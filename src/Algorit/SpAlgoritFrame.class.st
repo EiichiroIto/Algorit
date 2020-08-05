@@ -198,7 +198,8 @@ SpAlgoritFrame >> stepper [
 { #category : #accessing }
 SpAlgoritFrame >> target: aScript [
 	super target: aScript.
-	self updateVarTable: aScript
+	self updateVarTable: aScript.
+	self updateListTable: aScript
 ]
 
 { #category : #accessing }

@@ -103,7 +103,7 @@ AlgoritScript >> blocks [
 			('print %s'								-	print: 'hello,')
 			('print %s with newline'		-	println: 'world')
 			-
-			('return value'				r	returnValue)
+			('returned value'				r	returnValue)
 	).
 
 	^ blocks, self variablesBlocks

@@ -67,14 +67,11 @@ ScratchTranslator class >> current: aTranslator [
 
 { #category : #private }
 ScratchTranslator class >> defaultTranslator [
-	| obj font |
+	| obj |
 	obj := self new.
-	font := StrikeFont fontName: 'Verdana' size: 10.
-	obj fontAt: #Arg put: font.
-	font := StrikeFont fontName: 'VerdanaBold' size: 10.
-	obj fontAt: #Button put: font.
-	font := StrikeFont fontName: 'VerdanaBoldNarrowSpace' size: 10.
-	obj fontAt: #Label put: font.
+	obj fontAt: #Arg put: StandardFonts defaultFont.
+	obj fontAt: #Button put: StandardFonts buttonFont.
+	obj fontAt: #Label put: StandardFonts listFont.
 	^ obj
 ]
 
@@ -149,12 +146,11 @@ ScratchTranslator class >> renderHintString [
 { #category : #accessing }
 ScratchTranslator class >> setLocale: aString [
 	| fr tr |
-	aString = 'en'
-		ifTrue: [ self current: nil.
-			^ true ].
 	fr := ('locale/' , aString , '.po') asFileReference.
 	fr isFile
-		ifFalse: [ ^ false ].
+		ifFalse: [ self current: nil.
+			StandardFonts setFontsToMedium.
+			^ aString = 'en' ].
 	tr := self new.
 	tr readFrom: fr readStream.
 	tr setupFonts.
