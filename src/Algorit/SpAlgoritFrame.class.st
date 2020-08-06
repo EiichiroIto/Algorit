@@ -93,7 +93,8 @@ SpAlgoritFrame >> fileMenu [
 		addItem: [ :item | 
 			item
 				name: 'Close' localized;
-				action: [ application close ] ];
+				action: [ application close ];
+				enabled: [ application class dontClose not ] ];
 		addItem: [ :item | 
 			item
 				name: 'Quit' localized;

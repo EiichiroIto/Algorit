@@ -81,9 +81,17 @@ SpScratchApp class >> language [
 
 { #category : #accessing }
 SpScratchApp class >> language: aString [
+	| old |
+	old := self language.
 	(ScratchTranslator setLocale: aString)
 		ifFalse: [ ^ self ].
-	self settings at: #language put: aString
+	self settings at: #language put: aString.
+	old = aString
+		ifTrue: [ ^ self ].
+	(self confirm: 'Language settings has changed. Restart application?')
+		ifFalse: [ ^ self ].
+	self saveSettings.
+	Smalltalk snapshot: false andQuit: true
 ]
 
 { #category : #accessing }
