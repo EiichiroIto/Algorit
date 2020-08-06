@@ -614,6 +614,13 @@ SpScratchApp >> projectName: aString [
 		updateTitle
 ]
 
+{ #category : #'menu actions' }
+SpScratchApp >> quit [
+	(self confirm: 'Quit Application?' localized)
+		ifFalse: [ ^ self ].
+	Smalltalk snapshot: false andQuit: true
+]
+
 { #category : #private }
 SpScratchApp >> restoreProject [
 	self subclassResponsibility
