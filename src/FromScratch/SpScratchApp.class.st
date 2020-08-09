@@ -76,7 +76,7 @@ SpScratchApp class >> keepMaximize: aBoolean [
 
 { #category : #accessing }
 SpScratchApp class >> language [
-	^ self settings at: #language ifAbsent: [ 'en' ]
+	^ self settings at: #language ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
@@ -130,6 +130,16 @@ SpScratchApp class >> saveSettings [
 	stream := fr writeStream.
 	STON put: self settings onStream: stream.
 	stream close
+]
+
+{ #category : #accessing }
+SpScratchApp class >> settingKeys [
+	^ self settings keys sorted
+]
+
+{ #category : #accessing }
+SpScratchApp class >> settingValueFor: aSymbol [
+	^ self perform: aSymbol
 ]
 
 { #category : #private }
@@ -726,31 +736,6 @@ SpScratchApp >> serializeBlocks: aTopBlock [
 	aTopBlock isHatBlock
 		ifFalse: [ code := '(' , code , ')' ].
 	^ code
-]
-
-{ #category : #'menu actions' }
-SpScratchApp >> setMaxPlotSize: aPlotter [
-	| ret |
-	ret := UIManager default
-		request: 'number of max plots?' localized
-		initialAnswer: (aPlotter maxSize ifNil: [ '' ]) asString.
-	ret ifNil: [ ^ self ].
-	ret := ret isEmpty
-		ifTrue: [ nil ]
-		ifFalse: [ ret asNumberNoError ].
-	aPlotter maxSize: ret
-]
-
-{ #category : #'menu actions' }
-SpScratchApp >> setPlotPeriod: aPlotter [
-	| ret |
-	ret := UIManager default
-		request: 'update plot period? (in milliseconds)' localized
-		initialAnswer: (aPlotter updatePeriod ifNil: [ '' ]) asString.
-	(ret isNil or: [ ret isEmpty ])
-		ifTrue: [ ^ self ].
-	ret := ret asNumberNoError.
-	aPlotter updatePeriod: ret
 ]
 
 { #category : #private }

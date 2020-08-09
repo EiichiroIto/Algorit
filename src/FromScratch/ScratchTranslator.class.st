@@ -146,10 +146,11 @@ ScratchTranslator class >> renderHintString [
 { #category : #accessing }
 ScratchTranslator class >> setLocale: aString [
 	| fr tr |
+	aString ifEmpty: [ ^ false ].
 	fr := ('locale/' , aString , '.po') asFileReference.
 	fr isFile
 		ifFalse: [ self current: nil.
-			StandardFonts setFontsToMedium.
+			GraphicFontSettings setFontsToStyleNamed: #medium.
 			^ aString = 'en' ].
 	tr := self new.
 	tr readFrom: fr readStream.
