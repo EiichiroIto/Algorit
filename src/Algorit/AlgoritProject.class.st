@@ -44,6 +44,11 @@ AlgoritProject >> newObjStream [
 	^ AlgoritObjStream new
 ]
 
+{ #category : #accessing }
+AlgoritProject >> stopAll [
+	self application stopAllProcesses
+]
+
 { #category : #processes }
 AlgoritProject >> stopAllProcesses [
 	scripts do: #stopAllProcesses

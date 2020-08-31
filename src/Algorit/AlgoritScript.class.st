@@ -37,6 +37,13 @@ AlgoritScript >> addVariable: aString [
 	evaluator setVar: aString to: 0
 ]
 
+{ #category : #'misc ops' }
+AlgoritScript >> asserting: anObject [
+	anObject ifTrue: [ ^ self ].
+	self stopAll.
+	self error
+]
+
 { #category : #'block specs' }
 AlgoritScript >> blocks [
 	"Answer a collection of block specifications for the blocks that are common to all objects. Block specificatons (Arrays) are interspersed with category names (Strings). A block specification is an Array of the form: (<block spec string> <block type> <selector> [optional initial argument values]).
@@ -67,11 +74,10 @@ AlgoritScript >> blocks [
 			('repeat until %b'					c	doUntil)
 			-
 			('call %S'								s	callSubroutine '')
-			('return %n'							-	return: 0)
+			('return'									s	doReturn)
 			-
 			('wait %n secs'						t	wait:elapsed:from: 1)
 			-
-			('stop script'							-	stopThread)
 			('stop all'								-	stopAll)
 		'operators'
 			('%n + %n'								r	+ - -)
@@ -103,7 +109,7 @@ AlgoritScript >> blocks [
 			('print %s'								-	print: 'hello,')
 			('print %s with newline'		-	println: 'world')
 			-
-			('returned value'				r	returnValue)
+			('assert %b'							-	#asserting:)
 	).
 
 	^ blocks, self variablesBlocks
@@ -123,6 +129,13 @@ AlgoritScript >> deleteList: aString [
 AlgoritScript >> deleteVariable: aString [
 	varNames remove: aString ifAbsent: [  ].
 	evaluator deleteVariable: aString
+]
+
+{ #category : #evaluation }
+AlgoritScript >> evaluateFunction: aSymbol withArgs: anArgs [
+	(#(stopThread stopAll return: #asserting: returnValue) includes: aSymbol)
+		ifTrue: [ ^ self perform: aSymbol withArguments: anArgs ].
+	^ self evaluator perform: aSymbol withArguments: anArgs
 ]
 
 { #category : #accessing }
@@ -200,6 +213,11 @@ AlgoritScript >> setupBlockCategory [
 		addCategory: 'misc' color: (Color h: 200 s: 0.98 v: 0.86);
 		addCategory: 'variables' color: ScratchTheme variableBlockColor;
 		addCategory: 'list' color: ScratchTheme listBlockColor
+]
+
+{ #category : #'control ops' }
+AlgoritScript >> stopAll [
+	project stopAll
 ]
 
 { #category : #processes }

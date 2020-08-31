@@ -1,40 +1,40 @@
 Class {
-	#name : #AlgoritStepperMorph,
+	#name : #ScratchStepperMorph,
 	#superclass : #Morph,
 	#instVars : [
 		'block',
 		'stepTime'
 	],
-	#category : #'Algorit-Morphic'
+	#category : #'FromScratch-Morphic'
 }
 
 { #category : #private }
-AlgoritStepperMorph >> defaultStepTime [
+ScratchStepperMorph >> defaultStepTime [
 	^ 100
 ]
 
 { #category : #'stepping and presenter' }
-AlgoritStepperMorph >> step [
+ScratchStepperMorph >> step [
 	block ifNil: [ ^ self ].
 	block value
 ]
 
 { #category : #stepping }
-AlgoritStepperMorph >> stepTime [
+ScratchStepperMorph >> stepTime [
 	^ stepTime ifNil: [ self defaultStepTime ]
 ]
 
 { #category : #stepping }
-AlgoritStepperMorph >> stepTime: anInteger [
+ScratchStepperMorph >> stepTime: anInteger [
 	stepTime := anInteger
 ]
 
 { #category : #'stepping and presenter' }
-AlgoritStepperMorph >> wantsSteps [
+ScratchStepperMorph >> wantsSteps [
 	^ true
 ]
 
 { #category : #accessing }
-AlgoritStepperMorph >> whenStepsDo: aBlock [
+ScratchStepperMorph >> whenStepsDo: aBlock [
 	block := aBlock
 ]

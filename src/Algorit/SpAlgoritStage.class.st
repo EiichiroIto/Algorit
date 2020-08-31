@@ -64,7 +64,7 @@ SpAlgoritStage >> historyClicked [
 { #category : #initialization }
 SpAlgoritStage >> initializePresenter [
 	showHistory := false.
-	stepperMorph := self newMorph morph: AlgoritStepperMorph new yourself.
+	stepperMorph := self newMorph morph: ScratchStepperMorph new yourself.
 	toolBar := self newToolBar.
 	varTable := self newTable.
 	listTable := self newTable.
