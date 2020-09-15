@@ -29,7 +29,8 @@ AlgoritApp class >> initialize [
 	ScratchDirectory current appName: self appFolderName.
 	ScratchTheme
 		themesURL: self themesURL;
-		setupThemeNamed: self appFolderName
+		setupThemeNamed: self appFolderName.
+	ObjStream setupVariables "for test"
 ]
 
 { #category : #'world menu' }
