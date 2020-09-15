@@ -64,6 +64,7 @@ AlgoritScript >> blocks [
 	| blocks |
 	blocks := #(
 		'control'
+			('when setup'							S	-)
 			('when start'							G	-)
 			-
 			('if %b'									c	doIf)
@@ -251,7 +252,7 @@ AlgoritScript >> updateWatcher: aToggleButton for: aBlockMorph [
 
 { #category : #'argument menus' }
 AlgoritScript >> varNames [
-	^ varNames
+	^ varNames sorted
 ]
 
 { #category : #variables }
@@ -264,6 +265,7 @@ AlgoritScript >> variablesBlocks [
 	^ #(
 		'list'
 			('add %n to %L'									-	append:toList: 10 '')
+			('add %n to %n to %L'							-	appendFrom:to:toList: 10 99 '')
 			('delete %p of %L'								-	deleteLine:ofList: 1 '')
 			('replace item %p of %L with %n'		-	setLine:ofList:to: 1 '' 10)
 			('swap items %p and %p of %L'			-	swapLine:and:ofList: 1 2 '')

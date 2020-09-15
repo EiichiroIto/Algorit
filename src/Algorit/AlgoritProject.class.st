@@ -41,7 +41,7 @@ AlgoritProject >> assureExistsBreed: each [
 
 { #category : #private }
 AlgoritProject >> newObjStream [
-	^ AlgoritObjStream new
+	^ STONObjStream new
 ]
 
 { #category : #accessing }

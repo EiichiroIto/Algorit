@@ -21,6 +21,14 @@ AlgoritEvaluator >> append: anObject toList: aString [
 	self listsModified: true
 ]
 
+{ #category : #'list ops' }
+AlgoritEvaluator >> appendFrom: anObject1 to: anObject2 toList: aString [
+	| list |
+	list := lists at: aString asSymbol.
+	anObject1 asNumberNoError to: anObject2 asNumberNoError do: [ :each | list add: each ].
+	self listsModified: true
+]
+
 { #category : #private }
 AlgoritEvaluator >> appendVar: aString data: anObject [
 	varHistory add: { aString. anObject }.

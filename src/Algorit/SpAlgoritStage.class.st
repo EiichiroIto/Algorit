@@ -8,6 +8,7 @@ Class {
 		'listTable',
 		'whenClearDo',
 		'messages',
+		'whenSetupDo',
 		'whenStartDo',
 		'whenStopDo',
 		'showHistory',
@@ -65,6 +66,7 @@ SpAlgoritStage >> historyClicked [
 SpAlgoritStage >> initializePresenter [
 	showHistory := false.
 	stepperMorph := self newMorph morph: ScratchStepperMorph new yourself.
+	self stepper stepTime: 1.
 	toolBar := self newToolBar.
 	varTable := self newTable.
 	listTable := self newTable.
@@ -87,6 +89,11 @@ SpAlgoritStage >> messages [
 { #category : #initialization }
 SpAlgoritStage >> setupToolBar [
 	toolBar
+		addItem:
+			(SpToolBarButton new
+				label: 'Setup' localized;
+				icon: (ScratchTheme formAt: #setupButton);
+				action: [ whenSetupDo ifNotNil: [ whenSetupDo value ] ]);
 		addItem:
 			(SpToolBarButton new
 				label: 'Start' localized;
@@ -195,6 +202,11 @@ SpAlgoritStage >> whenClearDo: aBlock [
 { #category : #accessing }
 SpAlgoritStage >> whenHistoryDo: aBlock [
 	whenHistoryDo := aBlock
+]
+
+{ #category : #accessing }
+SpAlgoritStage >> whenSetupDo: aBlock [
+	whenSetupDo := aBlock
 ]
 
 { #category : #accessing }

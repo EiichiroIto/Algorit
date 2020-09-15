@@ -56,7 +56,8 @@ SpAlgoritFrame >> connectPresenters [
 		whenClearDo: [ self clear.
 			self updateDisplay ];
 		whenStopDo: [ self application stopAllProcesses ];
-		whenStartDo: [ self application shoutGo ];
+		whenStartDo: [ self application doStart ];
+		whenSetupDo: [ self application doSetup ];
 		whenHistoryDo: [ self updateVarTable: self target ]
 ]
 

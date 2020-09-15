@@ -85,6 +85,28 @@ AlgoritApp >> createProject [
 	^ AlgoritProject new
 ]
 
+{ #category : #'menu actions' }
+AlgoritApp >> doSetup [
+	| block |
+	self stopAllProcesses.
+	block := self setupHatBlock.
+	block
+		ifNil:
+			[ ^ UIManager default alert: 'Only one setup block needed!' localized ].
+	self startProcessFor: block
+]
+
+{ #category : #'menu actions' }
+AlgoritApp >> doStart [
+	| block |
+	self stopAllProcesses.
+	block := self startHatBlock.
+	block
+		ifNil:
+			[ ^ UIManager default alert: 'Only one start block needed!' localized ].
+	self startProcessFor: block
+]
+
 { #category : #initialization }
 AlgoritApp >> initialize [
 	super initialize.
@@ -145,15 +167,26 @@ AlgoritApp >> removeTerminatedProcesses [
 	runningBlocks := newRunning
 ]
 
-{ #category : #'menu actions' }
-AlgoritApp >> shoutGo [
+{ #category : #private }
+AlgoritApp >> setupHatBlock [
 	| list |
-	self stopAllProcesses.
-	list := self target hatBlocks \ self target subBlocks.
+	list := self target hatBlocks
+		select:
+			[ :each | (each isKindOf: EventHatMorph) and: [ each eventName = #setup ] ].
 	list size = 1
-		ifFalse: [ ^ UIManager default
-				alert: 'Only one hatblock can be started!' localized ].
-	self startProcessFor: list first
+		ifTrue: [ ^ list first ].
+	^ nil
+]
+
+{ #category : #private }
+AlgoritApp >> startHatBlock [
+	| list |
+	list := self target hatBlocks
+		select:
+			[ :each | (each isKindOf: EventHatMorph) and: [ each eventName = #start ] ].
+	list size = 1
+		ifTrue: [ ^ list first ].
+	^ nil
 ]
 
 { #category : #processes }
