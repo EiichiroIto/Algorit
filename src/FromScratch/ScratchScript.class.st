@@ -777,6 +777,11 @@ ScratchScript >> setupProgram: aProgram events: aDictionary [
 				events: aDictionary ].
 ]
 
+{ #category : #'block specs' }
+ScratchScript >> specialCommands [
+	^ #(#setVar:to:)
+]
+
 { #category : #'object i/o' }
 ScratchScript >> stackFromTupleList: tupleList receiver: scriptOwner [
 	| stackTop previousBlock block |
