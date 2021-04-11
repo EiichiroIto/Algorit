@@ -3,9 +3,7 @@ Class {
 	#superclass : #SpApplication,
 	#instVars : [
 		'presenter',
-		'project',
-		'process',
-		'updateInfoCount'
+		'project'
 	],
 	#classVars : [
 		'Clipboard',
@@ -518,8 +516,7 @@ SpScratchApp >> initialize [
 	self class loadSettings.
 	ScratchTranslator setLocale: self class language.
 	super initialize.
-	presenter := self newPresenter.
-	updateInfoCount := 0
+	presenter := self newPresenter
 ]
 
 { #category : #private }
@@ -529,12 +526,7 @@ SpScratchApp >> installNewProject: aProject [
 
 { #category : #processes }
 SpScratchApp >> isProcessRunning [
-	^ process notNil and: [ process isRunning ]
-]
-
-{ #category : #processes }
-SpScratchApp >> maxUpdateInfoCount [
-	^ 50
+	self subclassResponsibility
 ]
 
 { #category : #processes }
@@ -798,25 +790,12 @@ SpScratchApp >> startProcessFor: topBlock [
 
 { #category : #processes }
 SpScratchApp >> stepProcesses [
-	process ifNotNil: [ process step ].
-	updateInfoCount := updateInfoCount + 1.
-	updateInfoCount > self maxUpdateInfoCount
-		ifTrue: [ updateInfoCount := 0.
-			self updateInfo ].
-	presenter updateDisplay.
-	self stepProcessesHook
-]
-
-{ #category : #processes }
-SpScratchApp >> stepProcessesHook [
-	"do nothing"
+	self subclassResponsibility
 ]
 
 { #category : #processes }
 SpScratchApp >> stopAllProcesses [
-	process ifNil: [ ^ self ].
-	process stop.
-	process := nil
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -827,11 +806,6 @@ SpScratchApp >> target [
 { #category : #accessing }
 SpScratchApp >> updateContents [
 	presenter updateContents
-]
-
-{ #category : #processes }
-SpScratchApp >> updateInfo [
-	self subclassResponsibility
 ]
 
 { #category : #private }

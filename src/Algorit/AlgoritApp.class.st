@@ -128,6 +128,11 @@ AlgoritApp >> installNewProject: aProject [
 	presenter updateDisplay
 ]
 
+{ #category : #processes }
+AlgoritApp >> isProcessRunning [
+	^ runningBlocks notEmpty
+]
+
 { #category : #private }
 AlgoritApp >> mainScriptName [
 	^ 'main'
