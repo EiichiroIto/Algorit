@@ -90,6 +90,7 @@ AlgoritApp >> createProject [
 AlgoritApp >> doSetup [
 	| block |
 	self stopAllProcesses.
+	self fixUnsavedFields.
 	block := self setupHatBlock.
 	block
 		ifNil:
@@ -101,6 +102,7 @@ AlgoritApp >> doSetup [
 AlgoritApp >> doStart [
 	| block |
 	self stopAllProcesses.
+	self fixUnsavedFields.
 	block := self startHatBlock.
 	block
 		ifNil:

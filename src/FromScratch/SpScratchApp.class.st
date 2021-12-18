@@ -142,6 +142,8 @@ SpScratchApp class >> optionsFor: aSymbol [
 		ifTrue: [ ^ {true . false} ].
 	aSymbol = #language
 		ifTrue: [ ^ ScratchTranslator availableLocales ].
+	aSymbol = #useStdDialog
+		ifTrue: [ ^ {true . false} ].
 	^ #()
 ]
 
@@ -206,6 +208,16 @@ SpScratchApp class >> useErrorCatcher [
 { #category : #accessing }
 SpScratchApp class >> useErrorCatcher: aBoolean [
 	self settings at: #useErrorCatcher put: aBoolean
+]
+
+{ #category : #accessing }
+SpScratchApp class >> useStdDialog [
+	^ self settings at: #useStdDialog ifAbsent: [ false ]
+]
+
+{ #category : #accessing }
+SpScratchApp class >> useStdDialog: aBoolean [
+	self settings at: #useStdDialog put: aBoolean
 ]
 
 { #category : #private }
@@ -290,7 +302,22 @@ SpScratchApp >> chooseExistingFileType: aSymbol title: aString extension: ext [
 
 { #category : #private }
 SpScratchApp >> chooseNewFileDefault: filename extension: ext title: aString type: aSymbol [
-	| dialog d |
+	^ self class useStdDialog
+		ifTrue: [ self
+				chooseNewFileStdDefault: filename
+				extension: ext
+				title: aString
+				type: aSymbol ]
+		ifFalse: [ self
+				chooseNewFileNativeDefault: filename
+				extension: ext
+				title: aString
+				type: aSymbol ]
+]
+
+{ #category : #private }
+SpScratchApp >> chooseNewFileNativeDefault: filename extension: ext title: aString type: aSymbol [
+	| dialog d fName |
 	dialog := SpFileChooserDialog new.
 	dialog
 		extension: ext;
@@ -300,7 +327,21 @@ SpScratchApp >> chooseNewFileDefault: filename extension: ext title: aString typ
 	d := dialog openModalWithSpec: #chooseNewFileSpec.
 	d isCancelled
 		ifTrue: [ ^ nil ].
-	^ dialog filename
+	fName := dialog filename withExtension: ext.
+	fName isFile
+		ifTrue: [ (UIManager default
+				confirm: 'Overwrite existing file: ' localized , fName basename , '?')
+				ifFalse: [ ^ nil ].
+			fName delete ].
+	^ fName
+]
+
+{ #category : #private }
+SpScratchApp >> chooseNewFileStdDefault: filename extension: ext title: aString type: aSymbol [
+	^ UIManager default
+		chooseForSaveFileReference: aString
+		extensions: {ext}
+		path: filename
 ]
 
 { #category : #private }
@@ -443,12 +484,6 @@ SpScratchApp >> exportString: aContentsString extension: aString isBinary: aBool
 		title: 'Export ...' localized
 		type: #export.
 	fName ifNil: [ ^ self ].
-	fName := fName withExtension: aString.
-	fName isFile
-		ifTrue: [ (UIManager default
-				confirm: 'Overwrite existing file: ' localized , fName basename , '?')
-				ifFalse: [ ^ self ].
-			fName delete ].
 	f := nil.
 	self class
 		try: [ f := aBoolean
@@ -465,6 +500,11 @@ SpScratchApp >> exportString: aContentsString extension: aString isBinary: aBool
 { #category : #private }
 SpScratchApp >> extension [
 	^ self class extension
+]
+
+{ #category : #accessing }
+SpScratchApp >> fixUnsavedFields [
+	project ifNotNil: #fixUnsavedFields
 ]
 
 { #category : #private }
@@ -733,17 +773,15 @@ SpScratchApp >> saveScratchFileFor: aProject [
 SpScratchApp >> saveScriptsToImage [
 	"Take a snapshot of all scripts for a sprite and save as a GIF file"
 
-	| fName saveForm pngExt |
-	pngExt := 'png'.
+	| fName saveForm |
 	saveForm := presenter scriptForm.
 	saveForm ifNil: [ ^ self ].
 	fName := self
-		chooseNewFileDefault: ''
-		extension: pngExt
+		chooseNewFileDefault: self projectName
+		extension: 'png'
 		title: 'Save script snapshot' localized
 		type: #scriptsSnapshot.
 	fName ifNil: [ ^ self ].
-	fName := fName withExtension: pngExt.
 	saveForm writePNGFileNamed: fName pathString
 ]
 
