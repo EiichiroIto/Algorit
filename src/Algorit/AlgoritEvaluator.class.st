@@ -29,6 +29,21 @@ AlgoritEvaluator >> appendFrom: anObject1 to: anObject2 toList: aString [
 	self listsModified: true
 ]
 
+{ #category : #'list ops' }
+AlgoritEvaluator >> appendRandom: anInteger from: anInteger2 to: anInteger3 toList: aString [
+	| list from to count size numbers |
+	count := anInteger asNumberNoError.
+	from := anInteger2 asNumberNoError.
+	to := anInteger3 asNumberNoError.
+	size := to - from + 1.
+	numbers := count > size
+		ifTrue: [ (self numbers: count from: from to: to) shuffled ]
+		ifFalse: [ (from to: to) shuffled copyFrom: 1 to: count ].
+	list := lists at: aString asSymbol.
+	numbers do: [ :each | list add: each ].
+	self listsModified: true
+]
+
 { #category : #private }
 AlgoritEvaluator >> appendVar: aString data: anObject [
 	varHistory add: { aString. anObject }.
@@ -203,6 +218,22 @@ AlgoritEvaluator >> negated: aNumber [
 { #category : #'operator ops' }
 AlgoritEvaluator >> not: aFalse [ 
 	^ aFalse not
+]
+
+{ #category : #private }
+AlgoritEvaluator >> numbers: anInteger from: anInteger2 to: anInteger3 [
+	| stream size rest |
+	rest := anInteger.
+	size := anInteger3 - anInteger2 + 1.
+	self assert: [ size > 0 ].
+	stream := WriteStream on: Array new.
+	[ rest >= size ]
+		whileTrue: [ stream nextPutAll: (anInteger2 to: anInteger3).
+			rest := rest - size ].
+	rest > 0
+		ifTrue: [ stream
+				nextPutAll: ((anInteger2 to: anInteger3) copyFrom: 1 to: rest) ].
+	^ stream contents
 ]
 
 { #category : #'misc ops' }

@@ -47,6 +47,16 @@ AlgoritEvaluatorTest >> testMessages [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testNumbersFromTo [
+	| e r |
+	e := self newEvaluator.
+	r := e numbers: 5 from: 1 to: 3.
+	self assertCollection: r equals: #(1 2 3 1 2).
+	r := e numbers: 5 from: 3 to: 4.
+	self assertCollection: r equals: #(3 4 3 4 3)
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testVarsModified [
 	| e |
 	e := self newEvaluator.
