@@ -267,7 +267,8 @@ AlgoritScript >> variablesBlocks [
 		'list'
 			('add %n to %L'									-	append:toList: 10 '')
 			('add %n to %n to %L'							-	appendFrom:to:toList: 10 99 '')
-			('add random %n of %n to %n to %L'	-	appendRandom:from:to:toList: 20 10 99 '')
+			('add %n randoms from %n to %n to %L'
+																		-	appendRandom:from:to:toList: 20 10 99 '')
 			('delete %p of %L'								-	deleteLine:ofList: 1 '')
 			('replace item %p of %L with %n'		-	setLine:ofList:to: 1 '' 10)
 			('swap items %p and %p of %L'			-	swapLine:and:ofList: 1 2 '')
