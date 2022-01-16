@@ -67,6 +67,20 @@ SpAlgoritFrame >> defaultExtent [
 ]
 
 { #category : #private }
+SpAlgoritFrame >> exportMenu [
+	^ self newMenu
+		addItem: [ :item | 
+			item
+				name: 'Export S-EXP' localized;
+				action: [ application exportSexpCode ] ];
+		addItem: [ :item | 
+			item
+				name: 'Export Script image' localized;
+				action: [ application saveScriptsToImage ] ];
+		yourself
+]
+
+{ #category : #private }
 SpAlgoritFrame >> fileMenu [
 	^ self newMenu
 		addGroup: [ :grp | 
@@ -91,6 +105,16 @@ SpAlgoritFrame >> fileMenu [
 					item
 						name: 'Save As' localized;
 						action: [ application saveProject ] ] ];
+		addGroup: [ :grp | 
+			grp
+				addItem: [ :item | 
+					item
+						name: 'Import ...' localized;
+						subMenu: self importMenu ];
+				addItem: [ :item | 
+					item
+						name: 'Export ...' localized;
+						subMenu: self exportMenu ] ];
 		addItem: [ :item | 
 			item
 				name: 'Close' localized;
@@ -122,6 +146,16 @@ SpAlgoritFrame >> helpMenu [
 			item
 				name: 'Settings' localized;
 				subMenu: self settingsMenu ];
+		yourself
+]
+
+{ #category : #private }
+SpAlgoritFrame >> importMenu [
+	^ self newMenu
+		addItem: [ :item | 
+			item
+				name: 'Import S-EXP' localized;
+				action: [ application importSexpCode ] ];
 		yourself
 ]
 

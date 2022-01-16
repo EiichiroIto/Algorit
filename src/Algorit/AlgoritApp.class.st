@@ -110,6 +110,16 @@ AlgoritApp >> doStart [
 	self startProcessFor: block
 ]
 
+{ #category : #'menu actions' }
+AlgoritApp >> exportSexpCode [
+	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension
+]
+
+{ #category : #'menu actions' }
+AlgoritApp >> importSexpCode [
+	self import: (ScratchSexpImporter appName: self appName) extension: self sexpExtension
+]
+
 { #category : #initialization }
 AlgoritApp >> initialize [
 	super initialize.
@@ -176,6 +186,11 @@ AlgoritApp >> removeTerminatedProcesses [
 ]
 
 { #category : #private }
+AlgoritApp >> restoreProject [
+	"self subclassResponsibility"
+]
+
+{ #category : #private }
 AlgoritApp >> setupHatBlock [
 	| list |
 	list := self target hatBlocks
@@ -184,6 +199,11 @@ AlgoritApp >> setupHatBlock [
 	list size = 1
 		ifTrue: [ ^ list first ].
 	^ nil
+]
+
+{ #category : #private }
+AlgoritApp >> sexpExtension [
+	^ 'als'
 ]
 
 { #category : #private }
