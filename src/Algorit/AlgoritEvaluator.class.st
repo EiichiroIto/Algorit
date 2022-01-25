@@ -60,15 +60,20 @@ AlgoritEvaluator >> changeVar: aString by: anInteger [
 
 { #category : #private }
 AlgoritEvaluator >> clear [
-	varHistory := OrderedCollection new.
-	messages := ''.
-	self varsModified: true
+	self clearVarHistory.
+	messages := ''
 ]
 
 { #category : #'list ops' }
 AlgoritEvaluator >> clearList: aString [ 
 	lists at: aString asSymbol put: OrderedCollection new.
 	self listsModified: true
+]
+
+{ #category : #accessing }
+AlgoritEvaluator >> clearVarHistory [
+	varHistory := OrderedCollection new.
+	varsModified := true
 ]
 
 { #category : #'operator ops' }

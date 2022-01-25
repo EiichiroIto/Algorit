@@ -39,6 +39,19 @@ AlgoritProject >> assureExistsBreed: each [
 	self addScriptNamed: each
 ]
 
+{ #category : #accessing }
+AlgoritProject >> clearVarHistory [
+	scripts do: [ :each | each evaluator clearVarHistory ]
+]
+
+{ #category : #accessing }
+AlgoritProject >> countVarHistory [
+	| sum |
+	sum := 0.
+	scripts do: [ :each | sum := sum + each evaluator varHistory size ].
+	^ sum
+]
+
 { #category : #private }
 AlgoritProject >> newObjStream [
 	^ STONObjStream new

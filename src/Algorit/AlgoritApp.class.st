@@ -82,8 +82,36 @@ AlgoritApp >> addVariable: aScript [
 ]
 
 { #category : #private }
+AlgoritApp >> checkAndConfirmVarHistory [
+	| ret |
+	project countVarHistory < 100
+		ifTrue: [ ^ true ].
+	ret := UIManager default
+		confirm:
+			'The amount of variables'' history is large. Do you want to delete it before saving?'
+				localized
+		orCancel: nil.
+	ret ifNil: [ ^ false ].
+	ret
+		ifTrue: [ project clearVarHistory ].
+	^ true
+]
+
+{ #category : #private }
 AlgoritApp >> createProject [
 	^ AlgoritProject new
+]
+
+{ #category : #'button actions' }
+AlgoritApp >> deleteList: aScript [
+	super deleteList: aScript.
+	presenter updateListTable: aScript
+]
+
+{ #category : #'button actions' }
+AlgoritApp >> deleteVariable: aScript [
+	super deleteVariable: aScript.
+	presenter updateVarTable: aScript
 ]
 
 { #category : #'menu actions' }
@@ -117,7 +145,14 @@ AlgoritApp >> exportSexpCode [
 
 { #category : #'menu actions' }
 AlgoritApp >> importSexpCode [
-	self import: (ScratchSexpImporter appName: self appName) extension: self sexpExtension
+	| script |
+	self
+		import: (ScratchSexpImporter appName: self appName)
+		extension: self sexpExtension.
+	script := presenter target.
+	presenter
+		updateListTable: script;
+		updateVarTable: script
 ]
 
 { #category : #initialization }
@@ -190,6 +225,18 @@ AlgoritApp >> restoreProject [
 	"self subclassResponsibility"
 ]
 
+{ #category : #'menu actions' }
+AlgoritApp >> saveProject [
+	self checkAndConfirmVarHistory ifFalse: [ ^ self ].
+	super saveProject
+]
+
+{ #category : #'menu actions' }
+AlgoritApp >> saveProjectNoDialog [
+	self checkAndConfirmVarHistory ifFalse: [ ^ self ].
+	super saveProjectNoDialog
+]
+
 { #category : #private }
 AlgoritApp >> setupHatBlock [
 	| list |
@@ -252,7 +299,9 @@ AlgoritApp >> stepProcesses [
 	proc := nil.
 	self class
 		try: [ self processesToRun do: [ :p | (proc := p) runStepFor: self ] ]
-		onFailure: [ proc errorFlag: true ].
+		onFailure: [ proc errorFlag: true.
+			proc topBlock 	updateCachedForm.
+			runningBlocks := OrderedCollection new ].
 	self removeTerminatedProcesses.
 	inProcessStep := false
 ]

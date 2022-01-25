@@ -37,13 +37,6 @@ AlgoritScript >> addVariable: aString [
 	evaluator setVar: aString to: 0
 ]
 
-{ #category : #'misc ops' }
-AlgoritScript >> asserting: anObject [
-	anObject ifTrue: [ ^ self ].
-	self stopAll.
-	self error
-]
-
 { #category : #'block specs' }
 AlgoritScript >> blocks [
 	"Answer a collection of block specifications for the blocks that are common to all objects. Block specificatons (Arrays) are interspersed with category names (Strings). A block specification is an Array of the form: (<block spec string> <block type> <selector> [optional initial argument values]).
@@ -80,7 +73,7 @@ AlgoritScript >> blocks [
 			-
 			('wait %n secs'						t	wait:elapsed:from: 1)
 			-
-			('stop all'								-	stopAll)
+			('stop all'								s	stopAll)
 		'operators'
 			('%n + %n'								r	+ - -)
 			('%n - %n'								r	- - -)
@@ -91,8 +84,10 @@ AlgoritScript >> blocks [
 			('pick random %n to %n'			r	randomFrom:to: 1 10)
 			-
 			('%s < %s'								b	< '' '')
+			('%s <= %s'								b	lessEqual:than:  '' '')
 			('%s = %s'								b	= '' '')
 			('%s > %s'								b	> '' '')
+			('%s >= %s'								b	greaterEqual:than: '' '')
 			('%n between %n and %n'			b is:between:and: 50 0 100)
 			-
 			('%b and %b'							b	&)
@@ -111,7 +106,7 @@ AlgoritScript >> blocks [
 			('print %s'								-	print: 'hello,')
 			('print %s with newline'		-	println: 'world')
 			-
-			('assert %b'							-	#asserting:)
+			('assert %b'							s	doAssert)
 	).
 
 	^ blocks, self variablesBlocks
@@ -124,7 +119,8 @@ AlgoritScript >> clear [
 
 { #category : #variables }
 AlgoritScript >> deleteList: aString [
-	listVarNames remove: aString ifAbsent: [  ]
+	listVarNames remove: aString ifAbsent: [  ].
+	evaluator deleteList: aString
 ]
 
 { #category : #variables }
@@ -135,14 +131,33 @@ AlgoritScript >> deleteVariable: aString [
 
 { #category : #evaluation }
 AlgoritScript >> evaluateFunction: aSymbol withArgs: anArgs [
-	(#(stopThread stopAll return: #asserting: returnValue) includes: aSymbol)
+	(#(stopThread stopAll return: returnValue lessEqual:than: greaterEqual:than:)
+		includes: aSymbol)
 		ifTrue: [ ^ self perform: aSymbol withArguments: anArgs ].
 	^ self evaluator perform: aSymbol withArguments: anArgs
+]
+
+{ #category : #evaluation }
+AlgoritScript >> evaluateInfix: aSymbol withArgs: rawArgs [
+	| r |
+	r := super evaluateInfix: aSymbol withArgs: rawArgs.
+	(r isNumber and: [ r isInteger not ])
+		ifTrue: [ r := r asFloat ].
+	^ r
 ]
 
 { #category : #accessing }
 AlgoritScript >> evaluator [
 	^ evaluator
+]
+
+{ #category : #evaluation }
+AlgoritScript >> greaterEqual: x than: y [
+	^ super
+		evaluateInfix: #>=
+		withArgs:
+			{x.
+			y}
 ]
 
 { #category : #initialization }
@@ -162,6 +177,15 @@ AlgoritScript >> isValidSubName: aString [
 { #category : #testing }
 AlgoritScript >> isWatchingVar: aString [
 	^ evaluator isWatchingVar: aString
+]
+
+{ #category : #evaluation }
+AlgoritScript >> lessEqual: x than: y [
+	^ super
+		evaluateInfix: #<=
+		withArgs:
+			{x.
+			y}
 ]
 
 { #category : #'argument menus' }
@@ -217,11 +241,6 @@ AlgoritScript >> setupBlockCategory [
 		addCategory: 'list' color: ScratchTheme listBlockColor
 ]
 
-{ #category : #'control ops' }
-AlgoritScript >> stopAll [
-	project stopAll
-]
-
 { #category : #processes }
 AlgoritScript >> stopAllProcesses [
 	blocksBin isArray
@@ -230,7 +249,11 @@ AlgoritScript >> stopAllProcesses [
 		submorphsDo: [ :each | 
 			each isBlockMorph
 				ifTrue: [ each clearProcess.
-					each litUp: false ] ]
+					each litUp: false.
+					each
+						allMorphsDo: [ :each2 | 
+							each2 isBlockMorph
+								ifTrue: [ each2 updateCachedForm ] ] ] ]
 ]
 
 { #category : #accessing }
