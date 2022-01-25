@@ -127,7 +127,7 @@ AlgoritEvaluator >> deleteList: aString [
 AlgoritEvaluator >> deleteVariable: aString [
 	watchingVars remove: aString ifAbsent: [  ].
 	vars removeKey: aString ifAbsent: [  ].
-	varHistory := varHistory reject: [ :each | each second = aString ]
+	varHistory := varHistory reject: [ :each | each first = aString ]
 ]
 
 { #category : #'operator ops' }
