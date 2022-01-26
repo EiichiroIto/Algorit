@@ -136,13 +136,6 @@ AlgoritApp >> doStart [
 	self startProcessFor: block
 ]
 
-{ #category : #private }
-AlgoritApp >> exampleFiles [
-	| list |
-	list := self examplesDirectory filesMatching: '*.al;*.als'.
-	^ list sorted
-]
-
 { #category : #'menu actions' }
 AlgoritApp >> exportSexpCode [
 	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension

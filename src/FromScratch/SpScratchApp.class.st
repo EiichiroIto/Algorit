@@ -128,6 +128,10 @@ SpScratchApp class >> loadSettings [
 	dict := STON fromString: fr contents.
 	dict isDictionary
 		ifFalse: [ ^ self ].
+	dict keys
+		do: [ :each | 
+			(self respondsTo: each asSymbol)
+				ifFalse: [ dict removeKey: each ] ].
 	Settings := dict
 ]
 
@@ -405,6 +409,13 @@ SpScratchApp >> editNotes [
 		answerHeight: 450.
 	ret ifNil: [ ^ self ].
 	project comment: ret
+]
+
+{ #category : #private }
+SpScratchApp >> exampleFiles [
+	| list |
+	list := self examplesDirectory filesMatching: '*.' , self class extension.
+	^ list sorted
 ]
 
 { #category : #private }
