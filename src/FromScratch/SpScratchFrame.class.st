@@ -119,6 +119,20 @@ SpScratchFrame >> display [
 ]
 
 { #category : #private }
+SpScratchFrame >> examplesMenu [
+	| m |
+	m := self newMenu.
+	application exampleFiles
+		do: [ :each | 
+			m
+				addItem: [ :item | 
+					item
+						name: each basename;
+						action: [ application loadExample: each ] ] ].
+	^ m
+]
+
+{ #category : #private }
 SpScratchFrame >> formFrom: aMorph extent: size [
 	| canvas thumbForm bounds |
 	bounds := aMorph modelBounds.

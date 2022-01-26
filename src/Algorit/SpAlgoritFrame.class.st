@@ -67,20 +67,6 @@ SpAlgoritFrame >> defaultExtent [
 ]
 
 { #category : #private }
-SpAlgoritFrame >> examplesMenu [
-	| m |
-	m := self newMenu.
-	application exampleFiles
-		do: [ :each | 
-			m
-				addItem: [ :item | 
-					item
-						name: each basename;
-						action: [ application loadExample: each ] ] ].
-	^ m
-]
-
-{ #category : #private }
 SpAlgoritFrame >> exportMenu [
 	^ self newMenu
 		addItem: [ :item | 

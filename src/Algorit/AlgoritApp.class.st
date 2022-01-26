@@ -143,11 +143,6 @@ AlgoritApp >> exampleFiles [
 	^ list sorted
 ]
 
-{ #category : #private }
-AlgoritApp >> examplesDirectory [
-	^ FileSystem workingDirectory / 'Examples'
-]
-
 { #category : #'menu actions' }
 AlgoritApp >> exportSexpCode [
 	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension

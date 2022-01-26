@@ -408,6 +408,11 @@ SpScratchApp >> editNotes [
 ]
 
 { #category : #private }
+SpScratchApp >> examplesDirectory [
+	^ FileSystem workingDirectory / 'Examples'
+]
+
+{ #category : #private }
 SpScratchApp >> export: anExporter extension: aString [
 	self export: anExporter extension: aString isBinary: false
 ]
