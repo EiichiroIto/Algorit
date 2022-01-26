@@ -26,7 +26,6 @@ AlgoritApp class >> extension [
 { #category : #'class initialization' }
 AlgoritApp class >> initialize [
 	"self initialize"
-	ScratchDirectory current appName: self appFolderName.
 	ScratchTheme
 		themesURL: self themesURL;
 		setupThemeNamed: self appFolderName.
@@ -82,16 +81,15 @@ AlgoritApp >> addVariable: aScript [
 ]
 
 { #category : #private }
-AlgoritApp >> checkAndConfirmVarHistory [
+AlgoritApp >> checkVarHistory [
 	| ret |
 	project countVarHistory < 100
 		ifTrue: [ ^ true ].
 	ret := UIManager default
 		confirm:
-			'The amount of variables'' history is large. Do you want to delete it before saving?'
+			'The amount of variables'' history is large. Do you want to clear it before saving?'
 				localized
-		orCancel: nil.
-	ret ifNil: [ ^ false ].
+		orCancel: [ ^ false ].
 	ret
 		ifTrue: [ project clearVarHistory ].
 	^ true
@@ -136,6 +134,18 @@ AlgoritApp >> doStart [
 		ifNil:
 			[ ^ UIManager default alert: 'Only one start block needed!' localized ].
 	self startProcessFor: block
+]
+
+{ #category : #private }
+AlgoritApp >> exampleFiles [
+	| list |
+	list := self examplesDirectory filesMatching: '*.al;*.als'.
+	^ list sorted
+]
+
+{ #category : #private }
+AlgoritApp >> examplesDirectory [
+	^ FileSystem workingDirectory / 'Examples'
 ]
 
 { #category : #'menu actions' }
@@ -227,14 +237,14 @@ AlgoritApp >> restoreProject [
 
 { #category : #'menu actions' }
 AlgoritApp >> saveProject [
-	self checkAndConfirmVarHistory ifFalse: [ ^ self ].
-	super saveProject
+	self checkVarHistory ifFalse: [ ^ false ].
+	^ super saveProject
 ]
 
 { #category : #'menu actions' }
 AlgoritApp >> saveProjectNoDialog [
-	self checkAndConfirmVarHistory ifFalse: [ ^ self ].
-	super saveProjectNoDialog
+	self checkVarHistory ifFalse: [ ^ false ].
+	^ super saveProjectNoDialog
 ]
 
 { #category : #private }

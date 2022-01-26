@@ -3,7 +3,8 @@ Class {
 	#superclass : #SpApplication,
 	#instVars : [
 		'presenter',
-		'project'
+		'project',
+		'projectDirectory'
 	],
 	#classVars : [
 		'Clipboard',
@@ -142,9 +143,29 @@ SpScratchApp class >> optionsFor: aSymbol [
 		ifTrue: [ ^ {true . false} ].
 	aSymbol = #language
 		ifTrue: [ ^ ScratchTranslator availableLocales ].
-	aSymbol = #useStdDialog
-		ifTrue: [ ^ {true . false} ].
+	aSymbol = #projectDir
+		ifTrue: [ ^ #string ].
 	^ #()
+]
+
+{ #category : #accessing }
+SpScratchApp class >> projectDir [
+	| file dict |
+	file := self settings
+		at: #projectDir
+		ifAbsent: [ ^ FileSystem workingDirectory pathString ].
+	dict := Dictionary new.
+	dict at: #documents put: FileLocator documents pathString.
+	file := (file trimBoth format: dict) asFileReference.
+	file isDirectory
+		ifFalse: [ [ file createDirectory ]
+				ifError: [ file := FileSystem workingDirectory ] ].
+	^ file pathString
+]
+
+{ #category : #accessing }
+SpScratchApp class >> projectDir: aString [
+	self settings at: #projectDir put: aString
 ]
 
 { #category : #accessing }
@@ -208,16 +229,6 @@ SpScratchApp class >> useErrorCatcher [
 { #category : #accessing }
 SpScratchApp class >> useErrorCatcher: aBoolean [
 	self settings at: #useErrorCatcher put: aBoolean
-]
-
-{ #category : #accessing }
-SpScratchApp class >> useStdDialog [
-	^ self settings at: #useStdDialog ifAbsent: [ false ]
-]
-
-{ #category : #accessing }
-SpScratchApp class >> useStdDialog: aBoolean [
-	self settings at: #useStdDialog put: aBoolean
 ]
 
 { #category : #private }
@@ -287,82 +298,23 @@ SpScratchApp >> basedVersion [
 ]
 
 { #category : #private }
-SpScratchApp >> chooseExistingFileType: aSymbol title: aString extension: ext [
-	| dialog d |
-	dialog := SpFileChooserDialog new.
-	dialog
-		extension: ext;
-		title: aString;
-		type: aSymbol.
-	d := dialog openModalWithSpec: #chooseExistingFileSpec.
-	d isCancelled
-		ifTrue: [ ^ nil ].
-	^ dialog selectedFile
-]
-
-{ #category : #private }
-SpScratchApp >> chooseNewFileDefault: filename extension: ext title: aString type: aSymbol [
-	^ self class useStdDialog
-		ifTrue: [ self
-				chooseNewFileStdDefault: filename
-				extension: ext
-				title: aString
-				type: aSymbol ]
-		ifFalse: [ self
-				chooseNewFileNativeDefault: filename
-				extension: ext
-				title: aString
-				type: aSymbol ]
-]
-
-{ #category : #private }
-SpScratchApp >> chooseNewFileNativeDefault: filename extension: ext title: aString type: aSymbol [
-	| dialog d fName |
-	dialog := SpFileChooserDialog new.
-	dialog
-		extension: ext;
-		filename: filename;
-		title: aString;
-		type: aSymbol.
-	d := dialog openModalWithSpec: #chooseNewFileSpec.
-	d isCancelled
-		ifTrue: [ ^ nil ].
-	fName := dialog filename withExtension: ext.
-	fName isFile
-		ifTrue: [ (UIManager default
-				confirm: 'Overwrite existing file: ' localized , fName basename , '?')
-				ifFalse: [ ^ nil ].
-			fName delete ].
-	^ fName
-]
-
-{ #category : #private }
-SpScratchApp >> chooseNewFileStdDefault: filename extension: ext title: aString type: aSymbol [
-	^ UIManager default
-		chooseForSaveFileReference: aString
-		extensions: {ext}
-		path: filename
-]
-
-{ #category : #private }
 SpScratchApp >> closeMediaEditorsAndDialogs [
 	SpDialogWindow allInstances do: #cancel.
-	DialogWindow allInstances do: #cancel.
-	^ true
+	DialogWindow allInstances do: #cancel
 ]
 
-{ #category : #private }
-SpScratchApp >> confirmFileOverwriteIfExisting: aFileReference orCancel: aBlock [
-	| file response |
-	file := aFileReference withExtension: self extension.
-	file isFile
-		ifFalse: [ ^ file ].
-	response := UIManager default
-		confirm: 'The file name already exists. Overwrite existing file?' localized
-		orCancel: aBlock.
-	^ response
-		ifTrue: [ file ]
-		ifFalse: [ nil ]
+{ #category : #'menu actions' }
+SpScratchApp >> confirmForNewProject [
+	| response |
+	self closeMediaEditorsAndDialogs.
+	self stopAllProcesses.
+	(project notNil and: [ project modified ])
+		ifTrue: [ response := UIManager default
+				confirm: 'Save the current project?' localized
+				orCancel: [ ^ false ].
+			response
+				ifTrue: [ ^ self saveProjectNoDialog ] ].
+	^ true
 ]
 
 { #category : #'menu actions' }
@@ -474,26 +426,24 @@ SpScratchApp >> export: anExporter extension: aString isBinary: aBoolean [
 
 { #category : #private }
 SpScratchApp >> exportString: aContentsString extension: aString isBinary: aBoolean [
-	| fName f |
-	self closeMediaEditorsAndDialogs
-		ifFalse: [ ^ self ].
+	| file f |
+	self closeMediaEditorsAndDialogs.
 	self stopAllProcesses.
-	fName := self
-		chooseNewFileDefault: self projectName
-		extension: aString
-		title: 'Export ...' localized
-		type: #export.
-	fName ifNil: [ ^ self ].
+	file := UIManager default
+		chooseForSaveFileReference: 'Export ...' localized
+		extensions: {aString}
+		path: self projectPath.
+	file ifNil: [ ^ self ].
 	f := nil.
 	self class
 		try: [ f := aBoolean
-				ifTrue: [ fName binaryWriteStream ]
-				ifFalse: [ fName writeStream ].
+				ifTrue: [ file binaryWriteStream ]
+				ifFalse: [ file writeStream ].
 			f nextPutAll: aContentsString.
 			f close ]
 		onFailure: [ f ifNotNil: [ f close ].
 			UIManager default
-				alert: 'Could not write file: ' localized , fName basename
+				alert: 'Could not write file: ' localized , file basename
 				title: 'Export failed' localized ]
 ]
 
@@ -524,29 +474,27 @@ SpScratchApp >> import: anImporter extension: aString isBinary: aBoolean [
 
 { #category : #private }
 SpScratchApp >> importFileWithExtension: aString isBinary: aBoolean [
-	| response fr f code |
-	self closeMediaEditorsAndDialogs
-		ifFalse: [ ^ nil ].
+	| file f code |
+	self closeMediaEditorsAndDialogs.
 	self stopAllProcesses.
-	response := self
-		chooseExistingFileType: #export
-		title: 'Import ...' localized
-		extension: aString.
-	response ifNil: [ ^ nil ].
-	fr := response asFileReference.
-	fr isFile
+	file := UIManager default
+		chooseExistingFileReference: 'Import ...' localized
+		extensions: {aString}
+		path: self projectDirectory.
+	file ifNil: [ ^ nil ].
+	file isFile
 		ifFalse: [ ^ nil ].
 	f := aBoolean
-		ifTrue: [ fr binaryReadStream ]
-		ifFalse: [ fr readStream ].
+		ifTrue: [ file binaryReadStream ]
+		ifFalse: [ file readStream ].
 	^ self class
 		try: [ code := f contents.
 			f close.
 			{code.
-			fr} ]
+			file} ]
 		onFailure: [ f ifNotNil: [ f close ].
 			UIManager default
-				alert: 'Could not read file: ' localized , fr basename
+				alert: 'Could not read file: ' localized , file basename
 				title: 'Import failed' localized.
 			nil ]
 ]
@@ -569,6 +517,16 @@ SpScratchApp >> isProcessRunning [
 	self subclassResponsibility
 ]
 
+{ #category : #'menu actions' }
+SpScratchApp >> loadExample: aFileReference [
+	| newProj |
+	newProj := self createProject readProjectFrom: aFileReference.
+	newProj ifNil: [ ^ self ].
+	self projectDirectory: nil.
+	self projectName: aFileReference base.
+	self installNewProject: newProj
+]
+
 { #category : #processes }
 SpScratchApp >> newCode [
 	self subclassResponsibility
@@ -581,18 +539,9 @@ SpScratchApp >> newPresenter [
 
 { #category : #'menu actions' }
 SpScratchApp >> newProject [
-	| response |
-	self closeMediaEditorsAndDialogs
+	self confirmForNewProject
 		ifFalse: [ ^ self ].
-	self stopAllProcesses.
-	(project notNil and: [ project modified ])
-		ifTrue: [ response := UIManager default
-				confirm: 'Save the current project?' localized
-				orCancel: [ ^ self ].
-			response
-				ifTrue: [ self saveProjectNoDialog ] ].
-	self
-		projectDirectory: (ScratchDirectory current getDefaultFolderForType: #project).
+	self projectDirectory: nil.
 	self projectName: 'New Project'.
 	self installNewProject: self createProject
 ]
@@ -607,39 +556,19 @@ SpScratchApp >> open [
 
 { #category : #'menu actions' }
 SpScratchApp >> openProject [
-	| response newProj |
-	self closeMediaEditorsAndDialogs
+	| file newProj |
+	self confirmForNewProject
 		ifFalse: [ ^ self ].
-	self stopAllProcesses.
-	(project notNil and: [ project modified ])
-		ifTrue: [ response := UIManager default
-				confirm: 'Save the current project?' localized
-				orCancel: [ ^ self ].
-			response
-				ifTrue: [ self saveProjectNoDialog ] ].
-	response := self openScratchFileFor: self createProject.
-	response ifNil: [ ^ self ].
-	newProj := self createProject readProjectFrom: response.
+	file := UIManager default
+		chooseExistingFileReference: 'Open Project' localized
+		extensions: {self class extension}
+		path: self projectDirectory.
+	file ifNil: [ ^ self ].
+	newProj := self createProject readProjectFrom: file.
 	newProj ifNil: [ ^ self ].
-	self projectDirectory: response parent.
-	self projectName: response base.
+	self projectDirectory: file parent.
+	self projectName: file base.
 	self installNewProject: newProj
-]
-
-{ #category : #private }
-SpScratchApp >> openScratchFileFor: aProject [
-	| dialog d |
-	dialog := SpFileChooserDialog new.
-	dialog
-		extension: self extension;
-		project: aProject;
-		setupForFileInfoViewer;
-		title: 'Open Project' localized;
-		type: #project.
-	d := dialog openModalWithSpec: #openScratchFileSpec.
-	d isCancelled
-		ifTrue: [ ^ nil ].
-	^ dialog selectedFile
 ]
 
 { #category : #'menu actions' }
@@ -656,16 +585,15 @@ SpScratchApp >> project [
 	^ project
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 SpScratchApp >> projectDirectory [
-	^ ScratchDirectory current getLastFolderForType: #project
+	^ projectDirectory
+		ifNil: [ projectDirectory := self class projectDir asFileReference ]
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 SpScratchApp >> projectDirectory: aFileReference [
-	ScratchDirectory current
-		setLastFolderTo: aFileReference
-		forType: #project
+	projectDirectory := aFileReference
 ]
 
 { #category : #testing }
@@ -690,6 +618,11 @@ SpScratchApp >> projectName: aString [
 		updateTitle
 ]
 
+{ #category : #accessing }
+SpScratchApp >> projectPath [
+	^ self projectDirectory / self projectName
+]
+
 { #category : #'menu actions' }
 SpScratchApp >> quit [
 	(self confirm: 'Quit Application?' localized)
@@ -704,18 +637,12 @@ SpScratchApp >> restoreProject [
 
 { #category : #'menu actions' }
 SpScratchApp >> saveProject [
-	| fName result |
-	self closeMediaEditorsAndDialogs
-		ifFalse: [ ^ self ].
+	| file |
+	self closeMediaEditorsAndDialogs.
 	self stopAllProcesses.
-	fName := self saveScratchFileFor: project.
-	fName ifNil: [ ^ self ].
-	[ (result := self
-		confirmFileOverwriteIfExisting: fName
-		orCancel: [ ^ self ]) isNil ]
-		whileTrue: [ fName := self saveScratchFileFor: project.
-			fName ifNil: [ ^ self ] ].
-	self saveProjectAs: result
+	file := self saveScratchFileFor: project.
+	file ifNil: [ ^ false ].
+	^ self saveProjectAs: file
 ]
 
 { #category : #private }
@@ -725,64 +652,44 @@ SpScratchApp >> saveProjectAs: aFileReference [
 	project
 		thumbnailForm: (presenter stageShotExtent: self class thumbnailExtent).
 	(project writeProjectAs: aFileReference)
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ false ].
 	self projectName: aFileReference base.
 	self projectDirectory: aFileReference parent.
-	presenter target: (project findObjName: targetName)
+	presenter target: (project findObjName: targetName).
+	^ true
 ]
 
 { #category : #'menu actions' }
 SpScratchApp >> saveProjectNoDialog [
-	| fName dir file |
-	self closeMediaEditorsAndDialogs
-		ifFalse: [ ^ self ].
+	| file |
+	self closeMediaEditorsAndDialogs.
 	self stopAllProcesses.
-	fName := self projectName.
-	dir := ScratchDirectory current getLastFolderForType: #project.
-	file := dir / (fName , '.' , self extension).
-	file isFile
-		ifFalse: [ ^ self saveProject ].
-	ScratchDirectory current lastFolderIsSampleProjectsFolder
-		ifTrue: [ self projectDirectory: ScratchDirectory current project.
-			^ self saveProject ].
-	self saveProjectAs: file
+	projectDirectory ifNil: [ ^ self saveProject ].
+	file := self projectPath withExtension: self class extension.
+	^ self saveProjectAs: file
 ]
 
 { #category : #private }
 SpScratchApp >> saveScratchFileFor: aProject [
-	| dialog |
-	dialog := SpFileChooserDialog new.
-	dialog
-		filename: self projectName;
-		extension: self extension;
-		setupForFileInfoEditor;
-		title: 'Save Project' localized;
-		type: #project;
-		author: aProject author;
-		comment: aProject comment.
-	[ (dialog openModalWithSpec: #saveScratchFileSpec) isCancelled
-		ifTrue: [ ^ nil ].
-	dialog filename isNil ] whileTrue.
-	aProject
-		author: dialog author;
-		comment: dialog comment.
-	^ dialog filename
+	^ UIManager default
+		chooseForSaveFileReference: 'Save Project' localized
+		extensions: {self class extension}
+		path: self projectPath
 ]
 
 { #category : #'menu actions' }
 SpScratchApp >> saveScriptsToImage [
 	"Take a snapshot of all scripts for a sprite and save as a GIF file"
 
-	| fName saveForm |
+	| file saveForm |
 	saveForm := presenter scriptForm.
 	saveForm ifNil: [ ^ self ].
-	fName := self
-		chooseNewFileDefault: self projectName
-		extension: 'png'
-		title: 'Save script snapshot' localized
-		type: #scriptsSnapshot.
-	fName ifNil: [ ^ self ].
-	saveForm writePNGFileNamed: fName pathString
+	file := UIManager default
+		chooseForSaveFileReference: 'Save script snapshot' localized
+		extensions: {'png'}
+		path: self projectPath.
+	file ifNil: [ ^ self ].
+	saveForm writePNGFileNamed: file pathString
 ]
 
 { #category : #private }
