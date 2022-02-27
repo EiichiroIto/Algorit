@@ -54,7 +54,7 @@ AlgoritApp class >> recodingExtent [
 
 { #category : #accessing }
 AlgoritApp class >> themesURL [
-	^ 'https://raw.githubusercontent.com/EiichiroIto/Algorit/master/Themes.zip'
+	^ 'https://raw.githubusercontent.com/EiichiroIto/Algorit/master/misc/Themes.zip'
 ]
 
 { #category : #private }
