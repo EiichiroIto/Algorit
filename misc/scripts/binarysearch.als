@@ -1,0 +1,23 @@
+(Algorit (main)
+ ((for main ((var "e") (var "i") (var "s") (var "x") (var "y") (list "a"))
+   (
+   (when start
+    ((setVar:to: "x" "92")
+     (setVar:to: "s" "1")
+     (setVar:to: "e" (lineCountOfList: "a"))
+     (doUntil (more:than: (getVar "s") (getVar "e"))
+      ((setVar:to: "i" (rounded: (divide:by: (plus:and: (getVar "s") (getVar "e")) 2)))
+       (doIf (equal:to: (getVar "x") (getLine:ofList: (getVar "i") "a"))
+        ((print: (getVar "x"))
+         (print: " found at ")
+         (println: (getVar "i"))
+         (stopAll)))
+       (doIfElse (less:than: (getVar "x") (getLine:ofList: (getVar "i") "a"))
+        ((setVar:to: "e" (minus:with: (getVar "i") 1)))
+        ((setVar:to: "s" (plus:and: (getVar "i") 1))))))
+     (print: (getVar "x"))
+     (println: " is not found.")))
+   (when setup
+    ((clearList: "a")
+     (appendRandom:from:to:toList: 20 10 99 "a")
+     (sortList: "a")))))))

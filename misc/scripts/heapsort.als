@@ -1,0 +1,41 @@
+(Algorit (main)
+ ((for main ((var "add") (var "i") (var "large") (var "left") (var "parent") (var "right") (var "size") (list "a"))
+   (
+   (sub addheap
+    ((doUntil (equal:to: (getVar "add") 1)
+      ((setVar:to: "parent" (truncated: (divide:by: (getVar "add") 2)))
+       (doIfElse (less:than: (getLine:ofList: (getVar "parent") "a") (getLine:ofList: (getVar "add") "a"))
+        ((swapLine:and:ofList: (getVar "parent") (getVar "add") "a")
+         (setVar:to: "add" (getVar "parent")))
+        ((doReturn)))))))
+   
+   (sub removeheap
+    ((swapLine:and:ofList: 1 (getVar "size") "a")
+     (changeVar:by: "size" -1)
+     (setVar:to: "parent" "1")
+     (doForever
+      ((setVar:to: "left" (multiply:and: (getVar "parent") 2))
+       (setVar:to: "right" (plus:and: (getVar "left") 1))
+       (doIfElse (and:with: (lessEqual:than: (getVar "left") (getVar "size")) (lessEqual:than: (getVar "right") (getVar "size")))
+        ((doIfElse (less:than: (getLine:ofList: (getVar "left") "a") (getLine:ofList: (getVar "right") "a"))
+          ((setVar:to: "large" (getVar "right")))
+          ((setVar:to: "large" (getVar "left")))))
+        ((doIfElse (lessEqual:than: (getVar "left") (getVar "size"))
+          ((setVar:to: "large" (getVar "left")))
+          ((doReturn)))))
+       (doIf (lessEqual:than: (getLine:ofList: (getVar "large") "a") (getLine:ofList: (getVar "parent") "a"))
+        ((doReturn)))
+       (swapLine:and:ofList: (getVar "large") (getVar "parent") "a")
+       (setVar:to: "parent" (getVar "large"))))))
+   (when setup
+    ((clearList: "a")
+     (appendRandom:from:to:toList: 20 10 99 "a")))
+   (when start
+    ((setVar:to: "i" "1")
+     (doUntil (more:than: (getVar "i") (lineCountOfList: "a"))
+      ((setVar:to: "add" (getVar "i"))
+       (callSubroutine "addheap")
+       (changeVar:by: "i" 1)))
+     (setVar:to: "size" (lineCountOfList: "a"))
+     (doUntil (equal:to: (getVar "size") "1")
+      ((callSubroutine "removeheap")))))))))
