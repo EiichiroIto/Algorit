@@ -42,6 +42,11 @@ AlgoritApp class >> menuCommandOn: aBuilder [
 		icon: self icon
 ]
 
+{ #category : #accessing }
+AlgoritApp class >> projectClass [
+	^ AlgoritProject
+]
+
 { #category : #'as yet unclassified' }
 AlgoritApp class >> recodingExtent [
 	^ 400 @ 400
@@ -93,11 +98,6 @@ AlgoritApp >> checkVarHistory [
 	ret
 		ifTrue: [ project clearVarHistory ].
 	^ true
-]
-
-{ #category : #private }
-AlgoritApp >> createProject [
-	^ AlgoritProject new
 ]
 
 { #category : #'button actions' }
@@ -233,6 +233,21 @@ AlgoritApp >> saveProject [
 AlgoritApp >> saveProjectNoDialog [
 	self checkVarHistory ifFalse: [ ^ false ].
 	^ super saveProjectNoDialog
+]
+
+{ #category : #'menu actions' }
+AlgoritApp >> saveScriptsToImage [
+	"Take a snapshot of all scripts for a sprite and save as a GIF file"
+
+	| file saveForm |
+	saveForm := presenter scriptForm.
+	saveForm ifNil: [ ^ self ].
+	file := UIManager default
+		chooseForSaveFileReference: 'Export ...' localized
+		extensions: {'png'}
+		path: self projectPath.
+	file ifNil: [ ^ self ].
+	saveForm writePNGFileNamed: file pathString
 ]
 
 { #category : #private }

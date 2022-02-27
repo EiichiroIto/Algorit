@@ -13,12 +13,12 @@ Class {
 	#category : #'FromScratch-Spec2'
 }
 
-{ #category : #accessing }
+{ #category : #settings }
 SpScratchApp class >> appFolderName [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #settings }
 SpScratchApp class >> appName [
 	self subclassResponsibility
 ]
@@ -69,7 +69,7 @@ SpScratchApp class >> dontClose: aBoolean [
 	self settings at: #dontClose put: aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : #settings }
 SpScratchApp class >> extension [
 	self subclassResponsibility
 ]
@@ -150,6 +150,17 @@ SpScratchApp class >> optionsFor: aSymbol [
 	aSymbol = #projectDir
 		ifTrue: [ ^ #string ].
 	^ #()
+]
+
+{ #category : #settings }
+SpScratchApp class >> previewClass [
+	"self projectClass if use preview"
+	^ nil
+]
+
+{ #category : #settings }
+SpScratchApp class >> projectClass [
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -330,7 +341,7 @@ SpScratchApp >> copyBlock: aBlockMorph [
 
 { #category : #private }
 SpScratchApp >> createProject [
-	self subclassResponsibility
+	^ self class projectClass new
 ]
 
 { #category : #'menu actions' }
@@ -578,7 +589,8 @@ SpScratchApp >> openProject [
 	file := UIManager default
 		chooseExistingFileReference: 'Open Project' localized
 		extensions: {self class extension}
-		path: self projectDirectory.
+		path: self projectDirectory
+		preview: self class previewClass.
 	file ifNil: [ ^ self ].
 	newProj := self createProject readProjectFrom: file.
 	newProj ifNil: [ ^ self ].
@@ -691,21 +703,6 @@ SpScratchApp >> saveScratchFileFor: aProject [
 		chooseForSaveFileReference: 'Save Project' localized
 		extensions: {self class extension}
 		path: self projectPath
-]
-
-{ #category : #'menu actions' }
-SpScratchApp >> saveScriptsToImage [
-	"Take a snapshot of all scripts for a sprite and save as a GIF file"
-
-	| file saveForm |
-	saveForm := presenter scriptForm.
-	saveForm ifNil: [ ^ self ].
-	file := UIManager default
-		chooseForSaveFileReference: 'Save script snapshot' localized
-		extensions: {'png'}
-		path: self projectPath.
-	file ifNil: [ ^ self ].
-	saveForm writePNGFileNamed: file pathString
 ]
 
 { #category : #private }

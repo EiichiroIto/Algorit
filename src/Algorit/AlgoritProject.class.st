@@ -15,6 +15,11 @@ AlgoritProject class >> appVersionTag [
 ]
 
 { #category : #accessing }
+AlgoritProject class >> objStreamClass [
+	^ STONObjStream
+]
+
+{ #category : #accessing }
 AlgoritProject >> addScriptNamed: aString [
 	| script |
 	script := AlgoritScript new
@@ -50,11 +55,6 @@ AlgoritProject >> countVarHistory [
 	sum := 0.
 	scripts do: [ :each | sum := sum + each evaluator varHistory size ].
 	^ sum
-]
-
-{ #category : #private }
-AlgoritProject >> newObjStream [
-	^ STONObjStream new
 ]
 
 { #category : #accessing }
