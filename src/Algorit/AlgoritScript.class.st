@@ -106,6 +106,7 @@ AlgoritScript >> blocks [
 			('print %s'								-	print: 'hello,')
 			('print %s with newline'		-	println: 'world')
 			-
+			('set random seed %n'				-	setRandomSeed: 0)
 			('assert %b'							s	doAssert)
 	).
 

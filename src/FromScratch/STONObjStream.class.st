@@ -27,7 +27,8 @@ STONObjStream >> readObjFrom: aStream [
 { #category : #'entry points' }
 STONObjStream >> readObjFrom: aStream showProgress: aBoolean [
 	| str |
-	str := aStream upToEnd asString.
+	str := aStream upToEnd.
+	str := ZnUTF8Encoder default decodeBytes: str.
 	^ STON fromString: str
 ]
 
@@ -35,5 +36,6 @@ STONObjStream >> readObjFrom: aStream showProgress: aBoolean [
 STONObjStream >> storeObj: anObject on: aStream [
 	| str |
 	str := STON toString: anObject.
-	aStream nextPutAll: str asByteArray
+	str := ZnUTF8Encoder default encodeString: str.
+	aStream nextPutAll: str
 ]

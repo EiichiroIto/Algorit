@@ -190,7 +190,6 @@ SpAlgoritFrame >> initializePresenters [
 	viewerPane := self instantiate: SpScratchListViewer.
 	editorPane := self instantiate: SpScratchEditor.
 	titlePane := self instantiate: SpScratchTitle.
-	libraryPane := self instantiate: SpAlgoritLibrary.
 	stageFrame := self instantiate: SpAlgoritStage.
 	self focusOrder add: editorPane
 ]
