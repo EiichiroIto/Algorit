@@ -20,4 +20,6 @@ I referred to this site: https://daeudaeu.com/heap-sort/
 ### Quick Sort
 ![quick sort](https://raw.githubusercontent.com/EiichiroIto/Algorit/master/misc/images/quicksort.png)
 
+### Merge Sort
+![merge sort](https://raw.githubusercontent.com/EiichiroIto/Algorit/master/misc/images/mergesort.png)
 
