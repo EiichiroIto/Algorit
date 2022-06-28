@@ -377,7 +377,7 @@ AlgoritEvaluatorTest >> testPrintln [
 	e := self newEvaluator.
 	e messages: 'abc'.
 	e println: 'def'.
-	self assert: e messages equals: 'abcdef' , String crlf
+	self assert: e messages equals: 'abcdef' , String cr
 ]
 
 { #category : #test }

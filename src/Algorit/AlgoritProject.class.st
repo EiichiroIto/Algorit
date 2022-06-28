@@ -4,17 +4,17 @@ Class {
 	#category : #'Algorit-Project'
 }
 
-{ #category : #accessing }
-AlgoritProject class >> appVersion [
+{ #category : #constants }
+AlgoritProject class >> fileVersion [
 	^ 1
 ]
 
-{ #category : #accessing }
-AlgoritProject class >> appVersionTag [
+{ #category : #constants }
+AlgoritProject class >> fileVersionTag [
 	^ 'AlgoritV'
 ]
 
-{ #category : #accessing }
+{ #category : #constants }
 AlgoritProject class >> objStreamClass [
 	^ STONObjStream
 ]

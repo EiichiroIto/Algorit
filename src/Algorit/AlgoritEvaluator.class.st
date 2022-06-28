@@ -259,7 +259,7 @@ AlgoritEvaluator >> print: aString [
 
 { #category : #'misc ops' }
 AlgoritEvaluator >> println: aString [ 
-	messages := messages , aString asString , String crlf
+	messages := messages , aString asString , String cr
 ]
 
 { #category : #accessing }

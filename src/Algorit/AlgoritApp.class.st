@@ -8,17 +8,33 @@ Class {
 	#category : #'Algorit-Spec2'
 }
 
-{ #category : #accessing }
+{ #category : #private }
+AlgoritApp class >> aboutAppString [
+	^ self appName
+		,
+			'
+Copyright © 2020 Eiichiro Ito (ghc02331@nifty.com)
+All rights reserved.
+
+Based on Scratch from the MIT Media Lab, v' , self basedVersion
+		,
+			'
+Copyright © 2009 Massachusetts Institute of Technology.
+All rights reserved.
+'
+]
+
+{ #category : #constants }
 AlgoritApp class >> appFolderName [
 	^ 'algorit'
 ]
 
-{ #category : #accessing }
+{ #category : #constants }
 AlgoritApp class >> appName [
 	^ 'Algorit'
 ]
 
-{ #category : #accessing }
+{ #category : #constants }
 AlgoritApp class >> extension [
 	^ 'al'
 ]
@@ -42,35 +58,24 @@ AlgoritApp class >> menuCommandOn: aBuilder [
 		icon: self icon
 ]
 
-{ #category : #accessing }
+{ #category : #constants }
+AlgoritApp class >> presentationClass [
+	^ SpAlgoritFrame
+]
+
+{ #category : #constants }
 AlgoritApp class >> projectClass [
 	^ AlgoritProject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 AlgoritApp class >> recodingExtent [
 	^ 400 @ 400
 ]
 
-{ #category : #accessing }
+{ #category : #constants }
 AlgoritApp class >> themesURL [
 	^ 'https://raw.githubusercontent.com/EiichiroIto/Algorit/master/misc/Themes.zip'
-]
-
-{ #category : #private }
-AlgoritApp >> aboutAppString [
-	^ self appName
-		,
-			'
-Copyright © 2020 Eiichiro Ito (ghc02331@nifty.com)
-All rights reserved.
-
-Based on Scratch from the MIT Media Lab, v' , self basedVersion
-		,
-			'
-Copyright © 2009 Massachusetts Institute of Technology.
-All rights reserved.
-'
 ]
 
 { #category : #'button actions' }
@@ -181,15 +186,6 @@ AlgoritApp >> isProcessRunning [
 { #category : #private }
 AlgoritApp >> mainScriptName [
 	^ 'main'
-]
-
-{ #category : #private }
-AlgoritApp >> newPresenter [
-	^ SpAlgoritFrame basicNew
-		application: self;
-		initialize;
-		whenStepsDo: [ self stepProcesses ];
-		yourself
 ]
 
 { #category : #processes }

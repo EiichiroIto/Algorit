@@ -17,8 +17,8 @@ Class {
 	#category : #'Algorit-Spec2'
 }
 
-{ #category : #specs }
-SpAlgoritStage class >> defaultSpec [
+{ #category : #layout }
+SpAlgoritStage class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: #toolBar withConstraints: [ :c | c height: 50 ];
 		add:
@@ -39,16 +39,18 @@ SpAlgoritStage class >> defaultSpec [
 
 { #category : #accessing }
 SpAlgoritStage >> addMessage: aString [
-	aString isEmpty
-		ifTrue: [ ^ self ].
-	messages text: messages text , aString.
-	self showLastMessage
+
+	messages morph
+		put: aString;
+		changed
 ]
 
 { #category : #accessing }
 SpAlgoritStage >> clearMessage [
-	messages text: ''.
-	self showLastMessage
+
+	messages morph
+		clearScreen;
+		changed
 ]
 
 { #category : #accessing }
@@ -67,13 +69,10 @@ SpAlgoritStage >> initializePresenter [
 	showHistory := false.
 	stepperMorph := self newMorph morph: ScratchStepperMorph new yourself.
 	self stepper stepTime: 1.
-	toolBar := self newToolBar.
+	toolBar := self newToolbar.
 	varTable := self newTable.
 	listTable := self newTable.
-	messages := self newCode
-		withoutSyntaxHighlight;
-		yourself.
-	messages := self newText.
+	messages := self newConsole.
 	self setupToolBar.
 	self focusOrder
 		add: toolBar;
@@ -81,36 +80,39 @@ SpAlgoritStage >> initializePresenter [
 		add: listTable
 ]
 
-{ #category : #accessing }
-SpAlgoritStage >> messages [
-	^ messages text asString
+{ #category : #private }
+SpAlgoritStage >> newConsole [
+
+	^ self newMorph
+		  morph: ScratchConsoleMorph new;
+		  yourself
 ]
 
 { #category : #initialization }
 SpAlgoritStage >> setupToolBar [
 	toolBar
 		addItem:
-			(SpToolBarButton new
+			(SpToolbarButtonPresenter new
 				label: 'Setup' localized;
 				icon: (ScratchTheme formAt: #setupButton);
 				action: [ whenSetupDo ifNotNil: [ whenSetupDo value ] ]);
 		addItem:
-			(SpToolBarButton new
+			(SpToolbarButtonPresenter new
 				label: 'Start' localized;
 				icon: (ScratchTheme formAt: #goButton);
 				action: [ whenStartDo ifNotNil: [ whenStartDo value ] ]);
 		addItem:
-			(SpToolBarButton new
+			(SpToolbarButtonPresenter new
 				label: 'Stop' localized;
 				icon: (ScratchTheme formAt: #stopButton);
 				action: [ whenStopDo ifNotNil: [ whenStopDo value ] ]);
 		addItemRight:
-			(SpToolBarButton new
+			(SpToolbarButtonPresenter new
 				label: 'Clear' localized;
 				icon: (Smalltalk ui iconNamed: #smallDelete);
 				action: [ whenClearDo ifNotNil: [ whenClearDo value ] ]);
 		addItemRight:
-			(SpToolBarButton new
+			(SpToolbarButtonPresenter new
 				label: 'History' localized;
 				icon: (Smalltalk ui iconNamed: #history);
 				action: [ whenHistoryDo
@@ -142,11 +144,6 @@ SpAlgoritStage >> setupVarTableColumns: aCollection [
 					(SpStringTableColumn
 						title: 'Values' localized
 						evaluated: [ :x | x second ]) ]
-]
-
-{ #category : #private }
-SpAlgoritStage >> showLastMessage [
-	messages textArea moveCursorToIndex: messages text size
 ]
 
 { #category : #accessing }

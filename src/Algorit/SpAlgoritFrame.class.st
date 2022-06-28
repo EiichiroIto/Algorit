@@ -10,8 +10,8 @@ Class {
 	#category : #'Algorit-Spec2'
 }
 
-{ #category : #specs }
-SpAlgoritFrame class >> defaultSpec [
+{ #category : #layout }
+SpAlgoritFrame class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add:
 			(SpBoxLayout newHorizontal
@@ -82,6 +82,7 @@ SpAlgoritFrame >> exportMenu [
 
 { #category : #private }
 SpAlgoritFrame >> fileMenu [
+
 	| m |
 	m := self newMenu.
 	m
@@ -93,50 +94,46 @@ SpAlgoritFrame >> fileMenu [
 			item
 				name: 'Open' localized;
 				action: [ application openProject ] ].
-	application examplesDirectory isDirectory
-		ifTrue: [ m
-				addItem: [ :item | 
-					item
-						name: 'Examples' localized;
-						subMenu: self examplesMenu ] ].
-	m
-		addGroup: [ :grp | 
-			grp
-				addItem: [ :item | 
-					item
-						name: 'Project Notes' localized;
-						action: [ application editNotes ] ];
-				addItem: [ :item | 
-					item
-						name: 'Save' localized;
-						action: [ application saveProjectNoDialog ] ];
-				addItem: [ :item | 
-					item
-						name: 'Save As' localized;
-						action: [ application saveProject ] ] ].
-	m
-		addGroup: [ :grp | 
-			grp
-				addItem: [ :item | 
-					item
-						name: 'Import ...' localized;
-						subMenu: self importMenu ];
-				addItem: [ :item | 
-					item
-						name: 'Export ...' localized;
-						subMenu: self exportMenu ] ].
-	m
-		addGroup: [ :grp | 
-			grp
-				addItem: [ :item | 
-					item
-						name: 'Close' localized;
-						action: [ application close ];
-						enabled: [ application class dontClose not ] ];
-				addItem: [ :item | 
-					item
-						name: 'Quit' localized;
-						action: [ application quit ] ] ].
+	application examplesDirectory isDirectory ifTrue: [ 
+		m addItem: [ :item | 
+			item
+				name: 'Examples' localized;
+				subMenu: self examplesMenu ] ].
+	m addGroup: [ :grp | 
+		grp
+			addItem: [ :item | 
+				item
+					name: 'Project Notes' localized;
+					action: [ application editNotes ] ];
+			addItem: [ :item | 
+				item
+					name: 'Save' localized;
+					action: [ application saveProjectNoDialog ] ];
+			addItem: [ :item | 
+				item
+					name: 'Save As' localized;
+					action: [ application saveProject ] ] ].
+	m addGroup: [ :grp | 
+		grp
+			addItem: [ :item | 
+				item
+					name: 'Import ...' localized;
+					subMenu: self importMenu ];
+			addItem: [ :item | 
+				item
+					name: 'Export ...' localized;
+					subMenu: self exportMenu ] ].
+	m addGroup: [ :grp | 
+		grp
+			addItem: [ :item | 
+				item
+					name: 'Close' localized;
+					action: [ application closeAllWindows ];
+					enabled: [ application class dontClose not ] ];
+			addItem: [ :item | 
+				item
+					name: 'Quit' localized;
+					action: [ application quit ] ] ].
 	^ m
 ]
 
@@ -204,8 +201,7 @@ SpAlgoritFrame >> setupMenu [
 		addItem: [ :item | 
 			item
 				name: 'Help' localized;
-				subMenu: self helpMenu ].
-	menu applyTo: self
+				subMenu: self helpMenu ]
 ]
 
 { #category : #private }
