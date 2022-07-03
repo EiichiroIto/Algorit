@@ -10,15 +10,12 @@ Class {
 
 { #category : #private }
 AlgoritApp class >> aboutAppString [
-	^ self appName
-		,
-			'
+
+	^ self appName , ' v' , self appVersion , '
 Copyright © 2020 Eiichiro Ito (ghc02331@nifty.com)
 All rights reserved.
 
-Based on Scratch from the MIT Media Lab, v' , self basedVersion
-		,
-			'
+Based on Scratch from the MIT Media Lab, v' , self basedVersion , '
 Copyright © 2009 Massachusetts Institute of Technology.
 All rights reserved.
 '
@@ -32,6 +29,11 @@ AlgoritApp class >> appFolderName [
 { #category : #constants }
 AlgoritApp class >> appName [
 	^ 'Algorit'
+]
+
+{ #category : #constants }
+AlgoritApp class >> appVersion [
+	^ '1.2.2'
 ]
 
 { #category : #constants }
