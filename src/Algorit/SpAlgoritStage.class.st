@@ -11,8 +11,9 @@ Class {
 		'whenSetupDo',
 		'whenStartDo',
 		'whenStopDo',
-		'showHistory',
-		'whenHistoryDo'
+		'variables',
+		'historyTable',
+		'lists'
 	],
 	#category : #'Algorit-Spec2'
 }
@@ -25,8 +26,8 @@ SpAlgoritStage class >> defaultLayout [
 			(SpPanedLayout newVertical
 				add:
 					(SpPanedLayout newHorizontal
-						add: #varTable;
-						add: #listTable;
+						add: #variables;
+						add: #lists;
 						yourself);
 				add:
 					(SpBoxLayout newHorizontal
@@ -53,31 +54,79 @@ SpAlgoritStage >> clearMessage [
 		changed
 ]
 
+{ #category : #initialization }
+SpAlgoritStage >> createHistoryPage [
+
+	historyTable := self newTable.
+	^ SpNotebookPage
+		title: self historyLabel
+		icon: (self iconNamed: #history)
+		provider: [ historyTable ]
+]
+
+{ #category : #initialization }
+SpAlgoritStage >> createListPage [
+
+	listTable := self newTable.
+	^ SpNotebookPage
+		title: self listLabel
+		icon: (self iconNamed: #morph)
+		provider: [ listTable ]
+]
+
+{ #category : #initialization }
+SpAlgoritStage >> createValuePage [
+
+	varTable := self newTable.
+	^ SpNotebookPage
+		title: self valueLabel
+		icon: (self iconNamed: #morph)
+		provider: [ varTable ]
+]
+
 { #category : #accessing }
 SpAlgoritStage >> display [
 	^ self stepper
 ]
 
-{ #category : #private }
-SpAlgoritStage >> historyClicked [
-	showHistory := showHistory not.
-	
+{ #category : #constants }
+SpAlgoritStage >> historyLabel [
+
+	^ 'history' localized
 ]
 
 { #category : #initialization }
 SpAlgoritStage >> initializePresenter [
-	showHistory := false.
+
 	stepperMorph := self newMorph morph: ScratchStepperMorph new yourself.
 	self stepper stepTime: 1.
 	toolBar := self newToolbar.
-	varTable := self newTable.
-	listTable := self newTable.
 	messages := self newConsole.
+	variables := self newNotebook
+		             addPage: self createValuePage;
+		             addPage: self createHistoryPage;
+		             yourself.
+	lists := self newNotebook
+		         addPage: self createListPage;
+		         yourself.
 	self setupToolBar.
 	self focusOrder
 		add: toolBar;
 		add: varTable;
 		add: listTable
+]
+
+{ #category : #testing }
+SpAlgoritStage >> isShowingHistory [
+
+	variables selectedPage ifNil: [ ^ false ].
+	^ variables selectedPage title = self historyLabel
+]
+
+{ #category : #constants }
+SpAlgoritStage >> listLabel [
+
+	^ 'list' localized
 ]
 
 { #category : #private }
@@ -90,60 +139,54 @@ SpAlgoritStage >> newConsole [
 
 { #category : #initialization }
 SpAlgoritStage >> setupToolBar [
+
 	toolBar
-		addItem:
-			(SpToolbarButtonPresenter new
-				label: 'Setup' localized;
-				icon: (ScratchTheme formAt: #setupButton);
-				action: [ whenSetupDo ifNotNil: [ whenSetupDo value ] ]);
-		addItem:
-			(SpToolbarButtonPresenter new
-				label: 'Start' localized;
-				icon: (ScratchTheme formAt: #goButton);
-				action: [ whenStartDo ifNotNil: [ whenStartDo value ] ]);
-		addItem:
-			(SpToolbarButtonPresenter new
-				label: 'Stop' localized;
-				icon: (ScratchTheme formAt: #stopButton);
-				action: [ whenStopDo ifNotNil: [ whenStopDo value ] ]);
-		addItemRight:
-			(SpToolbarButtonPresenter new
-				label: 'Clear' localized;
-				icon: (Smalltalk ui iconNamed: #smallDelete);
-				action: [ whenClearDo ifNotNil: [ whenClearDo value ] ]);
-		addItemRight:
-			(SpToolbarButtonPresenter new
-				label: 'History' localized;
-				icon: (Smalltalk ui iconNamed: #history);
-				action: [ whenHistoryDo
-						ifNotNil: [ self historyClicked.
-							whenHistoryDo value ] ])
+		addItem: (SpToolbarButtonPresenter new
+				 label: 'Setup' localized;
+				 icon: (ScratchTheme formAt: #setupButton);
+				 action: [ whenSetupDo ifNotNil: [ whenSetupDo value ] ]);
+		addItem: (SpToolbarButtonPresenter new
+				 label: 'Start' localized;
+				 icon: (ScratchTheme formAt: #goButton);
+				 action: [ whenStartDo ifNotNil: [ whenStartDo value ] ]);
+		addItem: (SpToolbarButtonPresenter new
+				 label: 'Stop' localized;
+				 icon: (ScratchTheme formAt: #stopButton);
+				 action: [ whenStopDo ifNotNil: [ whenStopDo value ] ]);
+		addItemRight: (SpToolbarButtonPresenter new
+				 label: 'Clear' localized;
+				 icon: (self iconNamed: #smallDelete);
+				 action: [ whenClearDo ifNotNil: [ whenClearDo value ] ])
 ]
 
 { #category : #private }
 SpAlgoritStage >> setupVarTableColumns: aCollection [
+
+	historyTable
+		columns: #(  );
+		addColumn: (SpStringTableColumn
+				 title: self variableLabel
+				 evaluated: [ :x | x first ]).
+	aCollection do: [ :each | 
+		historyTable addColumn:
+			(SpStringTableColumn title: each evaluated: [ :x | 
+				 x second = each
+					 ifTrue: [ x third asString ]
+					 ifFalse: [ '' ] ]) ].
 	varTable
-		columns: #();
-		addColumn:
-			(SpStringTableColumn
-				title: 'Vars' localized
-				evaluated: [ :x | x first ]).
-	showHistory
-		ifTrue: [ aCollection
-				do: [ :each | 
-					varTable
-						addColumn:
-							(SpStringTableColumn
-								title: each
-								evaluated: [ :x | 
-									x second = each
-										ifTrue: [ x third asString ]
-										ifFalse: [ '' ] ]) ] ]
-		ifFalse: [ varTable
-				addColumn:
-					(SpStringTableColumn
-						title: 'Values' localized
-						evaluated: [ :x | x second ]) ]
+		columns: #(  );
+		addColumn: (SpStringTableColumn
+				 title: self variableLabel
+				 evaluated: [ :x | x first ]);
+		addColumn: (SpStringTableColumn
+				 title: self valueLabel
+				 evaluated: [ :x | x second ])
+]
+
+{ #category : #private }
+SpAlgoritStage >> startStepping [
+
+	self stepper startStepping
 ]
 
 { #category : #accessing }
@@ -153,12 +196,10 @@ SpAlgoritStage >> stepper [
 
 { #category : #accessing }
 SpAlgoritStage >> updateListTable: aScript [
-	| lists |
-	lists := aScript watchingLists sorted.
 	listTable
 		columns: #();
-		addColumn: (SpStringTableColumn title: 'Lists' localized evaluated: [ :x | x first ]).
-	lists
+		addColumn: (SpStringTableColumn title: self listLabel evaluated: [ :x | x first ]).
+	aScript watchingLists sorted
 		withIndexDo: [ :each :index |
 			listTable
 				addColumn:
@@ -173,6 +214,8 @@ SpAlgoritStage >> updateListTable: aScript [
 
 { #category : #accessing }
 SpAlgoritStage >> updateLists: aScript [
+
+	aScript ifNil: [ ^ self ].
 	listTable items: aScript watchingListItems
 ]
 
@@ -184,11 +227,23 @@ SpAlgoritStage >> updateVarTable: aScript [
 
 { #category : #accessing }
 SpAlgoritStage >> updateVars: aScript [
-	varTable
-		items:
-			(showHistory
-				ifTrue: [ aScript watchingVarHistory ]
-				ifFalse: [ aScript watchingVarAndValues ])
+
+	aScript ifNil: [ ^ self ].
+	self isShowingHistory
+		ifTrue: [ historyTable items: aScript watchingVarHistory ]
+		ifFalse: [ varTable items: aScript watchingVarAndValues ]
+]
+
+{ #category : #constants }
+SpAlgoritStage >> valueLabel [
+
+	^ 'value' localized
+]
+
+{ #category : #constants }
+SpAlgoritStage >> variableLabel [
+
+	^ 'variable' localized
 ]
 
 { #category : #accessing }
@@ -197,8 +252,9 @@ SpAlgoritStage >> whenClearDo: aBlock [
 ]
 
 { #category : #accessing }
-SpAlgoritStage >> whenHistoryDo: aBlock [
-	whenHistoryDo := aBlock
+SpAlgoritStage >> whenListsPageChangedDo: aBlock [
+
+	lists whenSelectedPageChangedDo: aBlock
 ]
 
 { #category : #accessing }
@@ -221,4 +277,10 @@ SpAlgoritStage >> whenStepsDo: aBlock [
 { #category : #accessing }
 SpAlgoritStage >> whenStopDo: aBlock [
 	whenStopDo := aBlock
+]
+
+{ #category : #accessing }
+SpAlgoritStage >> whenVariablesPageChangedDo: aBlock [
+
+	variables whenSelectedPageChangedDo: aBlock
 ]

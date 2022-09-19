@@ -50,15 +50,18 @@ SpAlgoritFrame >> clear [
 
 { #category : #initialization }
 SpAlgoritFrame >> connectPresenters [
+
 	buttonOpen action: [ application openProject ].
 	buttonSave action: [ application saveProject ].
 	stageFrame
-		whenClearDo: [ self clear.
+		whenClearDo: [ 
+			self clear.
 			self updateDisplay ];
-		whenStopDo: [ self application stopAllProcesses ];
-		whenStartDo: [ self application doStart ];
-		whenSetupDo: [ self application doSetup ];
-		whenHistoryDo: [ self updateVarTable: self target ]
+		whenStopDo: [ application stopAllProcesses ];
+		whenStartDo: [ application doStart ];
+		whenSetupDo: [ application doSetup ];
+		whenVariablesPageChangedDo: [ stageFrame updateVars: self target ];
+		whenListsPageChangedDo: [ stageFrame updateLists: self target ]
 ]
 
 { #category : #private }
@@ -187,11 +190,6 @@ SpAlgoritFrame >> stageShotExtent: size [
 	^ nil
 ]
 
-{ #category : #private }
-SpAlgoritFrame >> stepper [
-	^ stageFrame stepper
-]
-
 { #category : #accessing }
 SpAlgoritFrame >> target: aScript [
 	super target: aScript.
@@ -220,11 +218,6 @@ SpAlgoritFrame >> updateListTable: aScript [
 { #category : #accessing }
 SpAlgoritFrame >> updateVarTable: aScript [
 	stageFrame updateVarTable: aScript
-]
-
-{ #category : #accessing }
-SpAlgoritFrame >> updateVars: anAlgoritScript [ 
-	stageFrame updateVars: anAlgoritScript 
 ]
 
 { #category : #stepping }

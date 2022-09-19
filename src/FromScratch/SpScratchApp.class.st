@@ -615,6 +615,7 @@ SpScratchApp >> openProject [
 		path: self projectDirectory
 		preview: self class previewClass.
 	file ifNil: [ ^ self ].
+	file isFile ifFalse: [ ^ self ].
 	newProj := self createProject readProjectFrom: file.
 	newProj ifNil: [ ^ self ].
 	self projectDirectory: file parent.
@@ -661,6 +662,7 @@ SpScratchApp >> projectDirectory [
 	file := settings projectDir.
 	dict := Dictionary new.
 	dict at: #documents put: FileLocator documents pathString.
+	dict at: #app put: self appFolderName.
 	file := (file trimBoth format: dict) asFileReference.
 	file isDirectory ifFalse: [ 
 		[ file createDirectory ]

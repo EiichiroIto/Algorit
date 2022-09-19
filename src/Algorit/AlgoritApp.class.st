@@ -94,16 +94,13 @@ AlgoritApp >> addVariable: aScript [
 
 { #category : #private }
 AlgoritApp >> checkVarHistory [
+
 	| ret |
-	project countVarHistory < 100
-		ifTrue: [ ^ true ].
-	ret := UIManager default
-		confirm:
-			'The amount of variables'' history is large. Do you want to clear it before saving?'
-				localized
-		orCancel: [ ^ false ].
-	ret
-		ifTrue: [ project clearVarHistory ].
+	project countVarHistory < 100 ifTrue: [ ^ true ].
+	ret := self confirm:
+		       'The amount of variables'' history is large. Do you want to clear it before saving?'
+			       localized.
+	ret ifTrue: [ project clearVarHistory ].
 	^ true
 ]
 
@@ -121,25 +118,25 @@ AlgoritApp >> deleteVariable: aScript [
 
 { #category : #'menu actions' }
 AlgoritApp >> doSetup [
+
 	| block |
 	self stopAllProcesses.
 	self fixUnsavedFields.
 	block := self setupHatBlock.
-	block
-		ifNil:
-			[ ^ UIManager default alert: 'Only one setup block needed!' localized ].
+	block ifNil: [ 
+		^ self alert: 'Only one setup block needed!' localized ].
 	self startProcessFor: block
 ]
 
 { #category : #'menu actions' }
 AlgoritApp >> doStart [
+
 	| block |
 	self stopAllProcesses.
 	self fixUnsavedFields.
 	block := self startHatBlock.
-	block
-		ifNil:
-			[ ^ UIManager default alert: 'Only one start block needed!' localized ].
+	block ifNil: [ 
+		^ self alert: 'Only one start block needed!' localized ].
 	self startProcessFor: block
 ]
 
@@ -329,9 +326,4 @@ AlgoritApp >> stopAllProcesses [
 { #category : #accessing }
 AlgoritApp >> updateVarTable: aScript [
 	presenter updateVarTable: aScript
-]
-
-{ #category : #accessing }
-AlgoritApp >> updateVars [
-	presenter updateVars: self target
 ]
