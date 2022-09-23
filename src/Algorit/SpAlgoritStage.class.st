@@ -13,7 +13,8 @@ Class {
 		'whenStopDo',
 		'variables',
 		'historyTable',
-		'lists'
+		'lists',
+		'graphMorph'
 	],
 	#category : #'Algorit-Spec2'
 }
@@ -55,6 +56,26 @@ SpAlgoritStage >> clearMessage [
 ]
 
 { #category : #initialization }
+SpAlgoritStage >> createConsole [
+
+	^ self newMorph
+		  morph: ScratchConsoleMorph new;
+		  yourself
+]
+
+{ #category : #initialization }
+SpAlgoritStage >> createGraphMorphPage [
+
+	graphMorph := self newMorph
+		              morph: self newGraphMorph;
+		              yourself.
+	^ SpNotebookPage
+		  title: self graphLabel
+		  icon: (self iconNamed: #morph)
+		  provider: [ graphMorph ]
+]
+
+{ #category : #initialization }
 SpAlgoritStage >> createHistoryPage [
 
 	historyTable := self newTable.
@@ -90,6 +111,12 @@ SpAlgoritStage >> display [
 ]
 
 { #category : #constants }
+SpAlgoritStage >> graphLabel [
+
+	^ 'graph' localized
+]
+
+{ #category : #constants }
 SpAlgoritStage >> historyLabel [
 
 	^ 'history' localized
@@ -101,19 +128,20 @@ SpAlgoritStage >> initializePresenter [
 	stepperMorph := self newMorph morph: ScratchStepperMorph new yourself.
 	self stepper stepTime: 1.
 	toolBar := self newToolbar.
-	messages := self newConsole.
+	messages := self createConsole.
 	variables := self newNotebook
 		             addPage: self createValuePage;
 		             addPage: self createHistoryPage;
 		             yourself.
 	lists := self newNotebook
 		         addPage: self createListPage;
+		         addPage: self createGraphMorphPage;
 		         yourself.
 	self setupToolBar.
 	self focusOrder
 		add: toolBar;
-		add: varTable;
-		add: listTable
+		add: variables;
+		add: lists
 ]
 
 { #category : #testing }
@@ -130,10 +158,10 @@ SpAlgoritStage >> listLabel [
 ]
 
 { #category : #private }
-SpAlgoritStage >> newConsole [
+SpAlgoritStage >> newGraphMorph [
 
-	^ self newMorph
-		  morph: ScratchConsoleMorph new;
+	^ ListBarGraph new
+		  stepTime: 200;
 		  yourself
 ]
 
@@ -195,6 +223,14 @@ SpAlgoritStage >> stepper [
 ]
 
 { #category : #accessing }
+SpAlgoritStage >> target: aScript [
+
+	graphMorph morph script: aScript.
+	self updateVarTable: aScript.
+	self updateListTable: aScript
+]
+
+{ #category : #accessing }
 SpAlgoritStage >> updateListTable: aScript [
 	listTable
 		columns: #();
@@ -216,7 +252,8 @@ SpAlgoritStage >> updateListTable: aScript [
 SpAlgoritStage >> updateLists: aScript [
 
 	aScript ifNil: [ ^ self ].
-	listTable items: aScript watchingListItems
+	listTable items: aScript watchingListItems.
+	graphMorph morph needsUpdate: true
 ]
 
 { #category : #accessing }

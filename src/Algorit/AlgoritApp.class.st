@@ -98,7 +98,7 @@ AlgoritApp >> checkVarHistory [
 	| ret |
 	project countVarHistory < 100 ifTrue: [ ^ true ].
 	ret := self confirm:
-		       'The amount of variables'' history is large. Do you want to clear it before saving?'
+		       'Variable history is too large. Clear it before saving?'
 			       localized.
 	ret ifTrue: [ project clearVarHistory ].
 	^ true

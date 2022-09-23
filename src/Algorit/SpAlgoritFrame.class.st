@@ -12,34 +12,31 @@ Class {
 
 { #category : #layout }
 SpAlgoritFrame class >> defaultLayout [
+
 	^ SpBoxLayout newVertical
-		add:
-			(SpBoxLayout newHorizontal
-				spacing: 4;
-				add: #logo withConstraints: [ :c | c width: 200 ];
-				add: #buttonOpen
-					withConstraints: [ :c | c width: self iconWidth ];
-				add: #buttonSave
-					withConstraints: [ :c | c width: self iconWidth ];
-				add: #menu;
-				yourself)
-			withConstraints: [ :c | c height: self toolbarHeight ];
-		add:
-			(SpBoxLayout newHorizontal
-				add: #viewerPane
-					withConstraints: [ :c | c width: self viewerPaneWidth ];
-				add:
-					(SpPanedLayout newHorizontal
-						add: #editorPane;
-						add:
-							(SpBoxLayout newVertical
-								add: #titlePane
-									withConstraints: [ :c | c height: self titleButtonHeight ];
-								add: #stageFrame;
-								yourself);
-						yourself);
-				yourself);
-		yourself
+		  add: (SpBoxLayout newHorizontal
+				   spacing: 4;
+				   add: #logo withConstraints: [ :c | c width: 200 ];
+				   add: #buttonOpen
+				   withConstraints: [ :c | c width: self iconWidth ];
+				   add: #buttonSave
+				   withConstraints: [ :c | c width: self iconWidth ];
+				   add: #menu;
+				   yourself)
+		  withConstraints: [ :c | c height: self toolbarHeight ];
+		  add: (SpBoxLayout newHorizontal
+				   add: #viewerPane
+				   withConstraints: [ :c | c width: self viewerPaneWidth ];
+				   add: (SpPanedLayout newHorizontal
+						    add: (SpBoxLayout newVertical
+								     add: #titlePane
+								     withConstraints: [ :c | c height: self titleButtonHeight ];
+								     add: #editorPane;
+								     yourself);
+						    add: #stageFrame;
+						    yourself);
+				   yourself);
+		  yourself
 ]
 
 { #category : #accessing }
@@ -152,24 +149,48 @@ SpAlgoritFrame >> importMenu [
 
 { #category : #initialization }
 SpAlgoritFrame >> initializePresenters [
+
 	logo := self newImage
-		image: (ScratchTheme formAt: #logo);
-		yourself.
+		        image: (ScratchTheme formAt: #logo);
+		        yourself.
 	buttonOpen := self newButton
-		icon: (Smalltalk ui iconNamed: #smallOpen);
-		help: 'Open Project' localized;
-		yourself.
+		              icon: (Smalltalk ui iconNamed: #smallOpen);
+		              help: 'Open Project' localized;
+		              yourself.
 	buttonSave := self newButton
-		icon: (Smalltalk ui iconNamed: #smallSave);
-		help: 'Save Project' localized;
-		yourself.
+		              icon: (Smalltalk ui iconNamed: #smallSave);
+		              help: 'Save Project' localized;
+		              yourself.
 	menu := self newMenuBar.
 	self setupMenu.
 	viewerPane := self instantiate: SpScratchListViewer.
-	editorPane := self instantiate: SpScratchEditor.
-	titlePane := self instantiate: SpScratchTitle.
+	editorPane := self newMorph.
+	editorPane morph: (ScrollFrameMorph new
+			 growthFraction: 0.1;
+			 color: ScratchTheme scriptsPaneColor).
+	titlePane := self newLabel
+		             label: 'new project';
+		             yourself.
 	stageFrame := self instantiate: SpAlgoritStage.
 	self focusOrder add: editorPane
+]
+
+{ #category : #accessing }
+SpAlgoritFrame >> projectName [
+
+	^ titlePane label
+]
+
+{ #category : #accessing }
+SpAlgoritFrame >> projectName: aString [
+
+	titlePane label: aString
+]
+
+{ #category : #accessing }
+SpAlgoritFrame >> scriptForm [
+
+	^ editorPane morph contents screenshot
 ]
 
 { #category : #initialization }
@@ -192,9 +213,11 @@ SpAlgoritFrame >> stageShotExtent: size [
 
 { #category : #accessing }
 SpAlgoritFrame >> target: aScript [
-	super target: aScript.
-	self updateVarTable: aScript.
-	self updateListTable: aScript
+
+	viewerPane target: aScript.
+	stageFrame target: aScript.
+	editorPane morph contents: aScript blocksBin.
+	editorPane morph contents color: ScratchTheme scriptsPaneColor
 ]
 
 { #category : #accessing }

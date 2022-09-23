@@ -288,6 +288,7 @@ AlgoritScript >> variableNameInUse: aString [
 { #category : #'block specs' }
 AlgoritScript >> variablesBlocks [
 	^ #(
+		'variables'
 		'list'
 			('add %n to %L'									-	append:toList: 10 '')
 			('add %n to %n to %L'							-	appendFrom:to:toList: 10 99 '')

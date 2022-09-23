@@ -14,6 +14,35 @@ Class {
 	#category : #'FromScratch-Translation'
 }
 
+{ #category : #private }
+ScratchTranslator class >> addBlockDefsTo: aSet [
+
+	ScratchScript subclasses
+		collect: [ :each | each new ]
+		thenDo: [ :each | 
+			each blocks do: [ :each2 | 
+				each2 = '-' ifFalse: [ 
+					each2 isString
+						ifTrue: [ aSet add: each2 ]
+						ifFalse: [ 
+							(each2 isArray and: [ each2 size > 2 ]) ifTrue: [ 
+								aSet add: each2 first ] ] ] ] ]
+]
+
+{ #category : #private }
+ScratchTranslator class >> addLocalizedTextsTo: aSet [
+
+	| list list3 |
+	list := #localized senders.
+	list do: [ :each | 
+		list3 := each sendNodes select: [ :each2 | 
+			         each2 selector = #localized and: [ 
+				         each2 receiver isLiteralNode and: [ 
+					         each2 receiver isLiteralArray not ] ] ].
+		list3 := list3 collect: [ :each2 | each2 receiver value ].
+		aSet addAll: list3 ]
+]
+
 { #category : #accessing }
 ScratchTranslator class >> argFont [
 	^ self fontAt: #Arg
@@ -92,11 +121,14 @@ ScratchTranslator class >> generatePOTFile [
 
 	"ScratchTranslator generatePOTFile"
 
-	| file |
+	| file strings |
 	file := FileSystem workingDirectory / 'app.pot'.
 	file isFile ifTrue: [ file delete ].
+	strings := Set new.
+	self addLocalizedTextsTo: strings.
+	self addBlockDefsTo: strings.
 	file writeStreamDo: [ :stream | 
-		self localizedTargetString do: [ :each | 
+		strings asOrderedCollection sorted do: [ :each | 
 			stream
 				nextPutAll: 'msgid "';
 				nextPutAll: each;
@@ -117,42 +149,6 @@ ScratchTranslator class >> initialize [
 { #category : #accessing }
 ScratchTranslator class >> labelFont [
 	^ self fontAt: #Label
-]
-
-{ #category : #private }
-ScratchTranslator class >> localizedTargetString [
-
-	| base |
-	base := self localizedTexts.
-	ScratchScript subclasses
-		collect: [ :each | each new ]
-		thenDo: [ :each | 
-			each blocks do: [ :each2 | 
-				each2 = '-' ifFalse: [ 
-					each2 isString
-						ifTrue: [ base add: each2 ]
-						ifFalse: [ 
-							(each2 isArray and: [ each2 size > 2 ]) ifTrue: [ 
-								base add: each2 first ] ] ] ] ].
-	^ base asOrderedCollection sorted
-]
-
-{ #category : #private }
-ScratchTranslator class >> localizedTexts [
-
-	"ScratchTranslator localizedTexts sorted"
-
-	| list list2 list3 |
-	list := #localized senders.
-	list2 := WriteStream on: Array new.
-	list do: [ :each | 
-		list3 := each sendNodes select: [ :each2 | 
-			         each2 selector = #localized and: [ 
-				         each2 receiver isLiteralNode and: [ 
-					         each2 receiver isLiteralArray not ] ] ].
-		list3 := list3 collect: [ :each2 | each2 receiver value ].
-		list2 nextPutAll: list3 ].
-	^ list2 contents asSet
 ]
 
 { #category : #'import/export' }
