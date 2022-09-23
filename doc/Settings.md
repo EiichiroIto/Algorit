@@ -71,7 +71,7 @@ Possible options are true or false.
 
 ## resizable
 The resizable setting specifies whether the application's window can be resized.
-If the resizable setting is true, window decorations will not be displayed.
+If the resizable setting is false, window decorations will not be displayed.
 
 Possible options are true or false.
 
