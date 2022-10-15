@@ -401,6 +401,26 @@ AlgoritEvaluatorTest >> testRandomFromTo [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testReverseList [
+	| e |
+	e := self newEvaluator.
+	e clearList: 'abc'.
+	e append: 10 toList: 'abc'.
+	e append: 2 toList: 'abc'.
+	e append: 300 toList: 'abc'.
+	e append: 40 toList: 'abc'.
+	e append: 5 toList: 'abc'.
+	self
+		assertCollection: (e lists at: #abc) asArray
+		equals: #(10 2 300 40 5).
+	e reverseList: 'abc'.
+	self
+		assertCollection: (e lists at: #abc) asArray
+		equals: #(5 40 300 2 10).
+	self should: [ e sortList: 'def' ] raise: Error
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testRounded [
 	| e |
 	e := self newEvaluator.

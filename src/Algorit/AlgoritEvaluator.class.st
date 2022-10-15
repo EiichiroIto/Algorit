@@ -272,6 +272,14 @@ AlgoritEvaluator >> randomFrom: a to: b [
 	^ (a to: b) atRandom: random
 ]
 
+{ #category : #'list ops' }
+AlgoritEvaluator >> reverseList: aString [ 
+	| key |
+	key := aString asSymbol.
+	lists at: key put: (lists at: key) reversed.
+	self listsModified: true
+]
+
 { #category : #'operator ops' }
 AlgoritEvaluator >> rounded: aNumber [
 	^ aNumber rounded

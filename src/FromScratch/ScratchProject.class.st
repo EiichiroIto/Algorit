@@ -354,7 +354,7 @@ ScratchProject >> writeProjectAs: aFileReference [
 			saveError := err ].
 	self scripts do: [ :m | m convertTuplesToStacks ].
 	saveError ifNotNil: [ 
-		SpScratchApp alert: saveError title: 'Save failed' localized.
+		SpScratchApp alert: saveError.
 		^ false ].
 	aFileReference deleteIfAbsent: [  ].
 	[ tmpFile renameTo: aFileReference basename ]

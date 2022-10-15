@@ -33,7 +33,7 @@ AlgoritApp class >> appName [
 
 { #category : #constants }
 AlgoritApp class >> appVersion [
-	^ '1.2.2'
+	^ '1.2.3'
 ]
 
 { #category : #constants }
@@ -125,6 +125,7 @@ AlgoritApp >> doSetup [
 	block := self setupHatBlock.
 	block ifNil: [ 
 		^ self alert: 'Only one setup block needed!' localized ].
+	project clearVarHistory.
 	self startProcessFor: block
 ]
 

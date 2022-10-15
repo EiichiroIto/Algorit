@@ -305,6 +305,7 @@ AlgoritScript >> variablesBlocks [
 			-
 			('shuffle %L'										- shuffleList: '')
 			('sort %L'											- sortList: '')
+			('reverse %L'										- reverseList: '')
 	)
 ]
 
