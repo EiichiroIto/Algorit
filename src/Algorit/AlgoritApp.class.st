@@ -56,7 +56,7 @@ AlgoritApp class >> menuCommandOn: aBuilder [
 	(aBuilder item: self appName asSymbol)
 		order: 0.5;
 		target: self;
-		action: [self new open]; 
+		action: [self open]; 
 		icon: self icon
 ]
 
@@ -172,6 +172,7 @@ AlgoritApp >> installNewProject: aProject [
 	project := aProject.
 	project application: self.
 	self setupView.
+	presenter clear.
 	Smalltalk garbageCollect.
 	project modified: false.
 	"project needBuild: true."
@@ -229,21 +230,6 @@ AlgoritApp >> saveProject [
 AlgoritApp >> saveProjectNoDialog [
 	self checkVarHistory ifFalse: [ ^ false ].
 	^ super saveProjectNoDialog
-]
-
-{ #category : #'menu actions' }
-AlgoritApp >> saveScriptsToImage [
-	"Take a snapshot of all scripts for a sprite and save as a GIF file"
-
-	| file saveForm |
-	saveForm := presenter scriptForm.
-	saveForm ifNil: [ ^ self ].
-	file := UIManager default
-		chooseForSaveFileReference: 'Export ...' localized
-		extensions: {'png'}
-		path: self projectPath.
-	file ifNil: [ ^ self ].
-	saveForm writePNGFileNamed: file pathString
 ]
 
 { #category : #private }

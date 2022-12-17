@@ -33,8 +33,11 @@ AlgoritScript >> addList: aString [
 
 { #category : #variables }
 AlgoritScript >> addVariable: aString [
+
 	varNames add: aString.
-	evaluator setVar: aString to: 0
+	evaluator
+		setVar: aString to: 0;
+		setWatchingVar: aString to: true
 ]
 
 { #category : #'block specs' }
@@ -105,6 +108,9 @@ AlgoritScript >> blocks [
 		'misc'
 			('print %s'								-	print: 'hello,')
 			('print %s with newline'		-	println: 'world')
+			-
+			('timer'									r	now)
+			('reset timer'							-	resetTimer)
 			-
 			('set random seed %n'				-	setRandomSeed: 0)
 			('assert %b'							s	doAssert)

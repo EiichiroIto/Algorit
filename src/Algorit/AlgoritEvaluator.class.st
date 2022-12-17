@@ -9,7 +9,8 @@ Class {
 		'listsModified',
 		'messages',
 		'varsModified',
-		'random'
+		'random',
+		'timer'
 	],
 	#category : #'Algorit-Project'
 }
@@ -69,7 +70,9 @@ AlgoritEvaluator >> changeVar: aString by: anInteger [
 
 { #category : #private }
 AlgoritEvaluator >> clear [
+
 	self clearVarHistory.
+	self resetTimer.
 	messages := ''
 ]
 
@@ -235,6 +238,12 @@ AlgoritEvaluator >> not: aFalse [
 	^ aFalse not
 ]
 
+{ #category : #'misc ops' }
+AlgoritEvaluator >> now [
+
+	^ (Timespan current - timer) asMilliSeconds // 100 / 10.0
+]
+
 { #category : #private }
 AlgoritEvaluator >> numbers: anInteger from: anInteger2 to: anInteger3 [
 	| stream size rest list |
@@ -270,6 +279,12 @@ AlgoritEvaluator >> random [
 { #category : #'operator ops' }
 AlgoritEvaluator >> randomFrom: a to: b [
 	^ (a to: b) atRandom: random
+]
+
+{ #category : #'misc ops' }
+AlgoritEvaluator >> resetTimer [
+
+	timer := Timespan current
 ]
 
 { #category : #'list ops' }

@@ -351,6 +351,15 @@ AlgoritEvaluatorTest >> testNot [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testNow [
+
+	| obj r |
+	obj := self newEvaluator.
+	r := obj now.
+	self assert: r isFloat
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testNumbersFromTo [
 	| e r |
 	e := self newEvaluator.
@@ -398,6 +407,18 @@ AlgoritEvaluatorTest >> testRandomFromTo [
 	self assert: r equals: 4.
 	r := e randomFrom: 1 to: 10.
 	self assert: r equals: 5
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testResetTimer [
+
+	| obj a b |
+	obj := self newEvaluator.
+	a := obj now.
+	obj resetTimer.
+	b := obj now.
+	self assert: b isFloat.
+	self assert: b < 1
 ]
 
 { #category : #test }

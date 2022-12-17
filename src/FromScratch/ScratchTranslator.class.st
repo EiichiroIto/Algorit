@@ -14,12 +14,13 @@ Class {
 	#category : #'FromScratch-Translation'
 }
 
-{ #category : #private }
+{ #category : #utilities }
 ScratchTranslator class >> addBlockDefsTo: aSet [
 
-	ScratchScript subclasses
+	ScratchScript allSubclasses
 		collect: [ :each | each new ]
 		thenDo: [ :each | 
+			aSet addAll: each blockCategories.
 			each blocks do: [ :each2 | 
 				each2 = '-' ifFalse: [ 
 					each2 isString
@@ -29,7 +30,7 @@ ScratchTranslator class >> addBlockDefsTo: aSet [
 								aSet add: each2 first ] ] ] ] ]
 ]
 
-{ #category : #private }
+{ #category : #utilities }
 ScratchTranslator class >> addLocalizedTextsTo: aSet [
 
 	| list list3 |
@@ -50,7 +51,11 @@ ScratchTranslator class >> argFont [
 
 { #category : #accessing }
 ScratchTranslator class >> availableLocaleFiles [
-	^ 'locale' asFileReference filesMatching: '*.po'
+
+	| fr |
+	fr := 'locale' asFileReference.
+	fr isDirectory ifFalse: [ ^ #(  ) ].
+	^ fr filesMatching: '*.po'
 ]
 
 { #category : #accessing }
@@ -116,7 +121,7 @@ ScratchTranslator class >> fontAt: aSymbol [
 	^ self current fontAt: aSymbol
 ]
 
-{ #category : #'language translation' }
+{ #category : #utilities }
 ScratchTranslator class >> generatePOTFile [
 
 	"ScratchTranslator generatePOTFile"

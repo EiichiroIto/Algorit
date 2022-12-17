@@ -68,16 +68,17 @@ SpAlgoritFrame >> defaultExtent [
 
 { #category : #private }
 SpAlgoritFrame >> exportMenu [
+
 	^ self newMenu
-		addItem: [ :item | 
-			item
-				name: 'Export S-EXP' localized;
-				action: [ application exportSexpCode ] ];
-		addItem: [ :item | 
-			item
-				name: 'Export Script image' localized;
-				action: [ application saveScriptsToImage ] ];
-		yourself
+		  addItem: [ :item | 
+			  item
+				  name: 'Export S-EXP' localized;
+				  action: [ application exportSexpCode ] ];
+		  addItem: [ :item | 
+			  item
+				  name: 'Export Script image' localized;
+				  action: [ application exportScriptImage ] ];
+		  yourself
 ]
 
 { #category : #private }
