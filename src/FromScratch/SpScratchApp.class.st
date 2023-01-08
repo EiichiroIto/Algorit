@@ -436,6 +436,8 @@ SpScratchApp >> examplesDirectory [
 
 { #category : #private }
 SpScratchApp >> export: anExporter extension: aString [
+
+	self flag: #ToBeRemoved.
 	self export: anExporter extension: aString isBinary: false
 ]
 
@@ -541,6 +543,8 @@ SpScratchApp >> imageExtension [
 
 { #category : #private }
 SpScratchApp >> import: anImporter extension: aString [
+
+	self flag: #ToBeRemoved.
 	self import: anImporter extension: aString isBinary: false
 ]
 
@@ -598,7 +602,7 @@ SpScratchApp >> loadExample: aFileReference [
 
 	| newProj |
 	self confirmForNewProject ifFalse: [ ^ self ].
-	newProj := self createProject readProjectFrom: aFileReference.
+	newProj := self readProjectFrom: aFileReference.
 	newProj ifNil: [ ^ self ].
 	self projectDirectory: nil.
 	self projectName: aFileReference base.
@@ -669,7 +673,7 @@ SpScratchApp >> openProject [
 		preview: self class previewClass.
 	file ifNil: [ ^ self ].
 	file isFile ifFalse: [ ^ self ].
-	newProj := self createProject readProjectFrom: file.
+	newProj := self readProjectFrom: file.
 	newProj ifNil: [ ^ self ].
 	self projectDirectory: file parent.
 	self projectName: file base.
@@ -757,6 +761,27 @@ SpScratchApp >> projectPath [
 	^ self projectDirectory / self projectName
 ]
 
+{ #category : #'file read/write' }
+SpScratchApp >> readProjectFrom: aFileReference [
+
+	| f projData newProj reader |
+	reader := project newProjectReadWriter.
+	f := aFileReference binaryReadStream.
+	f ifNil: [ 
+		self alert:
+			'Could not read file: ' localized , aFileReference pathString.
+		^ nil ].
+	^ self class
+		  try: [ 
+			  projData := f contents.
+			  newProj := reader extractProjectFrom: projData.
+			  newProj info: (reader extractInfoFrom: projData).
+			  newProj ]
+		  onFailure: [ :err | 
+			  self alert: err messageText.
+			  nil ]
+]
+
 { #category : #utilities }
 SpScratchApp >> request: aString [
 
@@ -790,7 +815,7 @@ SpScratchApp >> saveProjectAs: aFileReference [
 	targetName := presenter target objName.
 	project
 		thumbnailForm: (presenter stageShotExtent: self class thumbnailExtent).
-	(project writeProjectAs: aFileReference)
+	(self writeProjectAs: aFileReference)
 		ifFalse: [ ^ false ].
 	self projectName: aFileReference base.
 	self projectDirectory: aFileReference parent.
@@ -945,6 +970,18 @@ SpScratchApp >> target [
 	^ presenter target
 ]
 
+{ #category : #'file read/write' }
+SpScratchApp >> unusedNameStartingWith: prefix in: aFileReference [
+	| usedNames i result |
+	usedNames := (aFileReference entries
+		collect: [ :each | each basename ]) asSet.
+	i := 0.
+	result := prefix , '0'.
+	[ usedNames includes: result ]
+		whileTrue: [ result := prefix , (i := i + 1) printString ].
+	^ aFileReference / result
+]
+
 { #category : #accessing }
 SpScratchApp >> updateContents [
 	presenter updateContents
@@ -953,4 +990,44 @@ SpScratchApp >> updateContents [
 { #category : #private }
 SpScratchApp >> windowClosing [
 	"do nothing"
+]
+
+{ #category : #'file read/write' }
+SpScratchApp >> writeProjectAs: aFileReference [
+
+	| saveError out tmpFile writer |
+	writer := project newProjectReadWriter.
+	saveError := nil.
+	tmpFile := (self
+		            unusedNameStartingWith: 'tmp'
+		            in: aFileReference parent) asFileReference.
+	self class
+		try: [ 
+			out := tmpFile binaryWriteStream.
+			out
+				ifNil: [ 
+				saveError := 'Folder may be locked or read-only' localized ]
+				ifNotNil: [ 
+					writer writeProject: project to: out.
+					out close ] ]
+		onFailure: [ :err | 
+			out ifNotNil: [ 
+				[ 
+				out close.
+				tmpFile delete ]
+					on: Error
+					do: [  ] ].
+			saveError := err ].
+	saveError ifNotNil: [ 
+		self alert: saveError.
+		^ false ].
+	aFileReference deleteIfAbsent: [  ].
+	[ tmpFile renameTo: aFileReference basename ]
+		on: Error
+		do: [ 
+			self alert:
+				'Save failed. The folder may be read-only.' localized.
+			^ false ].
+	project modified: false.
+	^ true
 ]

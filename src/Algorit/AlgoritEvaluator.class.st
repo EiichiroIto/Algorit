@@ -94,6 +94,8 @@ AlgoritEvaluator >> computeFunction: aString of: aNumber [
 		ifTrue: [ ^ aNumber sqrt ].
 	aString = 'abs'
 		ifTrue: [ ^ aNumber abs ].
+	aString = 'sign'
+		ifTrue: [ ^ aNumber sign ].
 	aString = 'sin'
 		ifTrue: [ ^ aNumber degreesToRadians sin ].
 	aString = 'cos'

@@ -33,7 +33,7 @@ AlgoritApp class >> appName [
 
 { #category : #constants }
 AlgoritApp class >> appVersion [
-	^ '1.2.3'
+	^ '1.2.4'
 ]
 
 { #category : #constants }

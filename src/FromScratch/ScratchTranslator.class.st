@@ -15,19 +15,17 @@ Class {
 }
 
 { #category : #utilities }
-ScratchTranslator class >> addBlockDefsTo: aSet [
+ScratchTranslator class >> addBlockDefs: aCollection to: aSet [
 
-	ScratchScript allSubclasses
-		collect: [ :each | each new ]
-		thenDo: [ :each | 
-			aSet addAll: each blockCategories.
-			each blocks do: [ :each2 | 
-				each2 = '-' ifFalse: [ 
-					each2 isString
-						ifTrue: [ aSet add: each2 ]
-						ifFalse: [ 
-							(each2 isArray and: [ each2 size > 2 ]) ifTrue: [ 
-								aSet add: each2 first ] ] ] ] ]
+	aCollection do: [ :each | 
+		aSet addAll: each blockCategories.
+		each blocks do: [ :each2 | 
+			each2 = '-' ifFalse: [ 
+				each2 isString
+					ifTrue: [ aSet add: each2 ]
+					ifFalse: [ 
+						(each2 isArray and: [ each2 size > 2 ]) ifTrue: [ 
+							aSet add: each2 first ] ] ] ] ]
 ]
 
 { #category : #utilities }
@@ -126,22 +124,12 @@ ScratchTranslator class >> generatePOTFile [
 
 	"ScratchTranslator generatePOTFile"
 
-	| file strings |
-	file := FileSystem workingDirectory / 'app.pot'.
-	file isFile ifTrue: [ file delete ].
+	| list strings |
 	strings := Set new.
+	list := ScratchScript allSubclasses collect: [ :each | each new ].
+	self addBlockDefs: list to: strings.
 	self addLocalizedTextsTo: strings.
-	self addBlockDefsTo: strings.
-	file writeStreamDo: [ :stream | 
-		strings asOrderedCollection sorted do: [ :each | 
-			stream
-				nextPutAll: 'msgid "';
-				nextPutAll: each;
-				nextPut: $";
-				nextPutAll: String crlf;
-				nextPutAll: 'msgstr ""';
-				nextPutAll: String crlf;
-				nextPutAll: String crlf ] ]
+	self writePOT: strings fileNamed: 'app.pot'
 ]
 
 { #category : #'class initialization' }
@@ -255,6 +243,24 @@ ScratchTranslator class >> verticalTrimForFont: aStrikeFont [
 	^ extra
 
 
+]
+
+{ #category : #utilities }
+ScratchTranslator class >> writePOT: aCollection fileNamed: aString [
+
+	| file |
+	file := FileSystem workingDirectory / aString.
+	file isFile ifTrue: [ file delete ].
+	file writeStreamDo: [ :stream | 
+		aCollection asSortedCollection do: [ :each | 
+			stream
+				nextPutAll: 'msgid "';
+				nextPutAll: each;
+				nextPut: $";
+				nextPutAll: String crlf;
+				nextPutAll: 'msgstr ""';
+				nextPutAll: String crlf;
+				nextPutAll: String crlf ] ]
 ]
 
 { #category : #private }
