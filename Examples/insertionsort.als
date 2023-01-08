@@ -15,11 +15,11 @@
          (setLine:ofList:to: (getVar "insert") "a" (getVar "data"))
          (doReturn)))
        (changeVar:by: "i" 1)))))
-   (when setup
-    ((clearList: "a")
-     (appendRandom:from:to:toList: 10 10 99 "a")))
    (when start
     ((setVar:to: "sorted" "1")
      (doRepeat (minus:with: (lineCountOfList: "a") 1)
       ((callSubroutine "insert")
-       (changeVar:by: "sorted" 1)))))))))
+       (changeVar:by: "sorted" 1)))))
+   (when setup
+    ((clearList: "a")
+     (appendRandom:from:to:toList: 20 10 99 "a")))))))

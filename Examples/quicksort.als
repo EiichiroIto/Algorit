@@ -28,6 +28,9 @@
        (append:toList: (getVar "oldto") "tolist")
        (append:toList: (getVar "oldfrom") "fromlist")
        (append:toList: (minus:with: (getVar "to") 1) "tolist")))))
+   (when setup
+    ((clearList: "a")
+     (appendRandom:from:to:toList: 90 10 99 "a")))
    (when start
     ((clearList: "fromlist")
      (clearList: "tolist")
@@ -39,7 +42,4 @@
        (deleteLine:ofList: -1 "fromlist")
        (deleteLine:ofList: -1 "tolist")
        (doIf (less:than: (getVar "from") (getVar "to"))
-        ((callSubroutine "qsort")))))))
-   (when setup
-    ((clearList: "a")
-     (appendRandom:from:to:toList: 90 10 99 "a")))))))
+        ((callSubroutine "qsort")))))))))))

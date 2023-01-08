@@ -1,14 +1,6 @@
 (Algorit (main)
  ((for main ((var "add") (var "i") (var "large") (var "left") (var "parent") (var "right") (var "size") (list "a"))
    (
-   (sub addheap
-    ((doUntil (equal:to: (getVar "add") 1)
-      ((setVar:to: "parent" (truncated: (divide:by: (getVar "add") 2)))
-       (doIfElse (less:than: (getLine:ofList: (getVar "parent") "a") (getLine:ofList: (getVar "add") "a"))
-        ((swapLine:and:ofList: (getVar "parent") (getVar "add") "a")
-         (setVar:to: "add" (getVar "parent")))
-        ((doReturn)))))))
-   
    (sub removeheap
     ((swapLine:and:ofList: 1 (getVar "size") "a")
      (changeVar:by: "size" -1)
@@ -27,9 +19,14 @@
         ((doReturn)))
        (swapLine:and:ofList: (getVar "large") (getVar "parent") "a")
        (setVar:to: "parent" (getVar "large"))))))
-   (when setup
-    ((clearList: "a")
-     (appendRandom:from:to:toList: 20 10 99 "a")))
+   
+   (sub addheap
+    ((doUntil (equal:to: (getVar "add") 1)
+      ((setVar:to: "parent" (truncated: (divide:by: (getVar "add") 2)))
+       (doIfElse (less:than: (getLine:ofList: (getVar "parent") "a") (getLine:ofList: (getVar "add") "a"))
+        ((swapLine:and:ofList: (getVar "parent") (getVar "add") "a")
+         (setVar:to: "add" (getVar "parent")))
+        ((doReturn)))))))
    (when start
     ((setVar:to: "i" "1")
      (doUntil (more:than: (getVar "i") (lineCountOfList: "a"))
@@ -38,4 +35,7 @@
        (changeVar:by: "i" 1)))
      (setVar:to: "size" (lineCountOfList: "a"))
      (doUntil (equal:to: (getVar "size") "1")
-      ((callSubroutine "removeheap")))))))))
+      ((callSubroutine "removeheap")))))
+   (when setup
+    ((clearList: "a")
+     (appendRandom:from:to:toList: 90 10 99 "a")))))))
