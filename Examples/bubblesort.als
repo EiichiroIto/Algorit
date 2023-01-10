@@ -1,9 +1,6 @@
 (Algorit (main)
  ((for main ((var "i") (var "j") (var "x") (var "y") (list "a"))
    (
-   (when setup
-    ((clearList: "a")
-     (appendRandom:from:to:toList: 20 10 99 "a")))
    (when start
     ((setVar:to: "i" (lineCountOfList: "a"))
      (doUntil (equal:to: (getVar "i") "1")
@@ -14,4 +11,7 @@
          (doIf (more:than: (getVar "x") (getVar "y"))
           ((swapLine:and:ofList: (getVar "j") (plus:and: (getVar "j") 1) "a")))
          (changeVar:by: "j" 1)))
-       (changeVar:by: "i" -1)))))))))
+       (changeVar:by: "i" -1)))))
+   (when setup
+    ((clearList: "a")
+     (appendRandom:from:to:toList: 20 10 99 "a")))))))
