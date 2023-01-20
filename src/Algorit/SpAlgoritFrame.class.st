@@ -2,10 +2,8 @@ Class {
 	#name : #SpAlgoritFrame,
 	#superclass : #SpScratchFrame,
 	#instVars : [
-		'logo',
 		'buttonOpen',
-		'buttonSave',
-		'menu'
+		'buttonSave'
 	],
 	#category : #'Algorit-Spec2'
 }
@@ -29,8 +27,12 @@ SpAlgoritFrame class >> defaultLayout [
 				   withConstraints: [ :c | c width: self viewerPaneWidth ];
 				   add: (SpPanedLayout newHorizontal
 						    add: (SpBoxLayout newVertical
-								     add: #titlePane
-								     withConstraints: [ :c | c height: self titleButtonHeight ];
+								     add: (SpBoxLayout newHorizontal
+										      add: #modifiedProjectLabel
+										      withConstraints: [ :c | c expand: false ];
+										      add: #projectNameLabel;
+										      yourself)
+								     withConstraints: [ :c | c expand: false ];
 								     add: #editorPane;
 								     yourself);
 						    add: #stageFrame;
@@ -151,9 +153,7 @@ SpAlgoritFrame >> importMenu [
 { #category : #initialization }
 SpAlgoritFrame >> initializePresenters [
 
-	logo := self newImage
-		        image: (ScratchTheme formAt: #logo);
-		        yourself.
+	super initializePresenters.
 	buttonOpen := self newButton
 		              icon: (Smalltalk ui iconNamed: #smallOpen);
 		              help: 'Open Project' localized;
@@ -162,30 +162,13 @@ SpAlgoritFrame >> initializePresenters [
 		              icon: (Smalltalk ui iconNamed: #smallSave);
 		              help: 'Save Project' localized;
 		              yourself.
-	menu := self newMenuBar.
-	self setupMenu.
-	viewerPane := self instantiate: SpScratchListViewer.
-	editorPane := self newMorph.
-	editorPane morph: (ScrollFrameMorph new
-			 growthFraction: 0.1;
-			 color: ScratchTheme scriptsPaneColor).
-	titlePane := self newLabel
-		             label: 'new project';
-		             yourself.
-	stageFrame := self instantiate: SpAlgoritStage.
 	self focusOrder add: editorPane
 ]
 
-{ #category : #accessing }
-SpAlgoritFrame >> projectName [
+{ #category : #initialization }
+SpAlgoritFrame >> newStage [
 
-	^ titlePane label
-]
-
-{ #category : #accessing }
-SpAlgoritFrame >> projectName: aString [
-
-	titlePane label: aString
+	^ self instantiate: SpAlgoritStage
 ]
 
 { #category : #accessing }
