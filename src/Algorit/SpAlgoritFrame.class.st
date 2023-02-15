@@ -41,7 +41,7 @@ SpAlgoritFrame class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritFrame >> clear [
 	self target clear.
 	stageFrame clearMessage
@@ -204,7 +204,7 @@ SpAlgoritFrame >> target: aScript [
 	editorPane morph contents color: ScratchTheme scriptsPaneColor
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritFrame >> updateDisplay [
 	self target
 		in: [ :t | 
@@ -217,12 +217,12 @@ SpAlgoritFrame >> updateDisplay [
 			t messages ifNotEmpty: [ :str | stageFrame addMessage: str ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritFrame >> updateListTable: aScript [
 	stageFrame updateListTable: aScript
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritFrame >> updateVarTable: aScript [
 	stageFrame updateVarTable: aScript
 ]

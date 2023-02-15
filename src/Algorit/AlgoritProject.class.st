@@ -19,7 +19,7 @@ AlgoritProject class >> objStreamClass [
 	^ STONObjStream
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritProject >> addScriptNamed: aString [
 	| script |
 	script := AlgoritScript new
@@ -44,12 +44,12 @@ AlgoritProject >> assureExistsBreed: each [
 	self addScriptNamed: each
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritProject >> clearVarHistory [
 	scripts do: [ :each | each evaluator clearVarHistory ]
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritProject >> countVarHistory [
 	| sum |
 	sum := 0.
@@ -57,7 +57,7 @@ AlgoritProject >> countVarHistory [
 	^ sum
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritProject >> stopAll [
 	self application stopAllProcesses
 ]
@@ -67,7 +67,7 @@ AlgoritProject >> stopAllProcesses [
 	scripts do: #stopAllProcesses
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritProject >> updateVarTable: aScript [
 	self application updateVarTable: aScript
 ]

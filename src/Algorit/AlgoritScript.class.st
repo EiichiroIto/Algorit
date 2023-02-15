@@ -17,18 +17,113 @@ AlgoritScript class >> stonAllInstVarNames [
 
 { #category : #'argument menus' }
 AlgoritScript >> addArgBuilder [
-	super addArgBuilder.
-	argBuilder
-		addNumberExpressArg: $p
-		selector: #listPositionMenu
-		target: nil
-		initialExpression: '1'
+
+	argMorphBuilder
+		addBooleanArg: $b;
+		addEventTitleArg: $e;
+		addChoiceArg: $f
+		options:
+			#( 'abs' 'sqrt' 'sin' 'cos' 'tan' 'asin' 'acos' 'atan' 'ln' 'log'
+			   'e ^' '10 ^' )
+		initialChoice: 'sqrt';
+		addLocalVarArg: $l;
+		addChoiceArg: $L selector: #listVarNames;
+		addSpriteArg: $m;
+		addNumberExpressArg: $n initialExpression: '10';
+		addChoiceArg: $S selector: #subNames;
+		addStringExpressArg: $s;
+		addChoiceArg: $v selector: #varNames;
+		addNumberExpressArg: $p selector: #listPositionMenu target: nil initialExpression: '1'
+]
+
+{ #category : #'block specs' }
+AlgoritScript >> addBlockSpecs [
+
+	self
+		addControlBlockSpecs;
+		addOperatorBlockSpecs;
+		addMiscBlockSpecs;
+		addVariableBlockSpecs
+]
+
+{ #category : #'block specs' }
+AlgoritScript >> addControlBlockSpecs [
+
+	blockMorphBuilder
+		addCategory: 'control';
+		addHatBlock: 'when setup' type: #S arguments: #(  );
+		addHatBlock: 'when start' type: #G arguments: #(  );
+		addSeparator;
+		addCBlock: 'if %b' selector: #doIf arguments: #(  );
+		addCBlock: 'if %b' selector: #doIfElse arguments: #(  );
+		addSeparator;
+		addCBlock: 'forever' selector: #doForever arguments: #( 10 );
+		addCBlock: 'repeat %n' selector: #doRepeat arguments: #( 10 );
+		addCBlock: 'while %b' selector: #doWhile arguments: #(  );
+		addCBlock: 'repeat until %b' selector: #doUntil arguments: #(  );
+		addSeparator;
+		addSpecial: 'call %S' selector: #callSubroutine arguments: #(  );
+		addSpecial: 'return' selector: #doReturn arguments: #( );
+		addSeparator;
+		addTimed: 'wait %n secs' selector: #wait:elapsed:from: arguments: #( 1 );
+		addSeparator;
+		addSpecial: 'stop all' selector: #stopAll arguments: #(  )
 ]
 
 { #category : #variables }
 AlgoritScript >> addList: aString [
 	listVarNames add: aString.
 	evaluator clearList: aString
+]
+
+{ #category : #'block specs' }
+AlgoritScript >> addMiscBlockSpecs [
+
+	blockMorphBuilder
+		addCategory: 'misc';
+		addCommand: 'print %s' selector: #print: arguments: #( 'hello,' );
+		addCommand: 'print %s with newline' selector: #println: arguments: #( 'world' );
+		addSeparator;
+		addReporter: 'timer' selector: #now;
+		addCommand: 'reset timer' selector: #resetTimer;
+		addSeparator;
+		addCommand: 'set random seed %n' selector: #setRandomSeed: arguments: #( 0 );
+		addSpecial: 'assert %b' selector: #doAssert arguments: #(  )
+]
+
+{ #category : #'block specs' }
+AlgoritScript >> addOperatorBlockSpecs [
+
+	blockMorphBuilder
+		addCategory: 'operators';
+		addReporter: '%n + %n' selector: #plus:and: arguments: #( 1 2 );
+		addReporter: '%n - %n' selector: #minus:with: arguments: #( 1 2 );
+		addReporter: '%n * %n' selector: #multiply:and: arguments: #( 1 2 );
+		addReporter: '%n / %n' selector: #divide:by: arguments: #( 1 2 );
+		addReporter: '- %n' selector: #negated: arguments: #( 1 );
+		addSeparator;
+		addReporter: 'pick random %n to %n' selector: #randomFrom:to: arguments: #( 1 10 );
+		addSeparator;
+		addBooleanReporter: '%s < %s' selector: #less:than: arguments: #( '' '' );
+		addBooleanReporter: '%s <= %s' selector: #lessEqual:than: arguments: #( '' '' );
+		addBooleanReporter: '%s = %s' selector: #equal:to: arguments: #( '' '' );
+		addBooleanReporter: '%s > %s' selector: #more:than: arguments: #( '' '' );
+		addBooleanReporter: '%s >= %s' selector: #moreEqual:than: arguments: #( '' '' );
+		addBooleanReporter: '%n between %n and %n' selector: #is:between:and: arguments: #( 50 0 100 );
+		addSeparator;
+		addBooleanReporter: '%b and %b' selector: #and:with: arguments: #( '' '' );
+		addBooleanReporter: '%b or %b' selector: #or:with: arguments: #( '' '' );
+		addBooleanReporter: 'not %b' selector: #not: arguments: #( '' '' );
+		addSeparator;
+		addBooleanReporter: 'true' selector: #getTrue;
+		addBooleanReporter: 'false' selector: #getFalse;
+		addSeparator;
+		addReporter: '%n div %n' selector: #div:by: arguments: #( 7 3 );
+		addReporter: '%n mod %n' selector: #mod:by: arguments: #( 7 3 );
+		addReporter: 'round %n' selector: #rounded: arguments: #( 1.5 );
+		addReporter: 'truncate %n' selector: #truncated: arguments: #( 1.5 );
+		addSeparator;
+		addReporter: '%f of %n' selector: #computeFunction:of: arguments: #( 'sqrt' 10 )
 ]
 
 { #category : #variables }
@@ -41,85 +136,28 @@ AlgoritScript >> addVariable: aString [
 ]
 
 { #category : #'block specs' }
-AlgoritScript >> blocks [
-	"Answer a collection of block specifications for the blocks that are common to all objects. Block specificatons (Arrays) are interspersed with category names (Strings). A block specification is an Array of the form: (<block spec string> <block type> <selector> [optional initial argument values]).
+AlgoritScript >> addVariableBlockSpecs [
 
-	Explanation of flags:
-		-	no flags
-		b	boolean reporter
-		c	c-shaped block containing a sequence of commands (always special form)
-		r	reporter
-		s	special form command with its own evaluation rule
-		t	timed command, like wait or glide
-		E	message event hat
-		K	key event hat
-		M	mouse-click event hat
-		S	start event hat
-		W	when <condition> hat (obsolete)"
-
-	| blocks |
-	blocks := #(
-		'control'
-			('when setup'							S	-)
-			('when start'							G	-)
-			-
-			('if %b'									c	doIf)
-			('if %b'									c	doIfElse)
-			-
-			('forever'								c	doForever)
-			('repeat %n'							c	doRepeat 10)
-			('while %b'								c	doWhile)
-			('repeat until %b'					c	doUntil)
-			-
-			('call %S'								s	callSubroutine '')
-			('return'									s	doReturn)
-			-
-			('wait %n secs'						t	wait:elapsed:from: 1)
-			-
-			('stop all'								s	stopAll)
-		'operators'
-			('%n + %n'								r	+ - -)
-			('%n - %n'								r	- - -)
-			('%n * %n'								r	* - -)
-			('%n / %n'								r	/ - -)
-			('- %n'										r	negated: 1)
-			-
-			('pick random %n to %n'			r	randomFrom:to: 1 10)
-			-
-			('%s < %s'								b	< '' '')
-			('%s <= %s'								b	lessEqual:than:  '' '')
-			('%s = %s'								b	= '' '')
-			('%s > %s'								b	> '' '')
-			('%s >= %s'								b	greaterEqual:than: '' '')
-			('%n between %n and %n'			b is:between:and: 50 0 100)
-			-
-			('%b and %b'							b	&)
-			('%b or %b'								b	|)
-			('not %b'									b	not:)
-			-
-			('true'										b 	getTrue)
-			('false'									b 	getFalse)
-			-
-			('%n mod %n'							r	\\ - -)
-			('round %n'								r	rounded: -)
-			('truncate %n'							r	truncated: -)
-			-
-			('%f of %n'								r	computeFunction:of: 'sqrt' 10)
-		'misc'
-			('print %s'								-	print: 'hello,')
-			('print %s with newline'		-	println: 'world')
-			-
-			('timer'									r	now)
-			('reset timer'							-	resetTimer)
-			-
-			('set random seed %n'				-	setRandomSeed: 0)
-			('assert %b'							s	doAssert)
-	).
-
-	^ blocks, self variablesBlocks
+	blockMorphBuilder
+		addCategory: 'list';
+		addCommand: 'add %n to %L' selector: #append:toList: arguments: #( 10 '' );
+		addCommand: 'add %n to %n to %L' selector: #appendFrom:to:toList: arguments: #( 10 99 '' );
+		addCommand: 'add %n randoms from %n to %n to %L' selector: #appendRandom:from:to:toList: arguments: #( 20 10 99 '' );
+		addCommand: 'delete %p of %L' selector: #deleteLine:ofList: arguments: #( 1 '' );
+		addCommand: 'replace item %p of %L with %n' selector: #setLine:ofList:to: arguments: #( 1 '' 10 );
+		addCommand: 'swap items %p and %p of %L' selector: #swapLine:and:ofList: arguments: #( 1 2 '' );
+		addCommand: 'clear list %L' selector: #clearList: arguments: #( '' );
+		addSeparator;
+		addReporter: 'item %p of %L' selector: #getLine:ofList: arguments: #( 1 '' );
+		addReporter: 'length of %L' selector: #lineCountOfList: arguments: #( '' );
+		addBooleanReporter: '%L contains %n' selector: #list:contains: arguments: #( '' 10 );
+		addSeparator;
+		addCommand: 'shuffle %L' selector: #shuffleList: arguments: #( '' );
+		addCommand: 'sort %L' selector: #sortList: arguments: #( '' );
+		addCommand: 'reverse %L' selector: #reverseList: arguments: #( '' )
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritScript >> clear [
 	evaluator clear
 ]
@@ -138,33 +176,15 @@ AlgoritScript >> deleteVariable: aString [
 
 { #category : #evaluation }
 AlgoritScript >> evaluateFunction: aSymbol withArgs: anArgs [
-	(#(stopThread stopAll return: returnValue lessEqual:than: greaterEqual:than:)
-		includes: aSymbol)
-		ifTrue: [ ^ self perform: aSymbol withArguments: anArgs ].
-	^ self evaluator perform: aSymbol withArguments: anArgs
-]
 
-{ #category : #evaluation }
-AlgoritScript >> evaluateInfix: aSymbol withArgs: rawArgs [
-	| r |
-	r := super evaluateInfix: aSymbol withArgs: rawArgs.
-	(r isNumber and: [ r isInteger not ])
-		ifTrue: [ r := r asFloat ].
-	^ r
+	(#( stopThread stopAll return: returnValue ) includes: aSymbol) 
+		ifTrue: [ self perform: aSymbol withArguments: anArgs ].
+	^ self evaluator perform: aSymbol withArguments: anArgs
 ]
 
 { #category : #accessing }
 AlgoritScript >> evaluator [
 	^ evaluator
-]
-
-{ #category : #evaluation }
-AlgoritScript >> greaterEqual: x than: y [
-	^ super
-		evaluateInfix: #>=
-		withArgs:
-			{x.
-			y}
 ]
 
 { #category : #initialization }
@@ -184,15 +204,6 @@ AlgoritScript >> isValidSubName: aString [
 { #category : #testing }
 AlgoritScript >> isWatchingVar: aString [
 	^ evaluator isWatchingVar: aString
-]
-
-{ #category : #evaluation }
-AlgoritScript >> lessEqual: x than: y [
-	^ super
-		evaluateInfix: #<=
-		withArgs:
-			{x.
-			y}
 ]
 
 { #category : #'argument menus' }
@@ -240,12 +251,13 @@ AlgoritScript >> objName: aString [
 
 { #category : #'block specs' }
 AlgoritScript >> setupBlockCategory [
-	blockDef
-		addCategory: 'control' color: (Color h: 41 s: 0.85 v: 0.9);
-		addCategory: 'operators' color: (Color h: 93 s: 0.9 v: 0.76);
-		addCategory: 'misc' color: (Color h: 200 s: 0.98 v: 0.86);
-		addCategory: 'variables' color: ScratchTheme variableBlockColor;
-		addCategory: 'list' color: ScratchTheme listBlockColor
+
+	blockMorphBuilder
+		setCategory: 'control' color: (Color h: 41 s: 0.85 v: 0.9);
+		setCategory: 'operators' color: (Color h: 93 s: 0.9 v: 0.76);
+		setCategory: 'misc' color: (Color h: 200 s: 0.98 v: 0.86);
+		setCategory: 'variables' color: ScratchTheme variableBlockColor;
+		setCategory: 'list' color: ScratchTheme listBlockColor
 ]
 
 { #category : #processes }
@@ -289,30 +301,6 @@ AlgoritScript >> varNames [
 { #category : #variables }
 AlgoritScript >> variableNameInUse: aString [
 	^ (varNames includes: aString) or: [ listVarNames includes: aString ]
-]
-
-{ #category : #'block specs' }
-AlgoritScript >> variablesBlocks [
-	^ #(
-		'variables'
-		'list'
-			('add %n to %L'									-	append:toList: 10 '')
-			('add %n to %n to %L'							-	appendFrom:to:toList: 10 99 '')
-			('add %n randoms from %n to %n to %L'
-																		-	appendRandom:from:to:toList: 20 10 99 '')
-			('delete %p of %L'								-	deleteLine:ofList: 1 '')
-			('replace item %p of %L with %n'		-	setLine:ofList:to: 1 '' 10)
-			('swap items %p and %p of %L'			-	swapLine:and:ofList: 1 2 '')
-			('clear list %L'									-	clearList: '')
-			-
-			('item %p of %L'									r	getLine:ofList: 1 '')
-			('length of %L'									r	lineCountOfList: '')
-			('%L contains %n'								b	list:contains: '' 10)
-			-
-			('shuffle %L'										- shuffleList: '')
-			('sort %L'											- sortList: '')
-			('reverse %L'										- reverseList: '')
-	)
 ]
 
 { #category : #accessing }

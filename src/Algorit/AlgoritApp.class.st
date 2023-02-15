@@ -33,7 +33,7 @@ AlgoritApp class >> appName [
 
 { #category : #constants }
 AlgoritApp class >> appVersion [
-	^ '1.2.4'
+	^ '1.2.5'
 ]
 
 { #category : #constants }
@@ -97,7 +97,7 @@ AlgoritApp >> checkVarHistory [
 
 	| ret |
 	project countVarHistory < 100 ifTrue: [ ^ true ].
-	ret := self confirm:
+	ret := presenter confirm:
 		       'Variable history is too large. Clear it before saving?'
 			       localized.
 	ret ifTrue: [ project clearVarHistory ].
@@ -124,7 +124,7 @@ AlgoritApp >> doSetup [
 	self fixUnsavedFields.
 	block := self setupHatBlock.
 	block ifNil: [ 
-		^ self alert: 'Only one setup block needed!' localized ].
+		^ presenter alert: 'Only one setup block needed!' localized ].
 	project clearVarHistory.
 	self startProcessFor: block
 ]
@@ -137,21 +137,23 @@ AlgoritApp >> doStart [
 	self fixUnsavedFields.
 	block := self startHatBlock.
 	block ifNil: [ 
-		^ self alert: 'Only one start block needed!' localized ].
+		^ presenter alert: 'Only one start block needed!' localized ].
 	self startProcessFor: block
 ]
 
 { #category : #'menu actions' }
 AlgoritApp >> exportSexpCode [
-	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension
+	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension isBinary: false
 ]
 
 { #category : #'menu actions' }
 AlgoritApp >> importSexpCode [
+
 	| script |
 	self
 		import: (ScratchSexpImporter appName: self appName)
-		extension: self sexpExtension.
+		extension: self sexpExtension
+		isBinary: false.
 	script := presenter target.
 	presenter
 		updateListTable: script;
@@ -171,6 +173,7 @@ AlgoritApp >> installNewProject: aProject [
 	"presenter knWorld: self newWorld."
 	project := aProject.
 	project application: self.
+	project setupBlockSpecs.
 	self setupView.
 	presenter clear.
 	Smalltalk garbageCollect.

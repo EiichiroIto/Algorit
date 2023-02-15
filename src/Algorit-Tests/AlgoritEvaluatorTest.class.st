@@ -13,6 +13,17 @@ AlgoritEvaluatorTest >> newEvaluator [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testAndWith [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj and: true with: true).
+	self deny: (obj and: true with: false).
+	self deny: (obj and: false with: true).
+	self deny: (obj and: false with: false)
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testAppendFromToToList [
 	| e |
 	e := self newEvaluator.
@@ -154,6 +165,54 @@ AlgoritEvaluatorTest >> testClearVarHistory [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testComputeFunctionOf [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj computeFunction: 'sqrt' of: 4) equals: 2.
+	self assert: (obj computeFunction: 'abs' of: -4) equals: 4.
+	self assert: (obj computeFunction: 'sign' of: -4) equals: -1.
+	self assert: (obj computeFunction: 'sin' of: 90) closeTo: 1.
+	self assert: (obj computeFunction: 'cos' of: 90) closeTo: 0.
+	self assert: (obj computeFunction: 'tan' of: 0) closeTo: 0.
+	self assert: (obj computeFunction: 'asin' of: 1) closeTo: 90.
+	self assert: (obj computeFunction: 'acos' of: 0) closeTo: 90.
+	self assert: (obj computeFunction: 'atan' of: 0) closeTo: 0.
+	self assert: (obj computeFunction: 'ln' of: 1) closeTo: 0.
+	self assert: (obj computeFunction: 'log' of: 100) closeTo: 2.
+	self assert: (obj computeFunction: 'e ^' of: 0) closeTo: 1.
+	self assert: (obj computeFunction: '10 ^' of: 2) closeTo: 100
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testConvertToFloat [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj convertToFloat: 123) equals: 123.
+	self assert: (obj convertToFloat: -123) equals: -123.
+	self assert: (obj convertToFloat: 123.2) equals: 123.2.
+	self assert: (obj convertToFloat: (1/2)) equals: 0.5.
+	self assert: (obj convertToFloat: 'abc') equals: 'abc'.
+	self assert: (obj convertToFloat: true).
+	self deny: (obj convertToFloat: false)
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testConvertToNumber [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj convertToNumber: 123) equals: 123.
+	self assert: (obj convertToNumber: -123) equals: -123.
+	self assert: (obj convertToNumber: '123') equals: 123.
+	self assert: (obj convertToNumber: '-123') equals: -123.
+	self assert: (obj convertToNumber: 'abc') equals: 'abc'.
+	self assert: (obj convertToNumber: true).
+	self deny: (obj convertToNumber: false)
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testDeleteLineOfList [
 	| e |
 	e := self newEvaluator.
@@ -203,6 +262,53 @@ AlgoritEvaluatorTest >> testDeleteVariable [
 	self
 		assertCollection: e varHistory second
 		equals: (Array with: 'c' with: 789)
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testDivBy [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj div: 4 by: 2) identicalTo: 2.
+	self assert: (obj div: 4.0 by: 2) identicalTo: 2.
+	self assert: (obj div: 4.0 by: 2.0) identicalTo: 2.
+	self assert: (obj div: 5 by: 2) identicalTo: 2
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testDivideBy [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj divide: 4 by: 2) identicalTo: 2.
+	self assert: (obj divide: 4.0 by: 2) identicalTo: 2.0.
+	self assert: (obj divide: 4.0 by: 2.0) identicalTo: 2.0.
+	self assert: (obj divide: 5 by: 2) identicalTo: 2.5
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testEqualTo [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj equal: 1 to: 1).
+	self assert: (obj equal: '1' to: '1').
+	self assert: (obj equal: '1' to: 1).
+	self assert: (obj equal: 2 to: '2').
+	self assert: (obj equal: 'x' to: 'x').
+	self assert: (obj equal: true to: true).
+	self assert: (obj equal: false to: false).
+	self assert: (obj equal: 'true' to: true).
+	self assert: (obj equal: true to: 'true').
+	self assert: (obj equal: 'false' to: false).
+	self assert: (obj equal: false to: 'false').
+	self deny: (obj equal: 1 to: 2).
+	self deny: (obj equal: '1' to: '2').
+	self deny: (obj equal: 'x' to: 'y').
+	self deny: (obj equal: true to: false).
+	self deny: (obj equal: false to: true).
+	self deny: (obj equal: 'true' to: false).
+	self deny: (obj equal: 'false' to: true)
 ]
 
 { #category : #test }
@@ -273,6 +379,42 @@ AlgoritEvaluatorTest >> testIsWatchingVar [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testLessEqualThan [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj lessEqual: 1 than: 2).
+	self assert: (obj lessEqual: '1' than: '2').
+	self assert: (obj lessEqual: '1' than: 2).
+	self assert: (obj lessEqual: 1 than: '2').
+	self assert: (obj lessEqual: 2 than: 2).
+	self assert: (obj lessEqual: '2' than: '2').
+	self assert: (obj lessEqual: '2' than: 2).
+	self assert: (obj lessEqual: 2 than: '2').
+	self deny: (obj lessEqual: 3 than: 2).
+	self deny: (obj lessEqual: '3' than: '2').
+	self deny: (obj lessEqual: '3' than: 2).
+	self deny: (obj lessEqual: 3 than: '2')
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testLessThan [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj less: 1 than: 2).
+	self assert: (obj less: '1' than: '2').
+	self assert: (obj less: '1' than: 2).
+	self assert: (obj less: 1 than: '2').
+	self assert: (obj less: 'a' than: 'b').
+	self deny: (obj less: 2 than: 2).
+	self deny: (obj less: '2' than: '2').
+	self deny: (obj less: '2' than: 2).
+	self deny: (obj less: 2 than: '2').
+	self deny: (obj less: 'a' than: 'a')
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testLineCountOfList [
 	| e |
 	e := self newEvaluator.
@@ -334,6 +476,75 @@ AlgoritEvaluatorTest >> testMessages [
 ]
 
 { #category : #test }
+AlgoritEvaluatorTest >> testMinusWith [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj minus: 5 with: 2) identicalTo: 3.
+	self assert: (obj minus: 5.0 with: 2) identicalTo: 3.0.
+	self assert: (obj minus: 5.0 with: 2.0) identicalTo: 3.0.
+	self assert: (obj minus: 6 with: 2) identicalTo: 4
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testModBy [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj mod: 5 by: 3) identicalTo: 2.
+	self assert: (obj mod: 5.0 by: 3) identicalTo: 2.0.
+	self assert: (obj mod: 5.0 by: 3.0) identicalTo: 2.0.
+	self assert: (obj mod: 6 by: 3) identicalTo: 0
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testMoreEqualThan [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj moreEqual: 2 than: 1).
+	self assert: (obj moreEqual: '2' than: '1').
+	self assert: (obj moreEqual: '2' than: 1).
+	self assert: (obj moreEqual: 2 than: '1').
+	self assert: (obj moreEqual: 2 than: 2).
+	self assert: (obj moreEqual: '2' than: '2').
+	self assert: (obj moreEqual: '2' than: 2).
+	self assert: (obj moreEqual: 2 than: '2').
+	self deny: (obj moreEqual: 2 than: 3).
+	self deny: (obj moreEqual: '2' than: '3').
+	self deny: (obj moreEqual: '2' than: 3).
+	self deny: (obj moreEqual: 2 than: '3')
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testMoreThan [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj more: 2 than: 1).
+	self assert: (obj more: '2' than: '1').
+	self assert: (obj more: '2' than: 1).
+	self assert: (obj more: 2 than: '1').
+	self assert: (obj more: 'b' than: 'a').
+	self deny: (obj more: 2 than: 2).
+	self deny: (obj more: '2' than: '2').
+	self deny: (obj more: '2' than: 2).
+	self deny: (obj more: 2 than: '2').
+	self deny: (obj more: 'b' than: 'b')
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testMultiplyAnd [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj multiply: 5 and: 2) identicalTo: 10.
+	self assert: (obj multiply: 5.0 and: 2) identicalTo: 10.0.
+	self assert: (obj multiply: 5.0 and: 2.0) identicalTo: 10.0.
+	self assert: (obj multiply: 6 and: 2) identicalTo: 12
+]
+
+{ #category : #test }
 AlgoritEvaluatorTest >> testNegated [
 	| e |
 	e := self newEvaluator.
@@ -369,6 +580,28 @@ AlgoritEvaluatorTest >> testNumbersFromTo [
 	self assertCollection: r equals: #(3 4 3 4 3 4).
 	r := e numbers: 100 from: 1 to: 9999.
 	self assertCollection: r asSet asArray sorted size equals: 100
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testOrWith [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj or: true with: true).
+	self assert: (obj or: true with: false).
+	self assert: (obj or: false with: true).
+	self deny: (obj or: false with: false)
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testPlusAnd [
+
+	| obj |
+	obj := self newEvaluator.
+	self assert: (obj plus: 5 and: 2) identicalTo: 7.
+	self assert: (obj plus: 5.0 and: 2) identicalTo: 7.0.
+	self assert: (obj plus: 5.0 and: 2.0) identicalTo: 7.0.
+	self assert: (obj plus: 6 and: 2) identicalTo: 8
 ]
 
 { #category : #test }
@@ -615,6 +848,12 @@ AlgoritEvaluatorTest >> testTruncated [
 	self assert: (e truncated: 1.5) equals: 1.
 	self assert: (e truncated: -1.4) equals: -1.
 	self assert: (e truncated: -1.5) equals: -1
+]
+
+{ #category : #test }
+AlgoritEvaluatorTest >> testUnknown [
+
+	self newEvaluator unknown: #abc
 ]
 
 { #category : #test }

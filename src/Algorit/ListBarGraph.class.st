@@ -371,7 +371,7 @@ ListBarGraph >> showMenu: anEvent [
 	list size = 1
 		ifTrue: [ listName := list first ]
 		ifFalse: [ 
-			choice := AlgoritApp
+			choice := SpScratchFrame
 				          select: 'Choose list var to display.' localized
 				          chooseFrom: list.
 			choice ifNil: [ ^ self ].

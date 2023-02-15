@@ -20,6 +20,12 @@ AlgoritEvaluator class >> stonAllInstVarNames [
 	^ super stonAllInstVarNames \ #(listsModified varsModified random)
 ]
 
+{ #category : #'operator ops' }
+AlgoritEvaluator >> and: aBoolean with: anotherBoolean [
+
+	^ aBoolean and: [ anotherBoolean ]
+]
+
 { #category : #'list ops' }
 AlgoritEvaluator >> append: anObject toList: aString [ 
 	| list |
@@ -82,7 +88,7 @@ AlgoritEvaluator >> clearList: aString [
 	self listsModified: true
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritEvaluator >> clearVarHistory [
 	varHistory := OrderedCollection new.
 	varsModified := true
@@ -119,6 +125,22 @@ AlgoritEvaluator >> computeFunction: aString of: aNumber [
 	self error
 ]
 
+{ #category : #private }
+AlgoritEvaluator >> convertToFloat: anObject [
+
+	^ (anObject isNumber and: [ anObject isInteger not ])
+		  ifTrue: [ anObject asFloat ]
+		  ifFalse: [ anObject ]
+]
+
+{ #category : #private }
+AlgoritEvaluator >> convertToNumber: anObject [
+
+	^ (anObject isString and: [ anObject isNumberString ])
+		  ifTrue: [ anObject asNumber ]
+		  ifFalse: [ anObject ]
+]
+
 { #category : #'list ops' }
 AlgoritEvaluator >> deleteLine: anInteger ofList: aString [
 	| list pos |
@@ -142,6 +164,38 @@ AlgoritEvaluator >> deleteVariable: aString [
 	watchingVars remove: aString ifAbsent: [  ].
 	vars removeKey: aString ifAbsent: [  ].
 	varHistory := varHistory reject: [ :each | each first = aString ]
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> div: aNumber by: aNumber2 [
+
+	^ aNumber // aNumber2
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> divide: aNumber by: aNumber2 [
+
+	^ self convertToFloat: aNumber / aNumber2
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> equal: anObject to: anotherObject [
+
+	| arg1 arg2 |
+	arg1 := anObject.
+	arg2 := anotherObject.
+	arg1 == arg2 ifTrue: [ ^ true ].
+	(arg1 isString and: [ arg2 isKindOf: Boolean ]) ifTrue: [ 
+		arg1 = 'true' ifTrue: [ ^ arg2 = true ].
+		arg1 = 'false' ifTrue: [ ^ arg2 = false ] ].
+	((arg1 isKindOf: Boolean) and: [ arg2 isString ]) ifTrue: [ 
+		arg2 = 'true' ifTrue: [ ^ arg1 = true ].
+		arg2 = 'false' ifTrue: [ ^ arg1 = false ] ].
+	arg1 := self convertToNumber: arg1.
+	arg2 := self convertToNumber: arg2.
+	((arg1 isNumber and: [ arg2 isNumber ]) or: [ 
+		 arg1 isString and: [ arg2 isString ] ]) ifTrue: [ ^ arg1 = arg2 ].
+	^ false
 ]
 
 { #category : #'operator ops' }
@@ -191,6 +245,28 @@ AlgoritEvaluator >> isWatchingVar: aString [
 	^ watchingVars includes: aString
 ]
 
+{ #category : #'operator ops' }
+AlgoritEvaluator >> less: anObject than: anotherObject [
+
+	| arg1 arg2 |
+	arg1 := self convertToNumber: anObject.
+	arg2 := self convertToNumber: anotherObject.
+	((arg1 isNumber and: [ arg2 isNumber ]) or: [ 
+		 arg1 isString and: [ arg2 isString ] ]) ifTrue: [ ^ arg1 < arg2 ].
+	^ false
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> lessEqual: anObject than: anotherObject [
+
+	| arg1 arg2 |
+	arg1 := self convertToNumber: anObject.
+	arg2 := self convertToNumber: anotherObject.
+	((arg1 isNumber and: [ arg2 isNumber ]) or: [ 
+		 arg1 isString and: [ arg2 isString ] ]) ifTrue: [ ^ arg1 <= arg2 ].
+	^ false
+]
+
 { #category : #'list ops' }
 AlgoritEvaluator >> lineCountOfList: aString [ 
 	| list |
@@ -231,6 +307,36 @@ AlgoritEvaluator >> messages: aString [
 ]
 
 { #category : #'operator ops' }
+AlgoritEvaluator >> minus: aNumber with: anotherNumber [
+
+	^ self convertToFloat: aNumber - anotherNumber
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> mod: aNumber by: aNumber2 [
+
+	^ aNumber \\ aNumber2
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> more: anObject than: anotherObject [
+
+	^ self less: anotherObject than: anObject
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> moreEqual: anObject than: anotherObject [
+
+	^ self lessEqual: anotherObject than: anObject
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> multiply: aNumber and: anotherNumber [
+
+	^ self convertToFloat: aNumber * anotherNumber
+]
+
+{ #category : #'operator ops' }
 AlgoritEvaluator >> negated: aNumber [
 	^ aNumber negated
 ]
@@ -261,6 +367,18 @@ AlgoritEvaluator >> numbers: anInteger from: anInteger2 to: anInteger3 [
 			list shuffleBy: random.
 			stream nextPutAll: (list copyFrom: 1 to: rest) ].
 	^ stream contents
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> or: aBoolean with: anotherBoolean [
+
+	^ aBoolean or: [ anotherBoolean ]
+]
+
+{ #category : #'operator ops' }
+AlgoritEvaluator >> plus: aNumber and: anotherNumber [
+
+	^ self convertToFloat: aNumber + anotherNumber
 ]
 
 { #category : #'misc ops' }
@@ -373,7 +491,7 @@ AlgoritEvaluator >> swapLine: anInteger and: anInteger2 ofList: aString [
 	self listsModified: true
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritEvaluator >> toggleWatchingVar: aString [
 	| b |
 	b := self isWatchingVar: aString.
@@ -383,6 +501,12 @@ AlgoritEvaluator >> toggleWatchingVar: aString [
 { #category : #'operator ops' }
 AlgoritEvaluator >> truncated: aNumber [
 	^ aNumber truncated
+]
+
+{ #category : #'misc ops' }
+AlgoritEvaluator >> unknown: aString [
+
+	"do nothing"
 ]
 
 { #category : #accessing }

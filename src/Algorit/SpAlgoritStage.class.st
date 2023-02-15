@@ -39,7 +39,7 @@ SpAlgoritStage class >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritStage >> addMessage: aString [
 
 	messages morph
@@ -47,7 +47,7 @@ SpAlgoritStage >> addMessage: aString [
 		changed
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritStage >> clearMessage [
 
 	messages morph
@@ -230,7 +230,7 @@ SpAlgoritStage >> target: aScript [
 	self updateListTable: aScript
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritStage >> updateListTable: aScript [
 	listTable
 		columns: #();
@@ -248,7 +248,7 @@ SpAlgoritStage >> updateListTable: aScript [
 	self updateLists: aScript
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritStage >> updateLists: aScript [
 
 	aScript ifNil: [ ^ self ].
@@ -256,13 +256,13 @@ SpAlgoritStage >> updateLists: aScript [
 	graphMorph morph needsUpdate: true
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritStage >> updateVarTable: aScript [
 	self setupVarTableColumns: aScript watchingVars sorted.
 	self updateVars: aScript
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 SpAlgoritStage >> updateVars: aScript [
 
 	aScript ifNil: [ ^ self ].

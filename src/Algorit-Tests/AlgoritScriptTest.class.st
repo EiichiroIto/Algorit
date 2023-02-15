@@ -39,12 +39,6 @@ AlgoritScriptTest >> testAddVariable [
 ]
 
 { #category : #test }
-AlgoritScriptTest >> testBlocks [
-
-	self assert: self newScript blocks isArray
-]
-
-{ #category : #test }
 AlgoritScriptTest >> testDeleteList [
 
 	| script |
@@ -85,16 +79,6 @@ AlgoritScriptTest >> testDeleteVariable [
 ]
 
 { #category : #test }
-AlgoritScriptTest >> testGreaterEqualThan [
-
-	| script |
-	script := self newScript.
-	self assert: (script greaterEqual: 1 than: 1).
-	self assert: (script greaterEqual: 2 than: 1).
-	self deny: (script greaterEqual: 0 than: 1)
-]
-
-{ #category : #test }
 AlgoritScriptTest >> testInitialize [
 
 	| script |
@@ -120,16 +104,6 @@ AlgoritScriptTest >> testIsWatchingVar [
 	self deny: (script isWatchingVar: 'abc').
 	script addVariable: 'abc'.
 	self assert: (script isWatchingVar: 'abc')
-]
-
-{ #category : #test }
-AlgoritScriptTest >> testLessEqualThan [
-
-	| script |
-	script := self newScript.
-	self assert: (script lessEqual: 1 than: 1).
-	self assert: (script lessEqual: 0 than: 1).
-	self deny: (script lessEqual: 2 than: 1)
 ]
 
 { #category : #test }
@@ -208,12 +182,6 @@ AlgoritScriptTest >> testVariableNameInUse [
 	script addList: 'def'.
 	self assert: (script variableNameInUse: 'abc').
 	self assert: (script variableNameInUse: 'def')
-]
-
-{ #category : #test }
-AlgoritScriptTest >> testVariablesBlocks [
-
-	self assert: self newScript variablesBlocks isArray
 ]
 
 { #category : #test }
