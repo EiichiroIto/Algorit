@@ -1,0 +1,483 @@
+msgid "Language-Name"
+msgstr "日本語"
+
+msgid "ArgFont"
+msgstr "MS UI Gothic:12"
+
+msgid "ButtonFont"
+msgstr "MS UI Gothic:13"
+
+msgid "CodeFont"
+msgstr "MS Gothic:12"
+
+msgid "LabelFont"
+msgstr "MS UI Gothic:13"
+
+msgid "TitleFont"
+msgstr "MS Mincho:10"
+
+msgid "%L contains %n"
+msgstr "リスト %L が %n を含む"
+
+msgid "%b and %b"
+msgstr "%b かつ %b"
+
+msgid "%b or %b"
+msgstr "%b または %b"
+
+msgid "%f of %n"
+msgstr "%n の %f"
+
+msgid "%n * %n"
+msgstr "%n × %n"
+
+msgid "%n + %n"
+msgstr "%n ＋ %n"
+
+msgid "%n - %n"
+msgstr "%n − %n"
+
+msgid "%n / %n"
+msgstr "%n ÷ %n"
+
+msgid "%n between %n and %n"
+msgstr "%n が %n と %n の間"
+
+msgid "%n div %n"
+msgstr "%n を %n で割った商"
+
+msgid "%n mod %n"
+msgstr "%n を %n で割った余り"
+
+msgid "%s < %s"
+msgstr "%s ＜ %s"
+
+msgid "%s <= %s"
+msgstr "%s ≦ %s"
+
+msgid "%s = %s"
+msgstr "%s ＝ %s"
+
+msgid "%s > %s"
+msgstr "%s ＞ %s"
+
+msgid "%s >= %s"
+msgstr "%s ≧ %s"
+
+msgid "- %n"
+msgstr "− %n"
+
+msgid "About Algorit"
+msgstr "Algorit について"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Choose list var to delete."
+msgstr "削除するリストを選んでください."
+
+msgid "Choose list var to display."
+msgstr "表示するリストを選んでください."
+
+msgid "Choose variable to delete."
+msgstr "削除する変数を選んでください."
+
+msgid "Clear"
+msgstr "消去"
+
+msgid "Clear plots"
+msgstr "プロットの消去"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Could not generate code: "
+msgstr "コードを生成できません: "
+
+msgid "Could not read file: "
+msgstr "ファイルを読めません: "
+
+msgid "Could not write file: "
+msgstr "ファイルに書けません: "
+
+msgid "Delete a list"
+msgstr "リストを削除する"
+
+msgid "Delete a variable"
+msgstr "変数を削除する"
+
+msgid "Enter for "
+msgstr "入力してください"
+
+msgid "Error!"
+msgstr "エラー!"
+
+msgid "Examples"
+msgstr "例"
+
+msgid "Export ..."
+msgstr "エクスポート ..."
+
+msgid "Export S-EXP"
+msgstr "S式としてエクスポートする"
+
+msgid "Export Script image"
+msgstr "スクリプト画像をエクスポートする"
+
+msgid "File"
+msgstr "ファイル"
+
+msgid "Folder may be locked or read-only"
+msgstr "フォルダがロック中か読み込み専用です"
+
+msgid "Help"
+msgstr "ヘルプ"
+
+msgid "Import ..."
+msgstr "インポート"
+
+msgid "Import S-EXP"
+msgstr "S式をインポートする"
+
+msgid "Important confirmation"
+msgstr "重要な確認"
+
+msgid "Information request"
+msgstr "情報を入力してください"
+
+msgid "Invalid file version!"
+msgstr "ファイルバージョンが不正です!"
+
+msgid "Invalid project format:"
+msgstr "プロジェクト形式が違います:"
+
+msgid "List name?"
+msgstr "リストの名前は?"
+
+msgid "Make a list"
+msgstr "リストを作る"
+
+msgid "Make a variable"
+msgstr "変数を作る"
+
+msgid "Message name:"
+msgstr "メッセージの名前:"
+
+msgid "Multiple Select"
+msgstr "複数選択"
+
+msgid "New"
+msgstr "新規"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Only one setup block needed!"
+msgstr "設定が押されたときのブロックが１つだけ必要です!"
+
+msgid "Only one start block needed!"
+msgstr "開始が押されたときのブロックが１つだけ必要です!"
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Open Project"
+msgstr "プロジェクトを開く"
+
+msgid "Plot data"
+msgstr "プロットデータ"
+
+msgid "Plotter menu"
+msgstr "プロットメニュー"
+
+msgid "Project Notes"
+msgstr "プロジェクトのメモ"
+
+msgid "Quit"
+msgstr "終了する"
+
+msgid "Quit Application?"
+msgstr "アプリを終了しますか?"
+
+msgid "Reading"
+msgstr "読み込み中"
+
+msgid "Save"
+msgstr "保存する"
+
+msgid "Save As"
+msgstr "名前を付けて保存する"
+
+msgid "Save Plots Snapshot"
+msgstr "プロット画像の保存"
+
+msgid "Save Project"
+msgstr "プロジェクトを保存する"
+
+msgid "Save failed. The folder may be read-only."
+msgstr "保存失敗. フォルダが読み込み専用の可能性があります."
+
+msgid "Save plot data"
+msgstr "プロットデータを保存する"
+
+msgid "Save settings"
+msgstr "設定を保存する"
+
+msgid "Save the current project?"
+msgstr "現在のプロジェクトを保存しますか?"
+
+msgid "Scripts"
+msgstr "スクリプト"
+
+msgid "Select Message name"
+msgstr "メッセージ名を選んでください"
+
+msgid "Select an option for "
+msgstr "オプションを選んでください"
+
+msgid "Select one"
+msgstr "1つ選んでください"
+
+msgid "Set max plots"
+msgstr "最大プロット数を設定する"
+
+msgid "Set max value"
+msgstr "最大値を設定する"
+
+msgid "Set min value"
+msgstr "最小値を設定する"
+
+msgid "Set update period"
+msgstr "更新間隔を設定する"
+
+msgid "Setup"
+msgstr "設定"
+
+msgid "Start"
+msgstr "開始"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Sub name?"
+msgstr "サブルーチン名?"
+
+msgid "That list name is already in use!"
+msgstr "そのリストは既に使われています!"
+
+msgid "That sub name is already in use!"
+msgstr "そのサブルーチンは既に使われています!"
+
+msgid "That variable name is already in use!"
+msgstr "その変数は既に使われています!"
+
+msgid "Variable history is too large. Clear it before saving?"
+msgstr "変数履歴が多すぎます. 保存前に消去しますか?"
+
+msgid "Variable name?"
+msgstr "変数名?"
+
+msgid "View on stage"
+msgstr "ステージの上に表示"
+
+msgid "[modified]"
+msgstr "[変更あり]"
+
+msgid "abs %n"
+msgstr "%n の絶対値"
+
+msgid "add %n randoms from %n to %n to %L"
+msgstr "リスト %L に %n2 から %n3 の範囲の %n1 個の数を追加する"
+
+msgid "add %n to %L"
+msgstr "リスト %L に %n を追加する"
+
+msgid "add %n to %n to %L"
+msgstr "リスト %L に %n1 から %n2 を追加する"
+
+msgid "add sub block"
+msgstr "サブルーチンを追加する"
+
+msgid "alert!"
+msgstr "警告!"
+
+msgid "assert %b"
+msgstr "%b は正しい"
+
+msgid "call %S"
+msgstr "%S を呼び出す"
+
+msgid "change %v by %n"
+msgstr "%v を %n ずつ変える"
+
+msgid "clean up"
+msgstr "きれいにする"
+
+msgid "clear list %L"
+msgstr "リスト %L を消去する"
+
+msgid "control"
+msgstr "制御"
+
+msgid "copy"
+msgstr "コピー"
+
+msgid "cut"
+msgstr "切り取り"
+
+msgid "delete"
+msgstr "削除"
+
+msgid "delete %p of %L"
+msgstr "リスト %L の %p 番目を削除する"
+
+msgid "duplicate"
+msgstr "複製"
+
+msgid "else"
+msgstr "でなければ"
+
+msgid "false"
+msgstr "いいえ"
+
+msgid "forever"
+msgstr "ずっと"
+
+msgid "graph"
+msgstr "グラフ"
+
+msgid "history"
+msgstr "履歴"
+
+msgid "if %b"
+msgstr "もし %b なら"
+
+msgid "invalid sub name!"
+msgstr "サブルーチン名がおかしい"
+
+msgid "item %p of %L"
+msgstr "リスト %L の %p 番目"
+
+msgid "length of %L"
+msgstr "リスト %L の個数"
+
+msgid "list"
+msgstr "リスト"
+
+msgid "maximum plot value?"
+msgstr "プロットの最大値?"
+
+msgid "minimum plot value?"
+msgstr "プロットの最小値?"
+
+msgid "misc"
+msgstr "その他"
+
+msgid "mouse-pointer"
+msgstr "マウスのポインター"
+
+msgid "new"
+msgstr "新規"
+
+msgid "no object"
+msgstr "オブジェクトなし"
+
+msgid "not %b"
+msgstr "%b ではない"
+
+msgid "number of max plots?"
+msgstr "プロットの最大数は?"
+
+msgid "operators"
+msgstr "演算"
+
+msgid "paste"
+msgstr "貼り付け"
+
+msgid "pick random %n to %n"
+msgstr "%n から %n までの乱数"
+
+msgid "print %s"
+msgstr "%s を表示する"
+
+msgid "print %s with newline"
+msgstr "%s を表示して改行する"
+
+msgid "repeat %n"
+msgstr "%n 回繰り返す"
+
+msgid "repeat until %b"
+msgstr "%b まで繰り返す"
+
+msgid "replace item %p of %L with %n"
+msgstr "リスト %L の %p 番目を %n で置き換える"
+
+msgid "reset timer"
+msgstr "タイマーをリセットする"
+
+msgid "return"
+msgstr "リターン"
+
+msgid "reverse %L"
+msgstr "%L を反転する"
+
+msgid "round %n"
+msgstr "%n を丸める"
+
+msgid "sensing"
+msgstr "調べる"
+
+msgid "set %v to %n"
+msgstr "%v を %n にする"
+
+msgid "set random seed %n"
+msgstr "乱数を %n で初期化する"
+
+msgid "shuffle %L"
+msgstr "リスト %L をシャッフルする"
+
+msgid "sort %L"
+msgstr "リスト %L を並べ替える"
+
+msgid "stop all"
+msgstr "すべてを止める"
+
+msgid "swap items %p and %p of %L"
+msgstr "リスト %L の %p1 番目と %p2 番目を入れ替える"
+
+msgid "test"
+msgstr "テスト"
+
+msgid "timer"
+msgstr "タイマー"
+
+msgid "true"
+msgstr "はい"
+
+msgid "truncate %n"
+msgstr "%n を切り捨て"
+
+msgid "unknown %s"
+msgstr "不明なブロック %s"
+
+msgid "update plot period? (in milliseconds)"
+msgstr "プロットの時間間隔(ミリ秒)は?"
+
+msgid "value"
+msgstr "値"
+
+msgid "variable"
+msgstr "変数"
+
+msgid "variables"
+msgstr "変数"
+
+msgid "wait %n secs"
+msgstr "%n 秒待つ"
+
+msgid "when I receive"
+msgstr "when I receive"
+
+msgid "while %b"
+msgstr "%b の間繰り返す"
+
