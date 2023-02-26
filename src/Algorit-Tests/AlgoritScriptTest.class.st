@@ -157,6 +157,16 @@ AlgoritScriptTest >> testObjName [
 ]
 
 { #category : #test }
+AlgoritScriptTest >> testStartHatBlockNames [
+
+	| script r |
+	script := self newScript.
+	r := script startHatBlockNames.
+	self assert: r isArray.
+	self assert: r size equals: 2
+]
+
+{ #category : #test }
 AlgoritScriptTest >> testVarNames [
 
 	| script |

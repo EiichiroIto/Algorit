@@ -237,12 +237,11 @@ AlgoritApp >> saveProjectNoDialog [
 
 { #category : #private }
 AlgoritApp >> setupHatBlock [
+
 	| list |
-	list := self target hatBlocks
-		select:
-			[ :each | (each isKindOf: EventHatMorph) and: [ each eventName = #setup ] ].
-	list size = 1
-		ifTrue: [ ^ list first ].
+	list := self target startHatBlocks select: [ :each | 
+		        each selector = #setup ].
+	list size = 1 ifTrue: [ ^ list first ].
 	^ nil
 ]
 
@@ -253,12 +252,11 @@ AlgoritApp >> sexpExtension [
 
 { #category : #private }
 AlgoritApp >> startHatBlock [
+
 	| list |
-	list := self target hatBlocks
-		select:
-			[ :each | (each isKindOf: EventHatMorph) and: [ each eventName = #start ] ].
-	list size = 1
-		ifTrue: [ ^ list first ].
+	list := self target startHatBlocks select: [ :each | 
+		        each selector = #start ].
+	list size = 1 ifTrue: [ ^ list first ].
 	^ nil
 ]
 

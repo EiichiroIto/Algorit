@@ -1,6 +1,6 @@
 Class {
 	#name : #SpAlgoritFrame,
-	#superclass : #SpScratchFrame,
+	#superclass : #SpScratchPresenter,
 	#instVars : [
 		'buttonOpen',
 		'buttonSave'

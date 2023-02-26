@@ -51,8 +51,8 @@ AlgoritScript >> addControlBlockSpecs [
 
 	blockMorphBuilder
 		addCategory: 'control';
-		addHatBlock: 'when setup' type: #S arguments: #(  );
-		addHatBlock: 'when start' type: #G arguments: #(  );
+		addStartHatBlock: 'when setup' selector: #setup;
+		addStartHatBlock: 'when start' selector: #start;
 		addSeparator;
 		addCBlock: 'if %b' selector: #doIf arguments: #(  );
 		addCBlock: 'if %b' selector: #doIfElse arguments: #(  );
@@ -162,6 +162,15 @@ AlgoritScript >> clear [
 	evaluator clear
 ]
 
+{ #category : #'block building' }
+AlgoritScript >> convertEventHatTuple: anArray [
+
+	anArray first = #EventHatMorph ifTrue: [ ^ Array with: anArray second asSymbol ].
+	anArray first = #SubHatMorph ifTrue: [ 
+		^ Array with: #sub: with: anArray second ].
+	^ anArray
+]
+
 { #category : #variables }
 AlgoritScript >> deleteList: aString [
 	listVarNames remove: aString ifAbsent: [  ].
@@ -258,6 +267,12 @@ AlgoritScript >> setupBlockCategory [
 		setCategory: 'misc' color: (Color h: 200 s: 0.98 v: 0.86);
 		setCategory: 'variables' color: ScratchTheme variableBlockColor;
 		setCategory: 'list' color: ScratchTheme listBlockColor
+]
+
+{ #category : #'block specs' }
+AlgoritScript >> startHatBlockNames [
+
+	^ #( setup start )
 ]
 
 { #category : #processes }
