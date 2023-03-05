@@ -282,6 +282,12 @@ AlgoritEvaluator >> list: aString contains: anInteger [
 ]
 
 { #category : #accessing }
+AlgoritEvaluator >> listVarNames [
+
+	^ lists keys
+]
+
+{ #category : #accessing }
 AlgoritEvaluator >> lists [
 	^ lists
 ]
@@ -512,6 +518,12 @@ AlgoritEvaluator >> unknown: aString [
 { #category : #accessing }
 AlgoritEvaluator >> varHistory [
 	^ varHistory
+]
+
+{ #category : #accessing }
+AlgoritEvaluator >> varNames [
+
+	^ vars keys
 ]
 
 { #category : #accessing }

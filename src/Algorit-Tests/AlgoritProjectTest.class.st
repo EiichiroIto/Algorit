@@ -14,22 +14,31 @@ AlgoritProjectTest >> newProject [
 ]
 
 { #category : #test }
-AlgoritProjectTest >> testAddScriptNamed [
-
-	| project script |
-	project := self newProject.
-	self assert: project scripts isEmpty.
-	script := project addScriptNamed: 'abc'.
-	self assert: script objName equals: 'abc'.
-	self assert: script project equals: project.
-	self assert: project scripts size equals: 1.
-	self assert: project scripts first equals: script
-]
-
-{ #category : #test }
 AlgoritProjectTest >> testFileVersionString [
 
 	self
 		assert: self newProject newProjectReadWriter fileVersionString
 		equals: 'AlgoritV01'
+]
+
+{ #category : #test }
+AlgoritProjectTest >> testNewScript [
+
+	| project script |
+	project := self newProject.
+	script := project newScript.
+	self assert: (script isKindOf: AlgoritScript).
+	self assert: script project identicalTo: project
+]
+
+{ #category : #test }
+AlgoritProjectTest >> testSetupScripts [
+
+	| project |
+	project := self newProject.
+	self assert: project scripts isEmpty.
+	project setupScripts.
+	self assert: project scripts notEmpty.
+	self assert: project scripts size equals: 1.
+	self assert: (project scripts first isKindOf: AlgoritScript)
 ]

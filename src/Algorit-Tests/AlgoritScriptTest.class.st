@@ -79,6 +79,15 @@ AlgoritScriptTest >> testDeleteVariable [
 ]
 
 { #category : #test }
+AlgoritScriptTest >> testEvaluator [
+
+	| script obj |
+	script := self newScript.
+	obj := script evaluator.
+	self assert: (obj isKindOf: AlgoritEvaluator)
+]
+
+{ #category : #test }
 AlgoritScriptTest >> testInitialize [
 
 	| script |
@@ -119,9 +128,7 @@ AlgoritScriptTest >> testListVarNames [
 	script := self newScript.
 	script addList: 'a'.
 	script addList: 'b'.
-	self
-		assertCollection: script listVarNames
-		equals: #( a b ) asOrderedCollection
+	self assertCollection: script listVarNames hasSameElements: #( a b )
 ]
 
 { #category : #test }
@@ -147,13 +154,10 @@ AlgoritScriptTest >> testNewEvaluator [
 { #category : #test }
 AlgoritScriptTest >> testObjName [
 
-	| script |
+	| script obj |
 	script := self newScript.
-	self assert: script objName isNil.
-	script objName: 'abc'.
-	self assert: script objName equals: 'abc'.
-	script objName: 'def'.
-	self assert: script objName equals: 'def'
+	obj := script objName.
+	self assert: obj equals: 'main'
 ]
 
 { #category : #test }
@@ -174,9 +178,7 @@ AlgoritScriptTest >> testVarNames [
 	script addVariable: 'c'.
 	script addVariable: 'a'.
 	script addVariable: 'b'.
-	self
-		assertCollection: script varNames
-		equals: #( a b c ) asOrderedCollection
+	self assertCollection: script varNames hasSameElements: #( a b c )
 ]
 
 { #category : #test }

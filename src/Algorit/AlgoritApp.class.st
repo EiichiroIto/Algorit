@@ -62,7 +62,7 @@ AlgoritApp class >> menuCommandOn: aBuilder [
 
 { #category : #constants }
 AlgoritApp class >> presentationClass [
-	^ SpAlgoritFrame
+	^ SpAlgoritPresenter
 ]
 
 { #category : #constants }
@@ -173,6 +173,7 @@ AlgoritApp >> installNewProject: aProject [
 	"presenter knWorld: self newWorld."
 	project := aProject.
 	project application: self.
+	project setupScripts.
 	project setupBlockSpecs.
 	self setupView.
 	presenter clear.
@@ -185,11 +186,6 @@ AlgoritApp >> installNewProject: aProject [
 { #category : #processes }
 AlgoritApp >> isProcessRunning [
 	^ runningBlocks notEmpty
-]
-
-{ #category : #private }
-AlgoritApp >> mainScriptName [
-	^ 'main'
 ]
 
 { #category : #processes }

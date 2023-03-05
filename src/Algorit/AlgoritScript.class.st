@@ -2,17 +2,14 @@ Class {
 	#name : #AlgoritScript,
 	#superclass : #ScratchScript,
 	#instVars : [
-		'varNames',
-		'listVarNames',
-		'evaluator',
-		'objName'
+		'evaluator'
 	],
 	#category : #'Algorit-Project'
 }
 
 { #category : #'ston-core' }
 AlgoritScript class >> stonAllInstVarNames [
-	^ super stonAllInstVarNames , #(objName varNames listVarNames evaluator)
+	^ super stonAllInstVarNames , #(evaluator)
 ]
 
 { #category : #'argument menus' }
@@ -72,7 +69,7 @@ AlgoritScript >> addControlBlockSpecs [
 
 { #category : #variables }
 AlgoritScript >> addList: aString [
-	listVarNames add: aString.
+
 	evaluator clearList: aString
 ]
 
@@ -129,7 +126,6 @@ AlgoritScript >> addOperatorBlockSpecs [
 { #category : #variables }
 AlgoritScript >> addVariable: aString [
 
-	varNames add: aString.
 	evaluator
 		setVar: aString to: 0;
 		setWatchingVar: aString to: true
@@ -173,13 +169,13 @@ AlgoritScript >> convertEventHatTuple: anArray [
 
 { #category : #variables }
 AlgoritScript >> deleteList: aString [
-	listVarNames remove: aString ifAbsent: [  ].
+
 	evaluator deleteList: aString
 ]
 
 { #category : #variables }
 AlgoritScript >> deleteVariable: aString [
-	varNames remove: aString ifAbsent: [  ].
+
 	evaluator deleteVariable: aString
 ]
 
@@ -188,7 +184,7 @@ AlgoritScript >> evaluateFunction: aSymbol withArgs: anArgs [
 
 	(#( stopThread stopAll return: returnValue ) includes: aSymbol) 
 		ifTrue: [ self perform: aSymbol withArguments: anArgs ].
-	^ self evaluator perform: aSymbol withArguments: anArgs
+	^ evaluator perform: aSymbol withArguments: anArgs
 ]
 
 { #category : #accessing }
@@ -198,11 +194,17 @@ AlgoritScript >> evaluator [
 
 { #category : #initialization }
 AlgoritScript >> initialize [
+
 	super initialize.
-	varNames := OrderedCollection new.
-	listVarNames := OrderedCollection new.
 	evaluator := self newEvaluator
-		yourself
+]
+
+{ #category : #introspection }
+AlgoritScript >> instVarNamed: aString put: aValue [
+
+	[ super instVarNamed: aString put: aValue ]
+		on: InstanceVariableNotFound
+		do: [ :err | self inform: err instVarName ]
 ]
 
 { #category : #testing }
@@ -222,7 +224,8 @@ AlgoritScript >> listPositionMenu [
 
 { #category : #'argument menus' }
 AlgoritScript >> listVarNames [
-	^ listVarNames
+
+	^ evaluator listVarNames
 ]
 
 { #category : #accessing }
@@ -250,12 +253,8 @@ AlgoritScript >> newEvaluator [
 
 { #category : #accessing }
 AlgoritScript >> objName [
-	^ objName
-]
 
-{ #category : #accessing }
-AlgoritScript >> objName: aString [
-	objName := aString
+	^ 'main'
 ]
 
 { #category : #'block specs' }
@@ -290,16 +289,17 @@ AlgoritScript >> stopAllProcesses [
 								ifTrue: [ each2 updateCachedForm ] ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritScript >> toggleWatcher: aToggleButton for: aVariableBlockMorph [
+
 	| v |
 	v := aVariableBlockMorph variable.
 	evaluator toggleWatchingVar: v.
 	self updateWatcher: aToggleButton for: aVariableBlockMorph.
-	self project updateVarTable: self
+	project updateVarTable: self
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 AlgoritScript >> updateWatcher: aToggleButton for: aBlockMorph [
 	| v |
 	v := aBlockMorph variable.
@@ -310,12 +310,12 @@ AlgoritScript >> updateWatcher: aToggleButton for: aBlockMorph [
 
 { #category : #'argument menus' }
 AlgoritScript >> varNames [
-	^ varNames sorted
+	^ evaluator varNames sorted
 ]
 
 { #category : #variables }
 AlgoritScript >> variableNameInUse: aString [
-	^ (varNames includes: aString) or: [ listVarNames includes: aString ]
+	^ (evaluator varNames includes: aString) or: [ evaluator listVarNames includes: aString ]
 ]
 
 { #category : #accessing }
@@ -356,7 +356,7 @@ AlgoritScript >> watchingListItems [
 
 { #category : #accessing }
 AlgoritScript >> watchingLists [
-	^ listVarNames
+	^ evaluator listVarNames
 ]
 
 { #category : #accessing }

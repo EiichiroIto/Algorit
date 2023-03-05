@@ -1,5 +1,5 @@
 Class {
-	#name : #SpAlgoritFrame,
+	#name : #SpAlgoritPresenter,
 	#superclass : #SpScratchPresenter,
 	#instVars : [
 		'buttonOpen',
@@ -8,23 +8,50 @@ Class {
 	#category : #'Algorit-Spec2'
 }
 
+{ #category : #api }
+SpAlgoritPresenter >> clear [
+	self target clear.
+	stageFrame clearMessage
+]
+
+{ #category : #initialization }
+SpAlgoritPresenter >> connectPresenters [
+
+	buttonOpen action: [ application openProject ].
+	buttonSave action: [ application saveProject ].
+	stageFrame
+		whenClearDo: [ 
+			self clear.
+			self updateDisplay ];
+		whenStopDo: [ application stopAllProcesses ];
+		whenStartDo: [ application doStart ];
+		whenSetupDo: [ application doSetup ];
+		whenVariablesPageChangedDo: [ stageFrame updateVars: self target ];
+		whenListsPageChangedDo: [ stageFrame updateLists: self target ]
+]
+
+{ #category : #private }
+SpAlgoritPresenter >> defaultExtent [
+	^ 1024 @ 768
+]
+
 { #category : #layout }
-SpAlgoritFrame class >> defaultLayout [
+SpAlgoritPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: (SpBoxLayout newHorizontal
 				   spacing: 4;
 				   add: #logo withConstraints: [ :c | c width: 200 ];
 				   add: #buttonOpen
-				   withConstraints: [ :c | c width: self iconWidth ];
+				   withConstraints: [ :c | c width: self class iconWidth ];
 				   add: #buttonSave
-				   withConstraints: [ :c | c width: self iconWidth ];
+				   withConstraints: [ :c | c width: self class iconWidth ];
 				   add: #menu;
 				   yourself)
-		  withConstraints: [ :c | c height: self toolbarHeight ];
+		  withConstraints: [ :c | c height: self class toolbarHeight ];
 		  add: (SpBoxLayout newHorizontal
 				   add: #viewerPane
-				   withConstraints: [ :c | c width: self viewerPaneWidth ];
+				   withConstraints: [ :c | c width: self class viewerPaneWidth ];
 				   add: (SpPanedLayout newHorizontal
 						    add: (SpBoxLayout newVertical
 								     add: (SpBoxLayout newHorizontal
@@ -41,35 +68,8 @@ SpAlgoritFrame class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #api }
-SpAlgoritFrame >> clear [
-	self target clear.
-	stageFrame clearMessage
-]
-
-{ #category : #initialization }
-SpAlgoritFrame >> connectPresenters [
-
-	buttonOpen action: [ application openProject ].
-	buttonSave action: [ application saveProject ].
-	stageFrame
-		whenClearDo: [ 
-			self clear.
-			self updateDisplay ];
-		whenStopDo: [ application stopAllProcesses ];
-		whenStartDo: [ application doStart ];
-		whenSetupDo: [ application doSetup ];
-		whenVariablesPageChangedDo: [ stageFrame updateVars: self target ];
-		whenListsPageChangedDo: [ stageFrame updateLists: self target ]
-]
-
 { #category : #private }
-SpAlgoritFrame >> defaultExtent [
-	^ 1024 @ 768
-]
-
-{ #category : #private }
-SpAlgoritFrame >> exportMenu [
+SpAlgoritPresenter >> exportMenu [
 
 	^ self newMenu
 		  addItem: [ :item | 
@@ -84,7 +84,7 @@ SpAlgoritFrame >> exportMenu [
 ]
 
 { #category : #private }
-SpAlgoritFrame >> fileMenu [
+SpAlgoritPresenter >> fileMenu [
 
 	| m |
 	m := self newMenu.
@@ -141,7 +141,7 @@ SpAlgoritFrame >> fileMenu [
 ]
 
 { #category : #private }
-SpAlgoritFrame >> importMenu [
+SpAlgoritPresenter >> importMenu [
 	^ self newMenu
 		addItem: [ :item | 
 			item
@@ -151,7 +151,7 @@ SpAlgoritFrame >> importMenu [
 ]
 
 { #category : #initialization }
-SpAlgoritFrame >> initializePresenters [
+SpAlgoritPresenter >> initializePresenters [
 
 	super initializePresenters.
 	buttonOpen := self newButton
@@ -166,19 +166,19 @@ SpAlgoritFrame >> initializePresenters [
 ]
 
 { #category : #initialization }
-SpAlgoritFrame >> newStage [
+SpAlgoritPresenter >> newStage [
 
 	^ self instantiate: SpAlgoritStage
 ]
 
 { #category : #accessing }
-SpAlgoritFrame >> scriptForm [
+SpAlgoritPresenter >> scriptForm [
 
 	^ editorPane morph contents screenshot
 ]
 
 { #category : #initialization }
-SpAlgoritFrame >> setupMenu [
+SpAlgoritPresenter >> setupMenu [
 	menu
 		addItem: [ :item | 
 			item
@@ -191,12 +191,12 @@ SpAlgoritFrame >> setupMenu [
 ]
 
 { #category : #private }
-SpAlgoritFrame >> stageShotExtent: size [
+SpAlgoritPresenter >> stageShotExtent: size [
 	^ nil
 ]
 
 { #category : #accessing }
-SpAlgoritFrame >> target: aScript [
+SpAlgoritPresenter >> target: aScript [
 
 	viewerPane target: aScript.
 	stageFrame target: aScript.
@@ -205,7 +205,7 @@ SpAlgoritFrame >> target: aScript [
 ]
 
 { #category : #api }
-SpAlgoritFrame >> updateDisplay [
+SpAlgoritPresenter >> updateDisplay [
 	self target
 		in: [ :t | 
 			t varsModified
@@ -218,16 +218,16 @@ SpAlgoritFrame >> updateDisplay [
 ]
 
 { #category : #api }
-SpAlgoritFrame >> updateListTable: aScript [
+SpAlgoritPresenter >> updateListTable: aScript [
 	stageFrame updateListTable: aScript
 ]
 
 { #category : #api }
-SpAlgoritFrame >> updateVarTable: aScript [
+SpAlgoritPresenter >> updateVarTable: aScript [
 	stageFrame updateVarTable: aScript
 ]
 
 { #category : #stepping }
-SpAlgoritFrame >> whenStepsDo: aBlock [
+SpAlgoritPresenter >> whenStepsDo: aBlock [
 	stageFrame whenStepsDo: aBlock
 ]

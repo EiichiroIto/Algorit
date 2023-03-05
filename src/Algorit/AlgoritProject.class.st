@@ -19,29 +19,10 @@ AlgoritProject class >> objStreamClass [
 	^ STONObjStream
 ]
 
-{ #category : #api }
-AlgoritProject >> addScriptNamed: aString [
-	| script |
-	script := AlgoritScript new
-		project: self;
-		objName: aString;
-		yourself.
-	self addScript: script.
-	^ script
-]
-
 { #category : #accessing }
-AlgoritProject >> application: anApplication [
-	super application: anApplication.
-	scripts isEmpty
-		ifTrue: [ self addScriptNamed: anApplication mainScriptName ]
-]
+AlgoritProject >> assureExistsScriptNamed: each [
 
-{ #category : #accessing }
-AlgoritProject >> assureExistsBreed: each [
-	((self scripts collect: #objName) includes: each)
-		ifTrue: [ ^ self ].
-	self addScriptNamed: each
+	self setupScripts
 ]
 
 { #category : #api }
@@ -57,17 +38,40 @@ AlgoritProject >> countVarHistory [
 	^ sum
 ]
 
-{ #category : #api }
-AlgoritProject >> stopAll [
-	self application stopAllProcesses
+{ #category : #'instance creation' }
+AlgoritProject >> newScript [
+
+	^ AlgoritScript new
+		  project: self;
+		  yourself
 ]
 
-{ #category : #processes }
+{ #category : #accessing }
+AlgoritProject >> scriptNamed: aString [
+
+	^ scripts first
+]
+
+{ #category : #api }
+AlgoritProject >> setupScripts [
+
+	scripts isEmpty ifFalse: [ ^ self ].
+	self addScript: self newScript
+]
+
+{ #category : #api }
+AlgoritProject >> stopAll [
+
+	application stopAllProcesses
+]
+
+{ #category : #api }
 AlgoritProject >> stopAllProcesses [
 	scripts do: #stopAllProcesses
 ]
 
 { #category : #api }
 AlgoritProject >> updateVarTable: aScript [
-	self application updateVarTable: aScript
+
+	application updateVarTable: aScript
 ]

@@ -19,26 +19,6 @@ Class {
 	#category : #'Algorit-Spec2'
 }
 
-{ #category : #layout }
-SpAlgoritStage class >> defaultLayout [
-	^ SpBoxLayout newVertical
-		add: #toolBar withConstraints: [ :c | c height: 50 ];
-		add:
-			(SpPanedLayout newVertical
-				add:
-					(SpPanedLayout newHorizontal
-						add: #variables;
-						add: #lists;
-						yourself);
-				add:
-					(SpBoxLayout newHorizontal
-						add: #stepperMorph withConstraints: [ :c | c width: 5 ];
-						add: #messages;
-						yourself);
-				yourself);
-		yourself
-]
-
 { #category : #api }
 SpAlgoritStage >> addMessage: aString [
 
@@ -103,6 +83,26 @@ SpAlgoritStage >> createValuePage [
 		title: self valueLabel
 		icon: (self iconNamed: #morph)
 		provider: [ varTable ]
+]
+
+{ #category : #layout }
+SpAlgoritStage >> defaultLayout [
+	^ SpBoxLayout newVertical
+		add: #toolBar withConstraints: [ :c | c height: 50 ];
+		add:
+			(SpPanedLayout newVertical
+				add:
+					(SpPanedLayout newHorizontal
+						add: #variables;
+						add: #lists;
+						yourself);
+				add:
+					(SpBoxLayout newHorizontal
+						add: #stepperMorph withConstraints: [ :c | c width: 5 ];
+						add: #messages;
+						yourself);
+				yourself);
+		yourself
 ]
 
 { #category : #accessing }
