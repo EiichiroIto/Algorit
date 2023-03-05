@@ -1,0 +1,63 @@
+@startuml
+class AlgoritProject {
+  {field} application
+  {field} scripts
+}
+
+class AlgoritScript {
+  {field} project
+  {field} evaluator
+}
+
+class AlgoritEvaluator
+
+AlgoritProject "1" *--* "1" AlgoritScript
+AlgoritScript "1" *--* "1" AlgoritEvaluator
+
+class SpAlgorit {
+  {field} project
+  {field} presenter
+}
+
+SpAlgorit "1" *--* "1" AlgoritProject
+
+class SpAlgoritPresenter {
+  {field} application
+  {field} viewerPane
+  {field} editorPane
+  {field} stageFrame
+}
+
+class ScratchScriptsMorph {
+  {field} submorphs
+}
+
+class ScratchBlockPaletteMorph {
+  {field} submorphs
+}
+
+SpAlgorit "1" *--* "1" SpAlgoritPresenter
+
+SpAlgoritPresenter "1" *-- "1" SpScratchListViewer
+SpAlgoritPresenter .. ScratchScriptsMorph
+SpAlgoritPresenter "1" *-- "1" SpAlgoritStage
+
+class SpAlgoritStage {
+  {field} messages
+  {field} graphMorph
+}
+
+SpScratchListViewer .. ScratchBlockPaletteMorph
+SpAlgoritStage .. ScratchConsoleMorph
+SpAlgoritStage .. ListBarGraph
+
+class SpScratchListViewer {
+  {field} pageViewer
+}
+
+abstract class BlockMorph
+
+ScratchScriptsMorph "1" -- "0..*" BlockMorph
+ScratchBlockPaletteMorph "1" -- "0..*" BlockMorph
+
+@enduml
