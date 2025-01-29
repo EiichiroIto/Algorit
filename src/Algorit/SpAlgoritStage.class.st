@@ -1,6 +1,6 @@
 Class {
-	#name : #SpAlgoritStage,
-	#superclass : #SpPresenter,
+	#name : 'SpAlgoritStage',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'stepperMorph',
 		'toolBar',
@@ -16,10 +16,12 @@ Class {
 		'lists',
 		'graphMorph'
 	],
-	#category : #'Algorit-Spec2'
+	#category : 'Algorit-Spec2',
+	#package : 'Algorit',
+	#tag : 'Spec2'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritStage >> addMessage: aString [
 
 	messages morph
@@ -27,7 +29,7 @@ SpAlgoritStage >> addMessage: aString [
 		changed
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritStage >> clearMessage [
 
 	messages morph
@@ -35,7 +37,7 @@ SpAlgoritStage >> clearMessage [
 		changed
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> createConsole [
 
 	^ self newMorph
@@ -43,7 +45,7 @@ SpAlgoritStage >> createConsole [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> createGraphMorphPage [
 
 	graphMorph := self newMorph
@@ -55,7 +57,7 @@ SpAlgoritStage >> createGraphMorphPage [
 		  provider: [ graphMorph ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> createHistoryPage [
 
 	historyTable := self newTable.
@@ -65,7 +67,7 @@ SpAlgoritStage >> createHistoryPage [
 		provider: [ historyTable ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> createListPage [
 
 	listTable := self newTable.
@@ -75,7 +77,7 @@ SpAlgoritStage >> createListPage [
 		provider: [ listTable ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> createValuePage [
 
 	varTable := self newTable.
@@ -85,7 +87,7 @@ SpAlgoritStage >> createValuePage [
 		provider: [ varTable ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 SpAlgoritStage >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: #toolBar withConstraints: [ :c | c height: 50 ];
@@ -105,24 +107,24 @@ SpAlgoritStage >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> display [
 	^ self stepper
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 SpAlgoritStage >> graphLabel [
 
 	^ 'graph' localized
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 SpAlgoritStage >> historyLabel [
 
 	^ 'history' localized
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> initializePresenter [
 
 	stepperMorph := self newMorph morph: ScratchStepperMorph new yourself.
@@ -144,20 +146,20 @@ SpAlgoritStage >> initializePresenter [
 		add: lists
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 SpAlgoritStage >> isShowingHistory [
 
 	variables selectedPage ifNil: [ ^ false ].
 	^ variables selectedPage title = self historyLabel
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 SpAlgoritStage >> listLabel [
 
 	^ 'list' localized
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritStage >> newGraphMorph [
 
 	^ ListBarGraph new
@@ -165,7 +167,7 @@ SpAlgoritStage >> newGraphMorph [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritStage >> setupToolBar [
 
 	toolBar
@@ -187,7 +189,7 @@ SpAlgoritStage >> setupToolBar [
 				 action: [ whenClearDo ifNotNil: [ whenClearDo value ] ])
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritStage >> setupVarTableColumns: aCollection [
 
 	historyTable
@@ -211,18 +213,18 @@ SpAlgoritStage >> setupVarTableColumns: aCollection [
 				 evaluated: [ :x | x second ])
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritStage >> startStepping [
 
 	self stepper startStepping
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> stepper [
 	^ stepperMorph morph
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> target: aScript [
 
 	graphMorph morph script: aScript.
@@ -230,7 +232,7 @@ SpAlgoritStage >> target: aScript [
 	self updateListTable: aScript
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritStage >> updateListTable: aScript [
 	listTable
 		columns: #();
@@ -248,7 +250,7 @@ SpAlgoritStage >> updateListTable: aScript [
 	self updateLists: aScript
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritStage >> updateLists: aScript [
 
 	aScript ifNil: [ ^ self ].
@@ -256,13 +258,13 @@ SpAlgoritStage >> updateLists: aScript [
 	graphMorph morph needsUpdate: true
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritStage >> updateVarTable: aScript [
 	self setupVarTableColumns: aScript watchingVars sorted.
 	self updateVars: aScript
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritStage >> updateVars: aScript [
 
 	aScript ifNil: [ ^ self ].
@@ -271,52 +273,52 @@ SpAlgoritStage >> updateVars: aScript [
 		ifFalse: [ varTable items: aScript watchingVarAndValues ]
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 SpAlgoritStage >> valueLabel [
 
 	^ 'value' localized
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 SpAlgoritStage >> variableLabel [
 
 	^ 'variable' localized
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenClearDo: aBlock [
 	whenClearDo := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenListsPageChangedDo: aBlock [
 
 	lists whenSelectedPageChangedDo: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenSetupDo: aBlock [
 	whenSetupDo := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenStartDo: aBlock [
 	whenStartDo := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenStepsDo: aBlock [
 	self stepper
 		whenStepsDo: aBlock;
 		startStepping
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenStopDo: aBlock [
 	whenStopDo := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritStage >> whenVariablesPageChangedDo: aBlock [
 
 	variables whenSelectedPageChangedDo: aBlock

@@ -1,14 +1,16 @@
 Class {
-	#name : #AlgoritApp,
-	#superclass : #SpScratchApp,
+	#name : 'AlgoritApp',
+	#superclass : 'SpScratchApp',
 	#instVars : [
 		'runningBlocks',
 		'inProcessStep'
 	],
-	#category : #'Algorit-Spec2'
+	#category : 'Algorit-Spec2',
+	#package : 'Algorit',
+	#tag : 'Spec2'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp class >> aboutAppString [
 
 	^ self appName , ' v' , self appVersion , '
@@ -18,30 +20,33 @@ All rights reserved.
 Based on Scratch from the MIT Media Lab, v' , self basedVersion , '
 Copyright © 2009 Massachusetts Institute of Technology.
 All rights reserved.
+
+Running ' , SmalltalkImage current version , ' on '
+	  , OSEnvironment current platform version , '
 '
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> appFolderName [
 	^ 'algorit'
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> appName [
 	^ 'Algorit'
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> appVersion [
-	^ '1.2.5'
+	^ '1.2.6'
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> extension [
 	^ 'al'
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 AlgoritApp class >> initialize [
 	"self initialize"
 	ScratchTheme
@@ -50,7 +55,7 @@ AlgoritApp class >> initialize [
 	ObjStream setupVariables "for test"
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 AlgoritApp class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: self appName asSymbol)
@@ -60,39 +65,39 @@ AlgoritApp class >> menuCommandOn: aBuilder [
 		icon: self icon
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> presentationClass [
 	^ SpAlgoritPresenter
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> projectClass [
 	^ AlgoritProject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritApp class >> recodingExtent [
 	^ 400 @ 400
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritApp class >> themesURL [
 	^ 'https://raw.githubusercontent.com/EiichiroIto/Algorit/master/misc/Themes.zip'
 ]
 
-{ #category : #'button actions' }
+{ #category : 'button actions' }
 AlgoritApp >> addList: aScript [
 	super addList: aScript.
 	presenter updateListTable: aScript
 ]
 
-{ #category : #'button actions' }
+{ #category : 'button actions' }
 AlgoritApp >> addVariable: aScript [
 	super addVariable: aScript.
 	presenter updateVarTable: aScript
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp >> checkVarHistory [
 
 	| ret |
@@ -104,19 +109,19 @@ AlgoritApp >> checkVarHistory [
 	^ true
 ]
 
-{ #category : #'button actions' }
+{ #category : 'button actions' }
 AlgoritApp >> deleteList: aScript [
 	super deleteList: aScript.
 	presenter updateListTable: aScript
 ]
 
-{ #category : #'button actions' }
+{ #category : 'button actions' }
 AlgoritApp >> deleteVariable: aScript [
 	super deleteVariable: aScript.
 	presenter updateVarTable: aScript
 ]
 
-{ #category : #'menu actions' }
+{ #category : 'menu actions' }
 AlgoritApp >> doSetup [
 
 	| block |
@@ -129,7 +134,7 @@ AlgoritApp >> doSetup [
 	self startProcessFor: block
 ]
 
-{ #category : #'menu actions' }
+{ #category : 'menu actions' }
 AlgoritApp >> doStart [
 
 	| block |
@@ -141,12 +146,12 @@ AlgoritApp >> doStart [
 	self startProcessFor: block
 ]
 
-{ #category : #'menu actions' }
+{ #category : 'menu actions' }
 AlgoritApp >> exportSexpCode [
 	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension isBinary: false
 ]
 
-{ #category : #'menu actions' }
+{ #category : 'menu actions' }
 AlgoritApp >> importSexpCode [
 
 	| script |
@@ -160,14 +165,14 @@ AlgoritApp >> importSexpCode [
 		updateVarTable: script
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AlgoritApp >> initialize [
 	super initialize.
 	runningBlocks := OrderedCollection new.
 	inProcessStep := false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp >> installNewProject: aProject [
 	self stopAllProcesses.
 	"presenter knWorld: self newWorld."
@@ -183,12 +188,12 @@ AlgoritApp >> installNewProject: aProject [
 	presenter updateDisplay
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritApp >> isProcessRunning [
 	^ runningBlocks notEmpty
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritApp >> processesToRun [
 	"Answer a collection of processes to run. Filter out any processes for objects have been picked up. Always return a copy of the processes list."
 
@@ -198,7 +203,7 @@ AlgoritApp >> processesToRun [
 	^ result
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritApp >> removeTerminatedProcesses [
 	"Remove terminated processes from the process list."
 
@@ -214,24 +219,24 @@ AlgoritApp >> removeTerminatedProcesses [
 	runningBlocks := newRunning
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp >> restoreProject [
 	"self subclassResponsibility"
 ]
 
-{ #category : #'menu actions' }
+{ #category : 'menu actions' }
 AlgoritApp >> saveProject [
 	self checkVarHistory ifFalse: [ ^ false ].
 	^ super saveProject
 ]
 
-{ #category : #'menu actions' }
+{ #category : 'menu actions' }
 AlgoritApp >> saveProjectNoDialog [
 	self checkVarHistory ifFalse: [ ^ false ].
 	^ super saveProjectNoDialog
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp >> setupHatBlock [
 
 	| list |
@@ -241,12 +246,12 @@ AlgoritApp >> setupHatBlock [
 	^ nil
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp >> sexpExtension [
 	^ 'als'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritApp >> startHatBlock [
 
 	| list |
@@ -256,7 +261,7 @@ AlgoritApp >> startHatBlock [
 	^ nil
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritApp >> startProcessFor: topBlock [
 	"Start a process to run the given block or stack of blocks. Return the  
 	new process."
@@ -276,7 +281,7 @@ AlgoritApp >> startProcessFor: topBlock [
 	^ proc
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritApp >> stepProcesses [
 	"Run each Scratch process until it gives up control, then filter out any processes that have terminated."
 
@@ -298,7 +303,7 @@ AlgoritApp >> stepProcesses [
 	inProcessStep := false
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritApp >> stopAllProcesses [
 	"Stop all running Scratch processes."
 
@@ -307,7 +312,7 @@ AlgoritApp >> stopAllProcesses [
 	inProcessStep := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritApp >> updateVarTable: aScript [
 	presenter updateVarTable: aScript
 ]

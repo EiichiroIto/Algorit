@@ -1,20 +1,22 @@
 Class {
-	#name : #SpAlgoritPresenter,
-	#superclass : #SpScratchPresenter,
+	#name : 'SpAlgoritPresenter',
+	#superclass : 'SpScratchPresenter',
 	#instVars : [
 		'buttonOpen',
 		'buttonSave'
 	],
-	#category : #'Algorit-Spec2'
+	#category : 'Algorit-Spec2',
+	#package : 'Algorit',
+	#tag : 'Spec2'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritPresenter >> clear [
 	self target clear.
 	stageFrame clearMessage
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritPresenter >> connectPresenters [
 
 	buttonOpen action: [ application openProject ].
@@ -30,12 +32,12 @@ SpAlgoritPresenter >> connectPresenters [
 		whenListsPageChangedDo: [ stageFrame updateLists: self target ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritPresenter >> defaultExtent [
 	^ 1024 @ 768
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 SpAlgoritPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical
@@ -68,7 +70,7 @@ SpAlgoritPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritPresenter >> exportMenu [
 
 	^ self newMenu
@@ -83,7 +85,7 @@ SpAlgoritPresenter >> exportMenu [
 		  yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritPresenter >> fileMenu [
 
 	| m |
@@ -140,7 +142,7 @@ SpAlgoritPresenter >> fileMenu [
 	^ m
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritPresenter >> importMenu [
 	^ self newMenu
 		addItem: [ :item | 
@@ -150,7 +152,7 @@ SpAlgoritPresenter >> importMenu [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritPresenter >> initializePresenters [
 
 	super initializePresenters.
@@ -165,19 +167,19 @@ SpAlgoritPresenter >> initializePresenters [
 	self focusOrder add: editorPane
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritPresenter >> newStage [
 
 	^ self instantiate: SpAlgoritStage
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritPresenter >> scriptForm [
 
 	^ editorPane morph contents screenshot
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SpAlgoritPresenter >> setupMenu [
 	menu
 		addItem: [ :item | 
@@ -190,12 +192,12 @@ SpAlgoritPresenter >> setupMenu [
 				subMenu: self helpMenu ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 SpAlgoritPresenter >> stageShotExtent: size [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SpAlgoritPresenter >> target: aScript [
 
 	viewerPane target: aScript.
@@ -204,7 +206,7 @@ SpAlgoritPresenter >> target: aScript [
 	editorPane morph contents color: ScratchTheme scriptsPaneColor
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritPresenter >> updateDisplay [
 	self target
 		in: [ :t | 
@@ -217,17 +219,17 @@ SpAlgoritPresenter >> updateDisplay [
 			t messages ifNotEmpty: [ :str | stageFrame addMessage: str ] ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritPresenter >> updateListTable: aScript [
 	stageFrame updateListTable: aScript
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 SpAlgoritPresenter >> updateVarTable: aScript [
 	stageFrame updateVarTable: aScript
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 SpAlgoritPresenter >> whenStepsDo: aBlock [
 	stageFrame whenStepsDo: aBlock
 ]

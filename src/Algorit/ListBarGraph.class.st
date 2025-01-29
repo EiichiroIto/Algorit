@@ -1,6 +1,6 @@
 Class {
-	#name : #ListBarGraph,
-	#superclass : #Morph,
+	#name : 'ListBarGraph',
+	#superclass : 'Morph',
 	#instVars : [
 		'indexes',
 		'stepTime',
@@ -10,46 +10,48 @@ Class {
 		'needsUpdate',
 		'listCount'
 	],
-	#category : #'Algorit-Morphic'
+	#category : 'Algorit-Morphic',
+	#package : 'Algorit',
+	#tag : 'Morphic'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> axisColor [
 
 	^ Color gray
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> barHeight [
 
 	^ self height - 20 max: 10
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> barOffset [
 
 	^ 20 @ 10
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> barWidth [
 
 	^ self width - 20 max: 10
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> cachedForm [
 
 	^ cachedForm
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> cachedForm: anObject [
 
 	cachedForm := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> checkListSizeChanged [
 
 	| count |
@@ -59,19 +61,19 @@ ListBarGraph >> checkListSizeChanged [
 	listCount ~= count ifTrue: [ indexes := listCount := nil ]
 ]
 
-{ #category : #'event handling' }
+{ #category : 'event handling' }
 ListBarGraph >> click: evt [
 
 	self showMenu: evt
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> defaultStepTime [
 
 	^ 1000
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawAxesY0: anInteger on: aCanvas [
 
 	| x1 x2 y1 y2 y0 |
@@ -96,7 +98,7 @@ ListBarGraph >> drawAxesY0: anInteger on: aCanvas [
 		color: self axisColor
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawBarGraph: aCollection on: aCanvas [
 
 	| min max |
@@ -119,7 +121,7 @@ ListBarGraph >> drawBarGraph: aCollection on: aCanvas [
 						on: aCanvas ] ]
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawNegativeBar: anInteger y0: anInteger2 width: anInteger3 at: aPoint on: aCanvas [
 
 	| p count |
@@ -134,7 +136,7 @@ ListBarGraph >> drawNegativeBar: anInteger y0: anInteger2 width: anInteger3 at: 
 		p := p + (1 @ 0) ]
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawNegativeValues: aCollection min: aMinNumber on: aCanvas [
 
 	| bw p dy |
@@ -154,7 +156,7 @@ ListBarGraph >> drawNegativeValues: aCollection min: aMinNumber on: aCanvas [
 		drawScale: aMinNumber y0: 0 on: aCanvas
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawOn: aCanvas [
 
 	super drawOn: aCanvas.
@@ -162,7 +164,7 @@ ListBarGraph >> drawOn: aCanvas [
 	aCanvas drawImage: cachedForm at: self topLeft
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawPositiveBar: anInteger y0: anInteger2 width: anInteger3 at: aPoint on: aCanvas [
 
 	| p count |
@@ -177,7 +179,7 @@ ListBarGraph >> drawPositiveBar: anInteger y0: anInteger2 width: anInteger3 at: 
 		p := p + (1 @ 0) ]
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawPositiveNegativeValues: aCollection min: aMinNumber max: aMaxNumber on: aCanvas [
 
 	| bw p dy y0 |
@@ -208,7 +210,7 @@ ListBarGraph >> drawPositiveNegativeValues: aCollection min: aMinNumber max: aMa
 		drawScale: aMinNumber y0: 0 on: aCanvas
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawPositiveValues: aCollection max: aMaxNumber on: aCanvas [
 
 	| bw p dy |
@@ -228,7 +230,7 @@ ListBarGraph >> drawPositiveValues: aCollection max: aMaxNumber on: aCanvas [
 		drawScale: aMaxNumber y0: self barHeight on: aCanvas
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 ListBarGraph >> drawScale: aNumber y0: anInteger on: aCanvas [
 
 	| str p |
@@ -244,7 +246,7 @@ ListBarGraph >> drawScale: aNumber y0: anInteger on: aCanvas [
 		color: self axisColor
 ]
 
-{ #category : #geometry }
+{ #category : 'geometry' }
 ListBarGraph >> extent: aPoint [
 
 	super extent: aPoint.
@@ -252,25 +254,25 @@ ListBarGraph >> extent: aPoint [
 	indexes := listCount := nil
 ]
 
-{ #category : #'event handling' }
+{ #category : 'event handling' }
 ListBarGraph >> handlesMouseDown: evt [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> indexes [
 
 	^ indexes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> indexes: anObject [
 
 	indexes := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ListBarGraph >> initialize [
 
 	super initialize.
@@ -279,81 +281,81 @@ ListBarGraph >> initialize [
 	self color: self theme backgroundColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> listCount [
 
 	^ listCount
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> listCount: anObject [
 
 	^ listCount := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> listName [
 
 	^ listName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> listName: anObject [
 
 	listName := anObject
 ]
 
-{ #category : #'event handling' }
+{ #category : 'event handling' }
 ListBarGraph >> mouseDown: evt [
 
 	evt hand newKeyboardFocus: nil.
 	evt hand waitForClicksOrDrag: self event: evt
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> needsUpdate [
 
 	^ needsUpdate
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> needsUpdate: anObject [
 
 	needsUpdate := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> negativeBarColor [
 
 	^ Color red
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> positiveBarColor [
 
 	^ Color blue
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> scaleFont [
 
 	^ StandardFonts balloonFont
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> scaleOffset [
 
 	^ 2 + (self scaleFont widthOfString: '0')
 	  @ (self scaleFont height // 2)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> script [
 
 	^ script
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> script: anObject [
 
 	script := anObject.
@@ -361,7 +363,7 @@ ListBarGraph >> script: anObject [
 	needsUpdate := true
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> showMenu: anEvent [
 
 	| list choice |
@@ -380,7 +382,7 @@ ListBarGraph >> showMenu: anEvent [
 	needsUpdate := true
 ]
 
-{ #category : #stepping }
+{ #category : 'stepping' }
 ListBarGraph >> step [
 
 	needsUpdate ifFalse: [ ^ self ].
@@ -389,19 +391,19 @@ ListBarGraph >> step [
 	self changed
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> stepTime [
 
 	^ stepTime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ListBarGraph >> stepTime: anObject [
 
 	stepTime := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> update [
 
 	self updateListName.
@@ -410,7 +412,7 @@ ListBarGraph >> update [
 	self updateCachedForm
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> updateCachedForm [
 
 	| canvas |
@@ -421,7 +423,7 @@ ListBarGraph >> updateCachedForm [
 	self drawBarGraph: self values on: canvas
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> updateIndex [
 
 	indexes := nil.
@@ -435,7 +437,7 @@ ListBarGraph >> updateIndex [
 			           sorted ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> updateListName [
 
 	| list |
@@ -448,7 +450,7 @@ ListBarGraph >> updateListName [
 	indexes := nil
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> values [
 
 	indexes ifNil: [ ^ nil ].
@@ -456,7 +458,7 @@ ListBarGraph >> values [
 		  script evaluator getLine: each ofList: listName ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ListBarGraph >> yCoordsOf: aNumber min: aMinNumber max: aMaxNumber [
 
 	| bh |

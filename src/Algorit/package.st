@@ -1,1 +1,1 @@
-Package { #name : #Algorit }
+Package { #name : 'Algorit' }

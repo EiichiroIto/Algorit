@@ -1,36 +1,38 @@
 Class {
-	#name : #AlgoritProject,
-	#superclass : #ScratchProject,
-	#category : #'Algorit-Project'
+	#name : 'AlgoritProject',
+	#superclass : 'ScratchProject',
+	#category : 'Algorit-Project',
+	#package : 'Algorit',
+	#tag : 'Project'
 }
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritProject class >> fileVersion [
 	^ 1
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritProject class >> fileVersionTag [
 	^ 'AlgoritV'
 ]
 
-{ #category : #constants }
+{ #category : 'constants' }
 AlgoritProject class >> objStreamClass [
 	^ STONObjStream
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritProject >> assureExistsScriptNamed: each [
 
 	self setupScripts
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritProject >> clearVarHistory [
 	scripts do: [ :each | each evaluator clearVarHistory ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritProject >> countVarHistory [
 	| sum |
 	sum := 0.
@@ -38,7 +40,7 @@ AlgoritProject >> countVarHistory [
 	^ sum
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 AlgoritProject >> newScript [
 
 	^ AlgoritScript new
@@ -46,31 +48,31 @@ AlgoritProject >> newScript [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritProject >> scriptNamed: aString [
 
 	^ scripts first
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritProject >> setupScripts [
 
 	scripts isEmpty ifFalse: [ ^ self ].
 	self addScript: self newScript
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritProject >> stopAll [
 
 	application stopAllProcesses
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritProject >> stopAllProcesses [
 	scripts do: #stopAllProcesses
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritProject >> updateVarTable: aScript [
 
 	application updateVarTable: aScript

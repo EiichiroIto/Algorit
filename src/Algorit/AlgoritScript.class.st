@@ -1,18 +1,20 @@
 Class {
-	#name : #AlgoritScript,
-	#superclass : #ScratchScript,
+	#name : 'AlgoritScript',
+	#superclass : 'ScratchScript',
 	#instVars : [
 		'evaluator'
 	],
-	#category : #'Algorit-Project'
+	#category : 'Algorit-Project',
+	#package : 'Algorit',
+	#tag : 'Project'
 }
 
-{ #category : #'ston-core' }
+{ #category : 'ston-core' }
 AlgoritScript class >> stonAllInstVarNames [
 	^ super stonAllInstVarNames , #(evaluator)
 ]
 
-{ #category : #'argument menus' }
+{ #category : 'argument menus' }
 AlgoritScript >> addArgBuilder [
 
 	argMorphBuilder
@@ -33,7 +35,7 @@ AlgoritScript >> addArgBuilder [
 		addNumberExpressArg: $p selector: #listPositionMenu target: nil initialExpression: '1'
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> addBlockSpecs [
 
 	self
@@ -43,7 +45,7 @@ AlgoritScript >> addBlockSpecs [
 		addVariableBlockSpecs
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> addControlBlockSpecs [
 
 	blockMorphBuilder
@@ -67,13 +69,13 @@ AlgoritScript >> addControlBlockSpecs [
 		addSpecial: 'stop all' selector: #stopAll arguments: #(  )
 ]
 
-{ #category : #variables }
+{ #category : 'variables' }
 AlgoritScript >> addList: aString [
 
 	evaluator clearList: aString
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> addMiscBlockSpecs [
 
 	blockMorphBuilder
@@ -88,7 +90,7 @@ AlgoritScript >> addMiscBlockSpecs [
 		addSpecial: 'assert %b' selector: #doAssert arguments: #(  )
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> addOperatorBlockSpecs [
 
 	blockMorphBuilder
@@ -123,7 +125,7 @@ AlgoritScript >> addOperatorBlockSpecs [
 		addReporter: '%f of %n' selector: #computeFunction:of: arguments: #( 'sqrt' 10 )
 ]
 
-{ #category : #variables }
+{ #category : 'variables' }
 AlgoritScript >> addVariable: aString [
 
 	evaluator
@@ -131,7 +133,7 @@ AlgoritScript >> addVariable: aString [
 		setWatchingVar: aString to: true
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> addVariableBlockSpecs [
 
 	blockMorphBuilder
@@ -153,12 +155,12 @@ AlgoritScript >> addVariableBlockSpecs [
 		addCommand: 'reverse %L' selector: #reverseList: arguments: #( '' )
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritScript >> clear [
 	evaluator clear
 ]
 
-{ #category : #'block building' }
+{ #category : 'block building' }
 AlgoritScript >> convertEventHatTuple: anArray [
 
 	anArray first = #EventHatMorph ifTrue: [ ^ Array with: anArray second asSymbol ].
@@ -167,19 +169,19 @@ AlgoritScript >> convertEventHatTuple: anArray [
 	^ anArray
 ]
 
-{ #category : #variables }
+{ #category : 'variables' }
 AlgoritScript >> deleteList: aString [
 
 	evaluator deleteList: aString
 ]
 
-{ #category : #variables }
+{ #category : 'variables' }
 AlgoritScript >> deleteVariable: aString [
 
 	evaluator deleteVariable: aString
 ]
 
-{ #category : #evaluation }
+{ #category : 'evaluation' }
 AlgoritScript >> evaluateFunction: aSymbol withArgs: anArgs [
 
 	(#( stopThread stopAll return: returnValue ) includes: aSymbol) 
@@ -187,19 +189,19 @@ AlgoritScript >> evaluateFunction: aSymbol withArgs: anArgs [
 	^ evaluator perform: aSymbol withArguments: anArgs
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> evaluator [
 	^ evaluator
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AlgoritScript >> initialize [
 
 	super initialize.
 	evaluator := self newEvaluator
 ]
 
-{ #category : #introspection }
+{ #category : 'introspection' }
 AlgoritScript >> instVarNamed: aString put: aValue [
 
 	[ super instVarNamed: aString put: aValue ]
@@ -207,38 +209,38 @@ AlgoritScript >> instVarNamed: aString put: aValue [
 		do: [ :err | self inform: err instVarName ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 AlgoritScript >> isValidSubName: aString [ 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 AlgoritScript >> isWatchingVar: aString [
 	^ evaluator isWatchingVar: aString
 ]
 
-{ #category : #'argument menus' }
+{ #category : 'argument menus' }
 AlgoritScript >> listPositionMenu [
 	^ #((1 1) ('last' -1))
 ]
 
-{ #category : #'argument menus' }
+{ #category : 'argument menus' }
 AlgoritScript >> listVarNames [
 
 	^ evaluator listVarNames
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> listsModified [
 	^ evaluator listsModified
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> listsModified: aBoolean [
 	evaluator listsModified: aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> messages [
 	| msg |
 	msg := evaluator messages.
@@ -246,18 +248,18 @@ AlgoritScript >> messages [
 	^ msg
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 AlgoritScript >> newEvaluator [
 	^ AlgoritEvaluator new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> objName [
 
 	^ 'main'
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> setupBlockCategory [
 
 	blockMorphBuilder
@@ -268,13 +270,13 @@ AlgoritScript >> setupBlockCategory [
 		setCategory: 'list' color: ScratchTheme listBlockColor
 ]
 
-{ #category : #'block specs' }
+{ #category : 'block specs' }
 AlgoritScript >> startHatBlockNames [
 
 	^ #( setup start )
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritScript >> stopAllProcesses [
 	blocksBin isArray
 		ifTrue: [ ^ self ].
@@ -289,7 +291,7 @@ AlgoritScript >> stopAllProcesses [
 								ifTrue: [ each2 updateCachedForm ] ] ] ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritScript >> toggleWatcher: aToggleButton for: aVariableBlockMorph [
 
 	| v |
@@ -299,7 +301,7 @@ AlgoritScript >> toggleWatcher: aToggleButton for: aVariableBlockMorph [
 	project updateVarTable: self
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlgoritScript >> updateWatcher: aToggleButton for: aBlockMorph [
 	| v |
 	v := aBlockMorph variable.
@@ -308,34 +310,34 @@ AlgoritScript >> updateWatcher: aToggleButton for: aBlockMorph [
 		ifFalse: [ aToggleButton off ]
 ]
 
-{ #category : #'argument menus' }
+{ #category : 'argument menus' }
 AlgoritScript >> varNames [
 	^ evaluator varNames sorted
 ]
 
-{ #category : #variables }
+{ #category : 'variables' }
 AlgoritScript >> variableNameInUse: aString [
 	^ (evaluator varNames includes: aString) or: [ evaluator listVarNames includes: aString ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> varsModified [
 	^ evaluator varsModified
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> varsModified: aBoolean [
 	evaluator varsModified: aBoolean
 ]
 
-{ #category : #processes }
+{ #category : 'processes' }
 AlgoritScript >> wait: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> watchingListItems [
 	| list n |
 	list := self watchingLists sorted
@@ -354,22 +356,22 @@ AlgoritScript >> watchingListItems [
 								ifFalse: [ l at: each ] ]) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> watchingLists [
 	^ evaluator listVarNames
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> watchingVarAndValues [
 	^ evaluator watchingVarAndValues
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> watchingVarHistory [
 	^ evaluator watchingVarHistory
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlgoritScript >> watchingVars [
 	^ evaluator watchingVars
 ]
