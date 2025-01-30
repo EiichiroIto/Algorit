@@ -1,1 +1,1 @@
-Package { #name : #BaselineOfAlgorit }
+Package { #name : 'BaselineOfAlgorit' }
